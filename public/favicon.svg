@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <rect width="128" height="128" rx="28" fill="#ffffff"/>
+  <!-- Top-right Green S Box -->
+  <rect x="56" y="16" width="56" height="56" rx="10" fill="#43a047"/>
+  <text x="84" y="52" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="38" fill="#ffffff" text-anchor="middle" dominant-baseline="central">S</text>
+  <!-- Bottom-left Blue H Box -->
+  <rect x="16" y="56" width="56" height="56" rx="10" fill="#0052cc"/>
+  <text x="44" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="38" fill="#ffffff" text-anchor="middle" dominant-baseline="central">H</text>
+</svg>

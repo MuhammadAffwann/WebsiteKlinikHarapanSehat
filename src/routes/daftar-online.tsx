@@ -121,6 +121,7 @@ type RegistrationResult = {
   pembayaran: "BPJS" | "Non-BPJS";
   noBpjs?: string | undefined;
   nik?: string | undefined;
+  keluhan?: string | undefined;
   waktuPendaftaran: string;
 };
 
@@ -140,6 +141,7 @@ function DaftarOnlinePage() {
   const [noRm, setNoRm] = useState("");
   const [tanggalLahir, setTanggalLahir] = useState("");
   const [noTelp, setNoTelp] = useState("");
+  const [keluhan, setKeluhan] = useState("");
 
   const [noBpjs, setNoBpjs] = useState("");
   const [nik, setNik] = useState("");
@@ -182,6 +184,7 @@ function DaftarOnlinePage() {
       pembayaran: paymentType,
       noBpjs: paymentType === "BPJS" ? noBpjs : undefined,
       nik: nik || undefined,
+      keluhan: keluhan.trim() || undefined,
       waktuPendaftaran: new Date().toLocaleString("id-ID", {
         dateStyle: "medium",
         timeStyle: "short",
@@ -205,6 +208,7 @@ function DaftarOnlinePage() {
     setNoTelp("");
     setNoBpjs("");
     setNik("");
+    setKeluhan("");
   };
 
   return (
@@ -469,6 +473,20 @@ function DaftarOnlinePage() {
                       </div>
                     )}
                   </div>
+
+                  <div>
+                    <label htmlFor="keluhan" className="block text-xs font-semibold text-foreground mb-1.5">
+                      Keluhan / Gejala Utama (Opsional)
+                    </label>
+                    <textarea
+                      id="keluhan"
+                      rows={2}
+                      placeholder="Contoh: Demam tinggi 2 hari, batuk berdahak, nyeri lambung, dll."
+                      value={keluhan}
+                      onChange={(e) => setKeluhan(e.target.value)}
+                      className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
                 </div>
 
                 <div className="h-px bg-border my-4" />
@@ -657,6 +675,15 @@ function DaftarOnlinePage() {
                 <p className="text-xs text-muted-foreground">Dokter & Jadwal:</p>
                 <p className="text-xs font-bold text-foreground">{ticketResult.dokter}</p>
               </div>
+
+              {ticketResult.keluhan && (
+                <div>
+                  <p className="text-xs text-muted-foreground">Keluhan / Gejala:</p>
+                  <p className="text-xs font-medium text-foreground bg-background p-2 rounded-lg border border-border mt-0.5">
+                    {ticketResult.keluhan}
+                  </p>
+                </div>
+              )}
 
               <div className="flex items-center justify-between rounded-xl bg-background p-2.5 border border-border text-xs">
                 <span className="text-muted-foreground">Jenis Pembayaran:</span>

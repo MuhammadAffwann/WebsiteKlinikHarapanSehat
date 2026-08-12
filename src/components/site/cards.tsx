@@ -123,11 +123,10 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
       {/* CTA */}
       <div className="border-t border-border p-4">
         <Link
-          to="/"
-          hash="buat-janji"
+          to="/daftar-online"
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
         >
-          Buat Janji Temu <ArrowRight className="size-4" />
+          Daftar Online <ArrowRight className="size-4" />
         </Link>
       </div>
     </article>

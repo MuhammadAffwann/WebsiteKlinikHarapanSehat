@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { ArrowRight, ChevronLeft, ChevronRight, Facebook, HeartPulse, Instagram, Mail, MapPin, MessageCircle, ShieldCheck, Stethoscope, UserRound } from "lucide-react";
+import { CalendarCheck, ChevronLeft, ChevronRight, Facebook, HeartPulse, Instagram, Mail, MapPin, MessageCircle, ShieldCheck, Stethoscope, UserRound } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { PostCard, ServiceCard } from "@/components/site/cards";
@@ -15,11 +15,11 @@ import blogCover from "@/assets/blog-cover.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Klinik Harapan Sehat — Klinik Keluarga 24 Jam Jakarta" },
+      { title: "Klinik Harapan Sehat — Klinik Keluarga 24 Jam Cianjur" },
       {
         name: "description",
         content:
-          "Klinik Harapan Sehat menyediakan layanan dokter umum, gigi, ibu & anak, laboratorium, dan gawat darurat 24 jam di Jakarta Selatan.",
+          "Klinik Harapan Sehat menyediakan layanan dokter umum, gigi, ibu & anak, laboratorium, dan gawat darurat 24 jam di Cianjur.",
       },
       { property: "og:title", content: "Klinik Harapan Sehat — Klinik Keluarga 24 Jam" },
       {
@@ -86,6 +86,11 @@ function HomePage() {
               <Button asChild size="lg" className="rounded-full">
                 <Link to="/" hash="doctors">
                   Cari Dokter <UserRound className="size-4" />
+                </Link>
+              </Button>
+              <Button asChild size="lg" className="rounded-full bg-emerald-600 text-white hover:bg-emerald-700 shadow-md">
+                <Link to="/daftar-online">
+                  Daftar Online <CalendarCheck className="size-4" />
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="rounded-full">
@@ -256,58 +261,6 @@ function HomePage() {
             >
               <ChevronRight className="size-5" />
             </Button>
-          </div>
-        </ScrollReveal>
-      </Section>
-
-      {/* Buat Janji */}
-      <Section id="buat-janji" className="bg-secondary/50">
-        <ScrollReveal variant="zoom-in" distance={15}>
-          <div className="surface-hero rounded-3xl border border-border p-8 sm:p-14">
-            <SectionHeading
-              eyebrow="Buat Janji"
-              title="Jadwalkan kunjungan Anda"
-              description="Isi formulir berikut dan tim kami akan menghubungi Anda untuk konfirmasi jadwal pada hari yang sama."
-              align="center"
-            />
-            <form className="mx-auto mt-10 max-w-lg space-y-4" onSubmit={(e) => e.preventDefault()}>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="nama" className="block text-sm font-medium text-foreground">Nama Lengkap</label>
-                  <input id="nama" type="text" placeholder="Budi Santoso" className="mt-1.5 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring" />
-                </div>
-                <div>
-                  <label htmlFor="telepon" className="block text-sm font-medium text-foreground">Nomor Telepon</label>
-                  <input id="telepon" type="tel" placeholder="08xx-xxxx-xxxx" className="mt-1.5 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring" />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="tanggal" className="block text-sm font-medium text-foreground">Tanggal Kunjungan</label>
-                <input id="tanggal" type="date" className="mt-1.5 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring" />
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="keluhan" className="block text-sm font-medium text-foreground">Keluhan</label>
-                  <input id="keluhan" type="text" placeholder="cth. demam, batuk, nyeri…" className="mt-1.5 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring" />
-                </div>
-                <div>
-                  <label htmlFor="poli" className="block text-sm font-medium text-foreground">Poli yang Dituju</label>
-                  <select id="poli" className="mt-1.5 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring">
-                    <option value="">Pilih poli…</option>
-                    <option>Poli Umum</option>
-                    <option>Kesehatan Gigi</option>
-                    <option>Ibu &amp; Anak</option>
-                    <option>Laboratorium</option>
-                    <option>Layanan Optik</option>
-                    <option>Rawat Inap</option>
-                    <option>Gawat Darurat</option>
-                  </select>
-                </div>
-              </div>
-              <Button type="submit" size="lg" className="w-full rounded-full">
-                Kirim Permintaan <ArrowRight className="size-4" />
-              </Button>
-            </form>
           </div>
         </ScrollReveal>
       </Section>

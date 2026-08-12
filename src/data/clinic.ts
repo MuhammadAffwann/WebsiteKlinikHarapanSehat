@@ -5,11 +5,10 @@
 
 export const clinic = {
   name: "Klinik Harapan Sehat",
-  tagline: "Perawatan Terbaik, Terjangkau untuk Semua.",
-  phone: "(021) 555-1234",
-  whatsapp: "+62 812 3456 7890",
-  whatsappUrl: "https://wa.me/628123456789",
-  email: "halo@harapansehat.id",
+  phone: "0263336097",
+  whatsapp: "+62 851-2996-7569",
+  whatsappUrl: "https://wa.me/6285129967569",
+  email: "admin@klinikharapansehat.id",
   address: "Jl. Raya Cibeber No.20, Sukasari, Kec. Cilaku, Kabupaten Cianjur, Jawa Barat 43285",
   hours: [
     { day: "Senin – Jumat", time: "08.00 – 21.00" },
@@ -17,14 +16,14 @@ export const clinic = {
     { day: "Minggu & Hari Libur", time: "09.00 – 15.00" },
   ],
   social: {
-    instagram: "https://instagram.com/harapansehat.id",
-    facebook: "https://facebook.com/harapansehat",
-    tiktok: "https://tiktok.com/@harapansehat",
+    instagram: "https://www.instagram.com/klinik.hs/",
+    facebook: "https://www.facebook.com/klinik.hs/",
+    tiktok: "https://www.tiktok.com/@klinik.hs",
   },
 } as const;
 
 export const stats = [
-  { value: "15+", label: "Tahun Melayani" },
+  { value: "18+", label: "Tahun Melayani" },
   { value: "24/7", label: "Layanan Gawat Darurat" },
   { value: "40+", label: "Dokter & Tenaga Medis" },
   { value: "99.8%", label: "Kepuasan Pasien" },
@@ -226,28 +225,7 @@ export const posts: Post[] = [
     body: [
       "Ruang tindakan baru kami dilengkapi monitor pasien, nebulizer, dan perangkat EKG untuk penanganan awal kasus darurat.",
       "Ambulans siaga beroperasi 24 jam dan dapat dipanggil melalui nomor telepon klinik.",
-      "Untuk kasus yang membutuhkan perawatan lanjutan, kami bekerja sama dengan tiga rumah sakit rujukan di Jakarta Selatan.",
+      "Untuk kasus yang membutuhkan perawatan lanjutan, kami bekerja sama dengan tiga rumah sakit rujukan di Cianjur.",
     ],
   },
 ];
-
-export const testimonials = [
-  {
-    name: "Rina Ambarwati",
-    role: "Pasien Poli Umum",
-    quote:
-      "Pendaftaran cepat, dokternya menjelaskan dengan sabar, dan hasil lab langsung dikirim ke WhatsApp. Sangat membantu.",
-  },
-  {
-    name: "Bagus Setiawan",
-    role: "Orang tua pasien",
-    quote:
-      "Ruang tunggu anak nyaman dan bersih. Anak saya jadi tidak takut lagi setiap kali jadwal imunisasi.",
-  },
-  {
-    name: "Hendra Kusuma",
-    role: "Peserta Medical Check-up",
-    quote:
-      "Paket check-up-nya lengkap dengan harga yang masuk akal. Konsultasi hasilnya juga detail dan mudah dipahami.",
-  },
-] as const;

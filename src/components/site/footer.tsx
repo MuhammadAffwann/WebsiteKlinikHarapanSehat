@@ -14,7 +14,7 @@ export function Footer() {
           </div>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
             Klinik keluarga dengan layanan dokter umum, gigi, ibu & anak, laboratorium, dan gawat
-            darurat 24 jam di Jakarta Selatan.
+            darurat 24 jam di Cianjur.
           </p>
         </div>
 

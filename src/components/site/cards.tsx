@@ -49,17 +49,21 @@ export function ServiceCard({ service }: { service: Service }) {
           ))}
         </ul>
         <Link
-          to="/"
-          hash="kontak"
+          to="/daftar-online"
+          search={{ poli: service.title }}
           className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:gap-2.5"
         >
-          Buat janji <ArrowRight className="size-4" />
+          Daftar <ArrowRight className="size-4" />
         </Link>
       </div>
     </article>
   );
 }
 
+const doctorPoliMap: Record<string, string> = {
+  "Dokter Umum": "Poli Umum",
+  "Dokter Gigi": "Kesehatan Gigi",
+};
 
 export function DoctorCard({ doctor }: { doctor: Doctor }) {
   // Derive initials from name (skip "dr." or "drg." prefix)
@@ -124,6 +128,10 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
       <div className="border-t border-border p-4">
         <Link
           to="/daftar-online"
+          search={{
+            poli: doctorPoliMap[doctor.specialty] || "Poli Umum",
+            dokter: doctor.slug,
+          }}
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
         >
           Daftar Online <ArrowRight className="size-4" />

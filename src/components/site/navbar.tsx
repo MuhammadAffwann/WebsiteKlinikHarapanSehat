@@ -7,17 +7,16 @@ import { Button } from "@/components/ui/button";
 
 type NavItem = {
   label: string;
-  to: "/";
-  hash: string;
+  to: "/" | "/dokter" | "/layanan" | "/blog" | "/daftar-online";
+  hash?: string;
 };
 
 const navItems: NavItem[] = [
   { label: "Home", to: "/", hash: "atas" },
   { label: "About", to: "/", hash: "about" },
-  { label: "Cari Dokter", to: "/", hash: "doctors" },
+  { label: "Cari Dokter", to: "/dokter" },
   { label: "Layanan", to: "/", hash: "layanan" },
   { label: "Blog", to: "/", hash: "blog" },
-  { label: "Kontak", to: "/", hash: "kontak" },
 ];
 
 export function Navbar() {
@@ -35,7 +34,7 @@ export function Navbar() {
             <Link
               key={item.label}
               to={item.to}
-              hash={item.hash}
+              {...(item.hash ? { hash: item.hash } : {})}
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {item.label}
@@ -68,7 +67,7 @@ export function Navbar() {
               <li key={item.label}>
                 <Link
                   to={item.to}
-                  hash={item.hash}
+                  {...(item.hash ? { hash: item.hash } : {})}
                   onClick={() => setOpen(false)}
                   className="block rounded-lg px-2 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
                 >

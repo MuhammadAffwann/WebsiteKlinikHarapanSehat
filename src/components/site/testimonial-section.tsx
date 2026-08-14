@@ -63,7 +63,7 @@ export function TestimonialSection() {
   const marqueeItems = [...testimonials, ...testimonials];
 
   return (
-    <Section id="testimoni" className="bg-secondary/40 overflow-hidden py-12 sm:py-16">
+    <Section id="testimoni" className="bg-white overflow-hidden py-12 sm:py-16">
       <ScrollReveal variant="fade-up">
         <SectionHeading
           eyebrow="Testimoni"

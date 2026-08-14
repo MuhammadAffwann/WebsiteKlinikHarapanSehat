@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DaftarOnlineRouteImport } from './routes/daftar-online'
+import { Route as DokterRouteImport } from './routes/dokter'
 import { Route as LayananRouteImport } from './routes/layanan'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
 const DaftarOnlineRoute = DaftarOnlineRouteImport.update({
   id: '/daftar-online',
   path: '/daftar-online',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DokterRoute = DokterRouteImport.update({
+  id: '/dokter',
+  path: '/dokter',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LayananRoute = LayananRouteImport.update({
@@ -44,6 +50,7 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/daftar-online': typeof DaftarOnlineRoute
+  '/dokter': typeof DokterRoute
   '/layanan': typeof LayananRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/blog/': typeof BlogIndexRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/daftar-online': typeof DaftarOnlineRoute
+  '/dokter': typeof DokterRoute
   '/layanan': typeof LayananRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/blog': typeof BlogIndexRoute
@@ -59,22 +67,31 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/daftar-online': typeof DaftarOnlineRoute
+  '/dokter': typeof DokterRoute
   '/layanan': typeof LayananRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/blog/': typeof BlogIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/daftar-online' | '/layanan' | '/blog/$slug' | '/blog/'
+  fullPaths:
+    '/' | '/daftar-online' | '/dokter' | '/layanan' | '/blog/$slug' | '/blog/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/daftar-online' | '/layanan' | '/blog/$slug' | '/blog'
+  to: '/' | '/daftar-online' | '/dokter' | '/layanan' | '/blog/$slug' | '/blog'
   id:
-    '__root__' | '/' | '/daftar-online' | '/layanan' | '/blog/$slug' | '/blog/'
+    | '__root__'
+    | '/'
+    | '/daftar-online'
+    | '/dokter'
+    | '/layanan'
+    | '/blog/$slug'
+    | '/blog/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DaftarOnlineRoute: typeof DaftarOnlineRoute
+  DokterRoute: typeof DokterRoute
   LayananRoute: typeof LayananRoute
   BlogSlugRoute: typeof BlogSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -94,6 +111,13 @@ declare module '@tanstack/react-router' {
       path: '/daftar-online'
       fullPath: '/daftar-online'
       preLoaderRoute: typeof DaftarOnlineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dokter': {
+      id: '/dokter'
+      path: '/dokter'
+      fullPath: '/dokter'
+      preLoaderRoute: typeof DokterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/layanan': {
@@ -123,6 +147,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DaftarOnlineRoute: DaftarOnlineRoute,
+  DokterRoute: DokterRoute,
   LayananRoute: LayananRoute,
   BlogSlugRoute: BlogSlugRoute,
   BlogIndexRoute: BlogIndexRoute,

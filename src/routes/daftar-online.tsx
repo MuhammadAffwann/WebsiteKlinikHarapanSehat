@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   CalendarCheck,
@@ -17,7 +17,20 @@ import { Button } from "@/components/ui/button";
 import { Section } from "@/components/site/section";
 import { ScrollReveal } from "@/components/site/scroll-reveal";
 
+type DaftarOnlineSearch = {
+  poli?: string | undefined;
+  dokter?: string | undefined;
+};
+
 export const Route = createFileRoute("/daftar-online")({
+  validateSearch: (search: Record<string, unknown>): DaftarOnlineSearch => {
+    const rawPoli = search["poli"];
+    const rawDokter = search["dokter"];
+    return {
+      poli: typeof rawPoli === "string" ? rawPoli : undefined,
+      dokter: typeof rawDokter === "string" ? rawDokter : undefined,
+    };
+  },
   head: () => ({
     meta: [
       { title: "Pendaftaran Online — Klinik Harapan Sehat" },
@@ -126,14 +139,51 @@ type RegistrationResult = {
 };
 
 function DaftarOnlinePage() {
+  const search = Route.useSearch();
   const [patientType, setPatientType] = useState<"Baru" | "Lama">("Baru");
   const [paymentType, setPaymentType] = useState<"BPJS" | "Non-BPJS">("Non-BPJS");
 
   // Form states
   const todayStr = new Date().toISOString().split("T")[0];
   const [tanggalKunjungan, setTanggalKunjungan] = useState<string>(todayStr || "");
-  const [jenisPoli, setJenisPoli] = useState<string>("");
-  const [selectedDokter, setSelectedDokter] = useState<string>("");
+
+  const initialPoli = useMemo(() => {
+    if (search.poli) {
+      const matched = services.find(
+        (s) =>
+          s.title.toLowerCase() === search.poli?.toLowerCase() ||
+          s.slug.toLowerCase() === search.poli?.toLowerCase()
+      );
+      return matched ? matched.title : search.poli;
+    }
+    if (search.dokter) {
+      const matchedDoc = doctors.find((d) => d.slug === search.dokter);
+      if (matchedDoc) {
+        return matchedDoc.specialty === "Dokter Gigi" ? "Kesehatan Gigi" : "Poli Umum";
+      }
+    }
+    return "";
+  }, [search.poli, search.dokter]);
+
+  const [jenisPoli, setJenisPoli] = useState<string>(initialPoli);
+  const [selectedDokter, setSelectedDokter] = useState<string>(search.dokter || "");
+
+  useEffect(() => {
+    if (search.poli) {
+      const matched = services.find(
+        (s) =>
+          s.title.toLowerCase() === search.poli?.toLowerCase() ||
+          s.slug.toLowerCase() === search.poli?.toLowerCase()
+      );
+      setJenisPoli(matched ? matched.title : search.poli);
+    }
+  }, [search.poli]);
+
+  useEffect(() => {
+    if (search.dokter) {
+      setSelectedDokter(search.dokter);
+    }
+  }, [search.dokter]);
 
   const [namaLengkap, setNamaLengkap] = useState("");
   const [namaAyah, setNamaAyah] = useState("");

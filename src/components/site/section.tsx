@@ -25,18 +25,22 @@ export function SectionHeading({
   title,
   description,
   align = "left",
+  className,
+  titleClassName,
 }: {
   eyebrow?: string;
-  title: string;
+  title: ReactNode;
   description?: string;
   align?: "left" | "center";
+  className?: string;
+  titleClassName?: string;
 }) {
   return (
-    <div className={cn("max-w-2xl", align === "center" && "mx-auto text-center")}>
+    <div className={cn("max-w-2xl", align === "center" && "mx-auto text-center", className)}>
       {eyebrow && (
         <p className="text-xs font-semibold tracking-[0.2em] text-primary uppercase">{eyebrow}</p>
       )}
-      <h2 className="mt-3 text-3xl font-bold sm:text-4xl">{title}</h2>
+      <h2 className={cn("mt-3 text-3xl font-bold sm:text-4xl", titleClassName)}>{title}</h2>
       {description && (
         <p className="mt-4 text-base leading-relaxed text-muted-foreground">{description}</p>
       )}
@@ -59,15 +63,47 @@ export function Pill({ children, className }: { children: ReactNode; className?:
 }
 
 /** Shared page hero for inner pages. */
-export function PageHero({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
+export function PageHero({
+  eyebrow,
+  title,
+  description,
+  backgroundImage,
+  className,
+}: {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  backgroundImage?: string;
+  className?: string;
+}) {
   return (
-    <div className="surface-hero border-b border-border">
-      <div className="mx-auto max-w-[1440px] px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-        <p className="text-xs font-semibold tracking-[0.2em] text-primary uppercase">{eyebrow}</p>
-        <h1 className="mt-3 max-w-2xl text-4xl font-bold sm:text-5xl">{title}</h1>
-        <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-          {description}
-        </p>
+    <div
+      className={cn(
+        "relative overflow-hidden surface-hero border-b border-border",
+        className
+      )}
+    >
+      {backgroundImage && (
+        <div className="absolute inset-0 pointer-events-none">
+          <img
+            src={backgroundImage}
+            alt=""
+            aria-hidden="true"
+            className="h-full w-full object-cover object-right md:object-right-top opacity-90"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/70 to-transparent sm:from-background/90 sm:via-background/50" />
+        </div>
+      )}
+      <div className="relative mx-auto max-w-[1440px] px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+        {eyebrow && (
+          <p className="text-xs font-semibold tracking-[0.2em] text-primary uppercase">{eyebrow}</p>
+        )}
+        <h1 className="mt-3 max-w-2xl text-4xl sm:text-5xl">{title}</h1>
+        {description && (
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            {description}
+          </p>
+        )}
       </div>
     </div>
   );

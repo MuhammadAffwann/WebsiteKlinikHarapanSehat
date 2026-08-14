@@ -1,13 +1,13 @@
-import { useRef } from "react";
+import { useRef, type ReactNode } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { CalendarCheck, ChevronLeft, ChevronRight, Facebook, HeartPulse, Instagram, Mail, MapPin, MessageCircle, ShieldCheck, Stethoscope, UserRound } from "lucide-react";
+import { Calendar, CalendarCheck, ChevronLeft, ChevronRight, ClipboardList, Facebook, HeartPulse, Instagram, Mail, MapPin, MessageCircle, ShieldCheck, Stethoscope } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { PostCard, ServiceCard } from "@/components/site/cards";
-import { DoctorSection } from "@/components/site/doctor-section";
 import { Pill, Section, SectionHeading } from "@/components/site/section";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/site/scroll-reveal";
 import { clinic, posts, services, stats } from "@/data/clinic";
+import { IjabKabulSection } from "@/components/site/ijab-kabul-section";
 import { TestimonialSection } from "@/components/site/testimonial-section";
 import heroImage from "@/assets/hero-care.jpg";
 import blogCover from "@/assets/blog-cover.jpg";
@@ -49,6 +49,64 @@ const advantages = [
   },
 ];
 
+const heroActions = [
+  {
+    label: "Cari Dokter",
+    to: "/dokter" as const,
+    icon: (
+      <div className="relative flex size-7 shrink-0 items-center justify-center sm:size-8">
+        <Calendar className="size-6 text-[#0052cc] sm:size-7" strokeWidth={1.5} />
+        <Stethoscope className="absolute -bottom-0.5 -left-0.5 size-3.5 text-[#43a047] sm:size-4" strokeWidth={2.25} />
+      </div>
+    ),
+  },
+  {
+    label: "Daftar Online",
+    to: "/daftar-online" as const,
+    icon: (
+      <div className="relative flex size-7 shrink-0 items-center justify-center sm:size-8">
+        <Calendar className="size-6 text-[#0052cc] sm:size-7" strokeWidth={1.5} />
+        <CalendarCheck className="absolute -bottom-0.5 -left-0.5 size-3.5 text-[#43a047] sm:size-4" strokeWidth={2.25} />
+      </div>
+    ),
+  },
+  {
+    label: "Lihat Layanan",
+    to: "/" as const,
+    hash: "layanan",
+    icon: (
+      <div className="relative flex size-7 shrink-0 items-center justify-center sm:size-8">
+        <ClipboardList className="size-6 text-[#0052cc] sm:size-7" strokeWidth={1.5} />
+        <HeartPulse className="absolute -bottom-0.5 -left-0.5 size-3.5 text-[#43a047] sm:size-4" strokeWidth={2.25} />
+      </div>
+    ),
+  },
+];
+
+function HeroActionCard({
+  label,
+  to,
+  hash,
+  icon,
+}: {
+  label: string;
+  to: "/" | "/daftar-online" | "/dokter";
+  hash?: string;
+  icon: ReactNode;
+}) {
+  return (
+    <Link
+      to={to}
+      {...(hash ? { hash } : {})}
+      className="shadow-card flex min-w-0 flex-1 items-center gap-1.5 rounded-xl border border-border/60 bg-white px-2.5 py-2.5 transition-transform hover:-translate-y-0.5 hover:shadow-lg sm:gap-2.5 sm:rounded-2xl sm:px-3.5 sm:py-3 md:gap-3 md:px-4 md:py-3.5"
+    >
+      {icon}
+      <span className="min-w-0 flex-1 text-xs font-medium leading-tight text-[#333333] sm:text-sm">{label}</span>
+      <ChevronRight className="size-3.5 shrink-0 text-[#0052cc] sm:size-4" strokeWidth={2} />
+    </Link>
+  );
+}
+
 function HomePage() {
   const servicesRef = useRef<HTMLDivElement>(null);
   const postsRef = useRef<HTMLDivElement>(null);
@@ -67,39 +125,32 @@ function HomePage() {
     <>
       {/* Hero */}
       <div id="atas" className="surface-hero">
-        <div className="mx-auto grid max-w-[1440px] items-start gap-8 px-4 pt-2 pb-8 sm:pt-3 sm:pb-10 sm:px-6 lg:grid-cols-2 lg:items-center lg:gap-12 lg:px-8 lg:pt-3 lg:pb-12">
-          <ScrollReveal variant="fade-right" distance={30} className="pt-1 sm:pt-2">
-            <Pill className="bg-background/80">
-              <span className="size-2 rounded-full bg-mint-foreground" />
-              LAYANAN MEDIS 24/7
-            </Pill>
-            <h1 className="mt-4 text-4xl leading-[1.05] font-bold sm:text-5xl lg:text-6xl">
-              Selamat datang di
-              <span className="block text-primary">Klinik Harapan Sehat</span>
+        <div className="mx-auto grid max-w-[1440px] items-start gap-6 px-4 pt-2 pb-8 sm:gap-8 sm:pt-3 sm:pb-10 sm:px-6 lg:grid-cols-2 lg:items-center lg:gap-12 lg:px-8 lg:pt-3 lg:pb-12">
+          <ScrollReveal variant="fade-right" distance={30} className="order-2 pt-1 sm:pt-2 lg:order-1">
+
+            <h1 className="text-4xl font-normal leading-[1.1] text-white sm:text-5xl lg:mt-4 lg:text-5xl xl:text-6xl">
+              <span className="block text-black font-normal">Selamat datang</span>
+              <span className="block text-black font-normal lg:whitespace-nowrap">di Klinik Harapan Sehat</span>
             </h1>
-            <p className="mt-4 max-w-lg text-base leading-relaxed text-muted-foreground sm:text-lg">
-              {clinic.name} menghadirkan layanan kesehatan keluarga yang ramah, cepat, dan
-              transparan, dengan sistem pembayaran sukarela “Ijab Kabul”. Pasien bisa membayar
-              sesuai kemampuannya dan tidak merasa keberatan.
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+              Memberikan Pelayanan kesehatan yang paripurna kepada masyarakat tanpa terkendala biaya
+              melalui sistem ijab kabul biaya berobat dan turut serta membantu pemerintah dalam
+              meningkatkan derajat kesehatan masyarakat dan membantu pembangunan nasional.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="rounded-full">
-                <Link to="/" hash="doctors">
-                  Cari Dokter <UserRound className="size-4" />
-                </Link>
-              </Button>
-              <Button asChild size="lg" className="rounded-full bg-emerald-600 text-white hover:bg-emerald-700 shadow-md">
-                <Link to="/daftar-online">
-                  Daftar Online <CalendarCheck className="size-4" />
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="rounded-full">
-                <Link to="/" hash="layanan">Lihat Layanan</Link>
-              </Button>
+            <div className="mt-6 flex w-full flex-row gap-2 sm:gap-3">
+              {heroActions.map((action) => (
+                <HeroActionCard
+                  key={action.label}
+                  label={action.label}
+                  to={action.to}
+                  {...("hash" in action ? { hash: action.hash } : {})}
+                  icon={action.icon}
+                />
+              ))}
             </div>
           </ScrollReveal>
 
-          <ScrollReveal variant="fade-left" distance={30} delay={0.1} className="relative mx-auto w-full max-w-lg lg:max-w-xl">
+          <ScrollReveal variant="fade-left" distance={30} delay={0.1} className="relative order-1 mx-auto w-full max-w-lg lg:order-2 lg:max-w-xl">
             <img
               src={heroImage}
               alt="Perawat mendampingi pasien di ruang perawatan Klinik Harapan Sehat"
@@ -135,17 +186,15 @@ function HomePage() {
         </StaggerContainer>
       </Section>
 
-      {/* Testimonials */}
-      <TestimonialSection />
-
       {/* Advantages */}
       <Section id="about" className="pt-4">
         <ScrollReveal variant="fade-up">
           <SectionHeading
             eyebrow="Mengapa Kami"
-            title="Pelayanan yang berpusat pada pasien"
-            description="Setiap alur layanan kami dirancang agar Anda merasa didengar, dari pendaftaran hingga konsultasi hasil."
+            title="Memberikan pelayanan kesehatan yang paripurna dan inklusif tanpa kendala biaya, didukung oleh sistem ijab kabul biaya berobat."
+            description="Di setiap alur, kami memastikan akad biaya pengobatan harus sama-sama sepakat, tidak mahal, dan ridho sama ridho, tanpa membeda-bedakan, serta memberikan pelayanan optimal kepada seluruh pasien."
             align="center"
+            titleClassName="font-normal"
           />
         </ScrollReveal>
         <StaggerContainer staggerChildren={0.1} className="mt-10 grid gap-6 md:grid-cols-3">
@@ -161,8 +210,14 @@ function HomePage() {
         </StaggerContainer>
       </Section>
 
+      {/* Ijab Kabul */}
+      <IjabKabulSection />
+
+      {/* Testimonials */}
+      <TestimonialSection />
+
       {/* Services */}
-      <Section id="layanan" className="bg-secondary/50">
+      <Section id="layanan" className="bg-white">
         <ScrollReveal variant="fade-up">
           <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
             <div className="lg:col-span-4">
@@ -205,21 +260,6 @@ function HomePage() {
             </Button>
           </div>
         </ScrollReveal>
-      </Section>
-
-      {/* Doctors */}
-      <Section id="doctors">
-        <ScrollReveal variant="fade-up">
-          <SectionHeading
-            eyebrow="Dokter"
-            title="Tim dokter kami"
-            description="Kenali dokter yang akan mendampingi Anda beserta jadwal praktiknya."
-            align="center"
-          />
-        </ScrollReveal>
-        <div className="mt-6">
-          <DoctorSection />
-        </div>
       </Section>
 
 

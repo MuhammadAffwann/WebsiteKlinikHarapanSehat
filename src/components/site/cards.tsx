@@ -9,7 +9,24 @@ import svcLab from "@/assets/svc-lab.jpg";
 import svcOptic from "@/assets/svc-optic.jpg";
 import svcRawatInap from "@/assets/svc-rawat-inap.jpg";
 import svcDarurat from "@/assets/svc-darurat.jpg";
+
+import drRiyan from "@/assets/drriyan.png";
+import drYusuf from "@/assets/dryusuf.png";
+import drRaden from "@/assets/drraden.png";
+import drPratiwi from "@/assets/drpratiwi.png";
+import drNofan from "@/assets/drnofan.png";
+import drMuhammadRudiansyah from "@/assets/drmuhammadrudiansyah.png";
+
 import type { Doctor, Post, Service } from "@/data/clinic";
+
+const doctorPhotoMap: Record<string, string> = {
+  "dr-riyan-annasith": drRiyan,
+  "dr-yusuf-nugraha": drYusuf,
+  "dr-raden-robi-a": drRaden,
+  "dr-pratiwi-eka-putri": drPratiwi,
+  "dr-nofan-pratama": drNofan,
+  "dr-muhammad-rudiansyah": drMuhammadRudiansyah,
+};
 
 
 /** Ganti file di src/assets untuk memakai foto klinik sendiri. */
@@ -74,6 +91,8 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
     .map((w) => w[0]?.toUpperCase() ?? "")
     .join("");
 
+  const photo = doctor.image ? (doctorPhotoMap[doctor.image] || doctor.image) : doctorPhotoMap[doctor.slug];
+
   // Detect if schedule spans overnight (time starts with 00: or 20:)
   const isNight = doctor.time.startsWith("20") || doctor.time.startsWith("00");
 
@@ -91,9 +110,19 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
       <div className="flex flex-1 flex-col gap-4 p-5">
         {/* Avatar + info */}
         <div className="flex items-center gap-4">
-          <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <span className="text-lg font-bold tracking-tight">{initials}</span>
-          </div>
+          {photo ? (
+            <div className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-primary/20 bg-primary/5 shadow-xs">
+              <img
+                src={photo}
+                alt={doctor.name}
+                className="h-full w-full object-cover object-top"
+              />
+            </div>
+          ) : (
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <span className="text-lg font-bold tracking-tight">{initials}</span>
+            </div>
+          )}
           <div className="min-w-0">
             <p className="text-[11px] font-semibold uppercase tracking-widest text-primary">{doctor.specialty}</p>
             <h3 className="mt-0.5 text-base font-bold leading-snug">{doctor.name}</h3>

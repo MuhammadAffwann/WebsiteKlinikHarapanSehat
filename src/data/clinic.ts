@@ -45,7 +45,7 @@ export const services: Service[] = [
     title: "Poli Umum",
     description:
       "Pemeriksaan kesehatan harian, pengobatan penyakit ringan, hingga rujukan spesialis oleh dokter umum berpengalaman.",
-    points: ["Konsultasi dokter umum", "Surat keterangan sehat", "Pengobatan ISPA & demam"],
+    points: ["Konsultasi dokter umum", "Surat keterangan sehat", "Pengobatan ISPA & demam", "Sistem Ijab Kabul"],
     image: "umum",
     badge: "Paling Dicari",
   },
@@ -105,6 +105,7 @@ export type Doctor = {
   specialty: string;
   days: string;
   time: string;
+  image?: string;
 };
 
 export const doctors: Doctor[] = [
@@ -120,14 +121,14 @@ export const doctors: Doctor[] = [
     name: "Dr Yusuf Nugraha M.H",
     specialty: "Dokter Umum",
     days: "Senin – Rabu",
-    time: "09:30 – 20:00",
+    time: "09:30 – 19:00",
   },
   {
     slug: "dr-raden-robi-a",
     name: "dr. Raden Robi A",
     specialty: "Dokter Umum",
     days: "Senin – Minggu",
-    time: "09:30 – 20:00",
+    time: "09:00 – 20:00",
   },
   {
     slug: "dr-pratiwi-eka-putri",

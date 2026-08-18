@@ -11,6 +11,7 @@ import { IjabKabulSection } from "@/components/site/ijab-kabul-section";
 import { TestimonialSection } from "@/components/site/testimonial-section";
 import heroImage from "@/assets/hero-care.jpg";
 import blogCover from "@/assets/blog-cover.jpg";
+import hsBackground from "@/assets/hsbackground.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -124,13 +125,26 @@ function HomePage() {
   return (
     <>
       {/* Hero */}
-      <div id="atas" className="surface-hero">
-        <div className="mx-auto grid max-w-[1440px] items-start gap-6 px-4 pt-2 pb-8 sm:gap-8 sm:pt-3 sm:pb-10 sm:px-6 lg:grid-cols-2 lg:items-center lg:gap-12 lg:px-8 lg:pt-3 lg:pb-12">
+      <div id="atas" className="relative overflow-hidden bg-background border-b border-border/40">
+        {/* Background clinic image with soft blur & clear visibility */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <img
+            src={hsBackground}
+            alt=""
+            aria-hidden="true"
+            className="h-full w-full object-cover object-center scale-105 blur-[2px] opacity-85 dark:opacity-40 transition-all duration-700"
+          />
+          {/* Soft gradient overlay to keep text 100% legible while showing clinic building clearly */}
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/75 to-background/25 sm:from-background/90 sm:via-background/60 sm:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background/90" />
+        </div>
+
+        <div className="relative mx-auto grid max-w-[1440px] items-start gap-6 px-4 pt-2 pb-8 sm:gap-8 sm:pt-3 sm:pb-10 sm:px-6 lg:grid-cols-2 lg:items-center lg:gap-12 lg:px-8 lg:pt-3 lg:pb-12">
           <ScrollReveal variant="fade-right" distance={30} className="order-2 pt-1 sm:pt-2 lg:order-1">
 
             <h1 className="text-4xl font-normal leading-[1.1] text-white sm:text-5xl lg:mt-4 lg:text-5xl xl:text-6xl">
-              <span className="block text-black font-normal">Selamat datang</span>
-              <span className="block text-black font-normal lg:whitespace-nowrap">di Klinik Harapan Sehat</span>
+              <span className="block text-black font-normal">𝑆𝑒𝑙𝑎𝑚𝑎𝑡 𝐷𝑎𝑡𝑎𝑛𝑔</span>
+              <span className="block text-black font-normal lg:whitespace-nowrap">𝑑𝑖 𝐾𝑙𝑖𝑛𝑖𝑘 𝐻𝑎𝑟𝑎𝑝𝑎𝑛 𝑆𝑒ℎ𝑎𝑡</span>
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               Memberikan Pelayanan kesehatan yang paripurna kepada masyarakat tanpa terkendala biaya

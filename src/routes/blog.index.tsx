@@ -4,6 +4,7 @@ import { PostCard } from "@/components/site/cards";
 import { PageHero, Section } from "@/components/site/section";
 import { posts } from "@/data/clinic";
 import blogCover from "@/assets/blog-cover.jpg";
+import blogBanner from "@/assets/blog-banner.jpg";
 
 export const Route = createFileRoute("/blog/")({
   head: () => ({
@@ -31,6 +32,7 @@ function BlogPage() {
         eyebrow="Blog"
         title="Kabar & edukasi kesehatan"
         description="Tulisan ringkas dari tim medis kami seputar pencegahan penyakit dan layanan klinik."
+        backgroundImage={blogBanner}
       />
       <Section>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

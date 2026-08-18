@@ -46,6 +46,7 @@ export function IjabKabulSection() {
           title="Ijab Kabul"
           description="Layanan kesehatan yang inklusif melalui mekanisme pembayaran sukarela dan subsidi silang."
           align="center"
+          titleClassName="font-normal"
         />
       </ScrollReveal>
 

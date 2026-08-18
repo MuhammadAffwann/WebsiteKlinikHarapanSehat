@@ -29,7 +29,7 @@ function BlogPage() {
   return (
     <>
       <PageHero
-        eyebrow="Blog"
+
         title="Kabar & edukasi kesehatan"
         description="Tulisan ringkas dari tim medis kami seputar pencegahan penyakit dan layanan klinik."
         backgroundImage={blogBanner}

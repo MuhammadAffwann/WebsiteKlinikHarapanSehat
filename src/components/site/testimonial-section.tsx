@@ -70,6 +70,7 @@ export function TestimonialSection() {
           title="Cerita & Pengalaman Pasien"
           description="Kepuasan dan kenyamanan pasien adalah kebanggaan utama Klinik Harapan Sehat."
           align="center"
+          titleClassName="font-normal"
         />
       </ScrollReveal>
 

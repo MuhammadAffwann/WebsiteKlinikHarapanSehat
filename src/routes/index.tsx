@@ -1,6 +1,6 @@
-import { useRef, type ReactNode } from "react";
+import { useState, useRef, type ReactNode } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { Calendar, CalendarCheck, ChevronLeft, ChevronRight, ClipboardList, Facebook, HeartPulse, Instagram, Mail, MapPin, MessageCircle, ShieldCheck, Stethoscope } from "lucide-react";
+import { ArrowRight, Calendar, CalendarCheck, ChevronLeft, ChevronRight, ClipboardList, Facebook, HeartPulse, Instagram, Mail, MapPin, MessageCircle, ShieldCheck, Stethoscope } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { PostCard, ServiceCard } from "@/components/site/cards";
@@ -9,6 +9,7 @@ import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/site/s
 import { clinic, posts, services, stats } from "@/data/clinic";
 import { IjabKabulSection } from "@/components/site/ijab-kabul-section";
 import { TestimonialSection } from "@/components/site/testimonial-section";
+import { cn } from "@/lib/utils";
 import heroImage from "@/assets/hero-care.jpg";
 import blogCover from "@/assets/blog-cover.jpg";
 import hsBackground from "@/assets/hsbackground.png";
@@ -111,6 +112,12 @@ function HeroActionCard({
 function HomePage() {
   const servicesRef = useRef<HTMLDivElement>(null);
   const postsRef = useRef<HTMLDivElement>(null);
+  const [selectedBlogCategory, setSelectedBlogCategory] = useState<string>("Semua Artikel");
+
+  const filteredBlogPosts =
+    selectedBlogCategory === "Semua Artikel"
+      ? posts
+      : posts.filter((post) => post.category.toLowerCase() === selectedBlogCategory.toLowerCase());
 
   const scrollContainer = (ref: React.RefObject<HTMLDivElement | null>, direction: "left" | "right") => {
     if (ref.current) {
@@ -132,7 +139,7 @@ function HomePage() {
             src={hsBackground}
             alt=""
             aria-hidden="true"
-            className="h-full w-full object-cover object-center scale-105 blur-[2px] opacity-85 dark:opacity-40 transition-all duration-700"
+            className="h-full w-full object-cover object-[center_15%] scale-100 blur-[2px] opacity-85 dark:opacity-40 transition-all duration-700"
           />
           {/* Soft gradient overlay to keep text 100% legible while showing clinic building clearly */}
           <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/75 to-background/25 sm:from-background/90 sm:via-background/60 sm:to-transparent" />
@@ -142,9 +149,9 @@ function HomePage() {
         <div className="relative mx-auto grid max-w-[1440px] items-start gap-6 px-4 pt-2 pb-8 sm:gap-8 sm:pt-3 sm:pb-10 sm:px-6 lg:grid-cols-2 lg:items-center lg:gap-12 lg:px-8 lg:pt-3 lg:pb-12">
           <ScrollReveal variant="fade-right" distance={30} className="order-2 pt-1 sm:pt-2 lg:order-1">
 
-            <h1 className="text-4xl font-normal leading-[1.1] text-white sm:text-5xl lg:mt-4 lg:text-5xl xl:text-6xl">
-              <span className="block text-black font-normal">𝑆𝑒𝑙𝑎𝑚𝑎𝑡 𝐷𝑎𝑡𝑎𝑛𝑔</span>
-              <span className="block text-black font-normal lg:whitespace-nowrap">𝑑𝑖 𝐾𝑙𝑖𝑛𝑖𝑘 𝐻𝑎𝑟𝑎𝑝𝑎𝑛 𝑆𝑒ℎ𝑎𝑡</span>
+            <h1 className="text-4xl font-bold leading-[1.15] sm:text-5xl lg:mt-4 lg:text-5xl xl:text-6xl">
+              <span className="block text-[#2e7d32] dark:text-emerald-400 font-bold">Selamat Datang</span>
+              <span className="block text-[#0052cc] dark:text-blue-400 font-bold lg:whitespace-nowrap">di Klinik Harapan Sehat</span>
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               Memberikan Pelayanan kesehatan yang paripurna kepada masyarakat tanpa terkendala biaya
@@ -238,6 +245,7 @@ function HomePage() {
               <SectionHeading
                 title="Pusat layanan unggulan"
                 description="Klinik Harapan Sehat mendukung perjalanan kesehatan anda dengan layanan yang terpercaya dan penuh perhatian."
+                titleClassName="font-normal"
               />
             </div>
 
@@ -280,28 +288,46 @@ function HomePage() {
       {/* Blog */}
       <Section id="blog">
         <ScrollReveal variant="fade-up">
-          <SectionHeading
-            eyebrow="Blog"
-            title="Kabar &amp; edukasi terbaru"
-            description="Informasi kesehatan praktis dan pembaruan layanan dari klinik kami."
-            align="center"
-          />
+          {/* Grid Container */}
+          <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
+            {/* Left Column: Heading, Description, Link */}
+            <div className="flex flex-col justify-center lg:col-span-4 lg:pr-4">
+              <h2 className="text-3xl font-normal leading-tight tracking-tight sm:text-4xl text-foreground">
+                Kabar &amp; edukasi terbaru
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                Temukan informasi kesehatan yang bermanfaat untuk hidup lebih sehat melalui artikel blog dan edukasi klinik kami.
+              </p>
 
-          <div
-            ref={postsRef}
-            className="mt-10 flex gap-6 overflow-x-auto pb-4 pt-2 scroll-smooth snap-x snap-mandatory [::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-          >
-            {posts.map((post) => (
-              <div key={post.slug} className="w-[280px] sm:w-[320px] lg:w-[360px] shrink-0 snap-start">
-                <PostCard post={post} cover={blogCover} />
+              <Link
+                to="/blog"
+                className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:gap-2.5 transition-all"
+              >
+                Lihat Semua Artikel <ArrowRight className="size-4" />
+              </Link>
+            </div>
+
+            {/* Right Column: Carousel Cards */}
+            <div className="lg:col-span-8 overflow-hidden">
+              {/* Cards Container */}
+              <div
+                ref={postsRef}
+                className="flex gap-6 overflow-x-auto pb-4 pt-1 scroll-smooth snap-x snap-mandatory [::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+              >
+                {filteredBlogPosts.map((post) => (
+                  <div key={post.slug} className="w-[280px] sm:w-[320px] lg:w-[340px] shrink-0 snap-start">
+                    <PostCard post={post} cover={blogCover} />
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
 
-          <div className="mt-6 flex items-center justify-center gap-3">
+          {/* Scroll Buttons - Centered Relative to Full Section */}
+          <div className="mt-8 flex items-center justify-center gap-3">
             <Button
               size="icon"
-              className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"
+              className="size-10 rounded-full bg-blue-600 text-white hover:bg-blue-700 shadow-md transition-colors"
               onClick={() => scrollContainer(postsRef, "left")}
               aria-label="Scroll Blog ke Kiri"
             >
@@ -309,7 +335,7 @@ function HomePage() {
             </Button>
             <Button
               size="icon"
-              className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"
+              className="size-10 rounded-full bg-blue-600 text-white hover:bg-blue-700 shadow-md transition-colors"
               onClick={() => scrollContainer(postsRef, "right")}
               aria-label="Scroll Blog ke Kanan"
             >
@@ -327,6 +353,7 @@ function HomePage() {
             title="Silakan hubungi kami jika ada pertanyaan"
             description="Tim kami siap membantu Anda — baik untuk pertanyaan medis, informasi layanan, maupun hal lainnya."
             align="center"
+            titleClassName="font-normal"
           />
         </ScrollReveal>
 

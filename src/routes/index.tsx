@@ -135,17 +135,29 @@ function HomePage() {
   return (
     <>
       {/* Hero */}
-      <div id="atas" className="relative overflow-hidden bg-white border-b border-border/40">
-        <div className="relative mx-auto grid max-w-[1440px] items-center gap-6 px-4 py-10 sm:gap-8 sm:py-14 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:py-16">
-          <ScrollReveal variant="fade-right" distance={30} className="order-2 lg:order-1">
+      <div id="atas" className="relative overflow-hidden bg-background border-b border-border/40">
+        {/* Desktop full-bleed image with gradient fade */}
+        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 overflow-hidden lg:block">
+          <img
+            src={hsBackground}
+            alt="Gedung Klinik Harapan Sehat"
+            className="h-full w-full object-cover object-[center_20%]"
+          />
+          {/* Gradient fade from solid background on the left to transparent on the right */}
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background/40" />
+        </div>
+
+        <div className="relative mx-auto grid max-w-[1440px] items-center gap-8 px-4 py-10 sm:gap-10 sm:py-14 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:py-20">
+          <ScrollReveal variant="fade-right" distance={30} className="relative z-10 max-w-2xl order-2 lg:order-1">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0052cc]">
               Selamat Datang di Klinik Harapan Sehat
             </p>
-            <h1 className="mt-4 text-4xl font-bold leading-[1.13] text-[#1a1a2e] sm:text-5xl xl:text-6xl">
+            <h1 className="mt-4 text-4xl font-bold leading-[1.13] text-[#1a1a2e] dark:text-foreground sm:text-5xl xl:text-6xl">
               <span className="block">Pelayanan Kesehatan</span>
-              <span className="block text-[#0052cc]">Paripurna & Terpercaya.</span>
+              <span className="block text-[#0052cc] dark:text-blue-400">Paripurna & Terpercaya.</span>
             </h1>
-            <p className="mt-5 max-w-lg text-base leading-relaxed text-[#555] sm:text-lg">
+            <p className="mt-5 max-w-lg text-base leading-relaxed text-[#555] dark:text-muted-foreground sm:text-lg">
               Memberikan pelayanan kesehatan yang paripurna kepada masyarakat tanpa terkendala biaya,
               didukung oleh sistem ijab kabul biaya berobat.
             </p>
@@ -162,14 +174,19 @@ function HomePage() {
             </div>
           </ScrollReveal>
 
-          <ScrollReveal variant="fade-left" distance={30} delay={0.1} className="relative order-1 mx-auto w-full max-w-lg lg:order-2 lg:max-w-xl">
-            <img
-              src={hsBackground}
-              alt="Gedung Klinik Harapan Sehat"
-              width={1200}
-              height={800}
-              className="aspect-[4/3] w-full rounded-3xl object-cover object-center shadow-xl"
-            />
+          <ScrollReveal variant="fade-left" distance={30} delay={0.1} className="relative order-1 lg:order-2 w-full">
+            {/* Mobile: regular simple image card */}
+            <div className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-md lg:hidden">
+              <img
+                src={hsBackground}
+                alt="Gedung Klinik Harapan Sehat"
+                width={1200}
+                height={800}
+                className="aspect-[4/3] w-full object-cover"
+              />
+            </div>
+            {/* Desktop spacer to preserve layout height if needed */}
+            <div className="hidden lg:block min-h-[320px]" />
           </ScrollReveal>
         </div>
       </div>

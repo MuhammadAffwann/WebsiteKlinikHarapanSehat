@@ -38,16 +38,19 @@ const advantages = [
     icon: Stethoscope,
     title: "Dokter Berpengalaman",
     text: "Tim dokter umum dan spesialis yang siap mendampingi setiap tahap perawatan Anda.",
+    image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=1000&auto=format&fit=crop",
   },
   {
     icon: ShieldCheck,
     title: "Fasilitas Terstandar",
     text: "Ruang periksa, laboratorium, dan alat medis yang steril serta terkalibrasi rutin.",
+    image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1000&auto=format&fit=crop",
   },
   {
     icon: HeartPulse,
     title: "Siaga 24 Jam",
     text: "Layanan gawat darurat dengan ambulans siaga dan rujukan cepat ke rumah sakit mitra.",
+    image: "https://images.unsplash.com/photo-1587745416684-47953f16f02f?q=80&w=1000&auto=format&fit=crop",
   },
 ];
 
@@ -132,33 +135,21 @@ function HomePage() {
   return (
     <>
       {/* Hero */}
-      <div id="atas" className="relative overflow-hidden bg-background border-b border-border/40">
-        {/* Background clinic image with soft blur & clear visibility */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <img
-            src={hsBackground}
-            alt=""
-            aria-hidden="true"
-            className="h-full w-full object-cover object-[center_15%] scale-100 blur-[2px] opacity-85 dark:opacity-40 transition-all duration-700"
-          />
-          {/* Soft gradient overlay to keep text 100% legible while showing clinic building clearly */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/75 to-background/25 sm:from-background/90 sm:via-background/60 sm:to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background/90" />
-        </div>
-
-        <div className="relative mx-auto grid max-w-[1440px] items-start gap-6 px-4 pt-2 pb-8 sm:gap-8 sm:pt-3 sm:pb-10 sm:px-6 lg:grid-cols-2 lg:items-center lg:gap-12 lg:px-8 lg:pt-3 lg:pb-12">
-          <ScrollReveal variant="fade-right" distance={30} className="order-2 pt-1 sm:pt-2 lg:order-1">
-
-            <h1 className="text-4xl font-bold leading-[1.15] sm:text-5xl lg:mt-4 lg:text-5xl xl:text-6xl">
-              <span className="block text-[#2e7d32] dark:text-emerald-400 font-bold">Selamat Datang</span>
-              <span className="block text-[#0052cc] dark:text-blue-400 font-bold lg:whitespace-nowrap">di Klinik Harapan Sehat</span>
-            </h1>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Memberikan Pelayanan kesehatan yang paripurna kepada masyarakat tanpa terkendala biaya
-              melalui sistem ijab kabul biaya berobat dan turut serta membantu pemerintah dalam
-              meningkatkan derajat kesehatan masyarakat dan membantu pembangunan nasional.
+      <div id="atas" className="relative overflow-hidden bg-white border-b border-border/40">
+        <div className="relative mx-auto grid max-w-[1440px] items-center gap-6 px-4 py-10 sm:gap-8 sm:py-14 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:py-16">
+          <ScrollReveal variant="fade-right" distance={30} className="order-2 lg:order-1">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0052cc]">
+              Selamat Datang di Klinik Harapan Sehat
             </p>
-            <div className="mt-6 flex w-full flex-row gap-2 sm:gap-3">
+            <h1 className="mt-4 text-4xl font-bold leading-[1.13] text-[#1a1a2e] sm:text-5xl xl:text-6xl">
+              <span className="block">Pelayanan Kesehatan</span>
+              <span className="block text-[#0052cc]">Paripurna & Terpercaya.</span>
+            </h1>
+            <p className="mt-5 max-w-lg text-base leading-relaxed text-[#555] sm:text-lg">
+              Memberikan pelayanan kesehatan yang paripurna kepada masyarakat tanpa terkendala biaya,
+              didukung oleh sistem ijab kabul biaya berobat.
+            </p>
+            <div className="mt-8 flex w-full flex-row gap-2 sm:gap-3">
               {heroActions.map((action) => (
                 <HeroActionCard
                   key={action.label}
@@ -173,21 +164,12 @@ function HomePage() {
 
           <ScrollReveal variant="fade-left" distance={30} delay={0.1} className="relative order-1 mx-auto w-full max-w-lg lg:order-2 lg:max-w-xl">
             <img
-              src={heroImage}
-              alt="Perawat mendampingi pasien di ruang perawatan Klinik Harapan Sehat"
+              src={hsBackground}
+              alt="Gedung Klinik Harapan Sehat"
               width={1200}
-              height={1100}
-              className="shadow-float aspect-[1/1] sm:aspect-[4/3.6] max-h-[460px] lg:max-h-[520px] w-full rounded-3xl border border-border bg-card object-cover"
+              height={800}
+              className="aspect-[4/3] w-full rounded-3xl object-cover object-center shadow-xl"
             />
-            <div className="shadow-card absolute bottom-5 left-5 sm:bottom-6 sm:left-6 flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3">
-              <span className="flex size-10 items-center justify-center rounded-full bg-mint text-mint-foreground">
-                <HeartPulse className="size-5" />
-              </span>
-              <div>
-                <p className="text-lg font-bold">99.8%</p>
-                <p className="text-xs text-muted-foreground">Kepuasan pasien</p>
-              </div>
-            </div>
           </ScrollReveal>
         </div>
       </div>
@@ -218,16 +200,93 @@ function HomePage() {
             titleClassName="font-normal"
           />
         </ScrollReveal>
-        <StaggerContainer staggerChildren={0.1} className="mt-10 grid gap-6 md:grid-cols-3">
-          {advantages.map(({ icon: Icon, title, text }) => (
-            <StaggerItem key={title} className="shadow-card rounded-2xl border border-border bg-card p-6">
-              <span className="flex size-11 items-center justify-center rounded-xl bg-accent text-accent-foreground">
-                <Icon className="size-5" />
-              </span>
-              <h3 className="mt-4 text-lg font-bold">{title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{text}</p>
-            </StaggerItem>
-          ))}
+        <StaggerContainer staggerChildren={0.1} className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-12">
+          {/* Card 1: Dokter Berpengalaman (Besar di kiri, span 2 baris) */}
+          <StaggerItem className="md:col-span-7 md:row-span-2">
+            {(() => {
+              const Icon = advantages[0].icon;
+              return (
+                <div className="group relative flex h-full min-h-[340px] md:min-h-[460px] flex-col justify-between overflow-hidden rounded-2xl sm:rounded-3xl border border-border/40 shadow-card">
+                  {/* TODO: ganti dengan foto asli klinik — saat ini pakai placeholder Unsplash */}
+                  <img
+                    src={advantages[0].image}
+                    alt={advantages[0].title}
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                  <div className="relative z-10 flex h-full flex-col justify-between p-6 sm:p-8">
+                    <div>
+                      <span className="inline-flex size-12 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white backdrop-blur-md shadow-sm">
+                        <Icon className="size-6" />
+                      </span>
+                    </div>
+                    <div className="mt-auto pt-8">
+                      <h3 className="text-xl font-semibold text-white sm:text-2xl">{advantages[0].title}</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-white/80 sm:text-base">{advantages[0].text}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+          </StaggerItem>
+
+          {/* Card 2: Fasilitas Terstandar */}
+          <StaggerItem className="md:col-span-5">
+            {(() => {
+              const Icon = advantages[1].icon;
+              return (
+                <div className="group relative flex h-full min-h-[210px] flex-col justify-between overflow-hidden rounded-2xl sm:rounded-3xl border border-border/40 shadow-card">
+                  {/* TODO: ganti dengan foto asli klinik — saat ini pakai placeholder Unsplash */}
+                  <img
+                    src={advantages[1].image}
+                    alt={advantages[1].title}
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                  <div className="relative z-10 flex h-full flex-col justify-between p-6 sm:p-7">
+                    <div>
+                      <span className="inline-flex size-10 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white backdrop-blur-md shadow-sm">
+                        <Icon className="size-5" />
+                      </span>
+                    </div>
+                    <div className="mt-auto pt-6">
+                      <h3 className="text-lg font-semibold text-white sm:text-xl">{advantages[1].title}</h3>
+                      <p className="mt-1.5 text-xs leading-relaxed text-white/80 sm:text-sm">{advantages[1].text}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+          </StaggerItem>
+
+          {/* Card 3: Siaga 24 Jam */}
+          <StaggerItem className="md:col-span-5">
+            {(() => {
+              const Icon = advantages[2].icon;
+              return (
+                <div className="group relative flex h-full min-h-[210px] flex-col justify-between overflow-hidden rounded-2xl sm:rounded-3xl border border-border/40 shadow-card">
+                  {/* TODO: ganti dengan foto asli klinik — saat ini pakai placeholder Unsplash */}
+                  <img
+                    src={advantages[2].image}
+                    alt={advantages[2].title}
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                  <div className="relative z-10 flex h-full flex-col justify-between p-6 sm:p-7">
+                    <div>
+                      <span className="inline-flex size-10 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white backdrop-blur-md shadow-sm">
+                        <Icon className="size-5" />
+                      </span>
+                    </div>
+                    <div className="mt-auto pt-6">
+                      <h3 className="text-lg font-semibold text-white sm:text-xl">{advantages[2].title}</h3>
+                      <p className="mt-1.5 text-xs leading-relaxed text-white/80 sm:text-sm">{advantages[2].text}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+          </StaggerItem>
         </StaggerContainer>
       </Section>
 

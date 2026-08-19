@@ -4,6 +4,7 @@ import { ServiceCard } from "@/components/site/cards";
 import { PageHero, Section } from "@/components/site/section";
 import { StaggerContainer, StaggerItem } from "@/components/site/scroll-reveal";
 import { services } from "@/data/clinic";
+import hsBackground from "@/assets/hsbackground.png";
 
 export const Route = createFileRoute("/layanan")({
   head: () => ({
@@ -28,7 +29,7 @@ function LayananPage() {
   return (
     <>
       <PageHero
-        eyebrow="Layanan"
+        backgroundImage={hsBackground}
         title="Layanan lengkap untuk seluruh keluarga"
         description="Semua layanan ditangani tenaga medis berlisensi dengan biaya yang diinformasikan di awal."
       />

@@ -25,8 +25,7 @@ const faqs: IjabKabulFaq[] = [
       "Pembayaran dari pasien yang mampu digunakan secara langsung untuk membantu membiayai pasien yang membutuhkan. Dengan begitu, pasien yang membayar tidak hanya berobat, tetapi juga bernilai sedekah yang memberi dampak nyata.",
   },
   {
-    question:
-      "Di mana dan bagaimana proses kesepakatan akad Ijab Kabul tersebut disahkan?",
+    question: "Di mana dan bagaimana proses kesepakatan akad Ijab Kabul tersebut disahkan?",
     answer:
       "Kesepakatan dilakukan secara langsung di bagian pendaftaran atau di ruang dokter, kemudian disahkan melalui tanda tangan sebagai bukti persetujuan bersama.",
   },
@@ -85,7 +84,7 @@ export function IjabKabulSection() {
                       <Plus
                         className={cn(
                           "size-5 transition-transform duration-300",
-                          isOpen && "rotate-45 text-foreground"
+                          isOpen && "rotate-45 text-foreground",
                         )}
                         strokeWidth={2.2}
                       />

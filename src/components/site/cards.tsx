@@ -28,7 +28,6 @@ const doctorPhotoMap: Record<string, string> = {
   "dr-muhammad-rudiansyah": drMuhammadRudiansyah,
 };
 
-
 /** Ganti file di src/assets untuk memakai foto klinik sendiri. */
 const serviceImages = {
   umum: svcUmum,
@@ -91,7 +90,9 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
     .map((w) => w[0]?.toUpperCase() ?? "")
     .join("");
 
-  const photo = doctor.image ? (doctorPhotoMap[doctor.image] || doctor.image) : doctorPhotoMap[doctor.slug];
+  const photo = doctor.image
+    ? doctorPhotoMap[doctor.image] || doctor.image
+    : doctorPhotoMap[doctor.slug];
 
   // Detect if schedule spans overnight (time starts with 00: or 20:)
   const isNight = doctor.time.startsWith("20") || doctor.time.startsWith("00");
@@ -124,7 +125,9 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
             </div>
           )}
           <div className="min-w-0">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-primary">{doctor.specialty}</p>
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-primary">
+              {doctor.specialty}
+            </p>
             <h3 className="mt-0.5 text-base font-bold leading-snug">{doctor.name}</h3>
           </div>
         </div>
@@ -134,13 +137,17 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
 
         {/* Schedule */}
         <div className="space-y-1.5">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Jadwal Praktik</p>
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+            Jadwal Praktik
+          </p>
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1 text-xs font-medium">
               <CalendarDays className="size-3.5 text-primary" />
               {doctor.days}
             </span>
-            <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${isNight ? "bg-indigo-100 text-indigo-700" : "bg-green-100 text-green-700"}`}>
+            <span
+              className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${isNight ? "bg-indigo-100 text-indigo-700" : "bg-green-100 text-green-700"}`}
+            >
               {doctor.time}
             </span>
           </div>

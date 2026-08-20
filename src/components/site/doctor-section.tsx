@@ -8,8 +8,13 @@ const DAYS = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"] as
 type Day = (typeof DAYS)[number];
 
 const DAY_INDEX: Record<Day, number> = {
-  Senin: 0, Selasa: 1, Rabu: 2, Kamis: 3,
-  Jumat: 4, Sabtu: 5, Minggu: 6,
+  Senin: 0,
+  Selasa: 1,
+  Rabu: 2,
+  Kamis: 3,
+  Jumat: 4,
+  Sabtu: 5,
+  Minggu: 6,
 };
 
 /**
@@ -76,9 +81,7 @@ export function DoctorSection() {
   const filtered =
     activeDay === "Semua"
       ? doctors
-      : doctors.filter((doc) =>
-          coveredDays(doc.days).includes(DAY_INDEX[activeDay])
-        );
+      : doctors.filter((doc) => coveredDays(doc.days).includes(DAY_INDEX[activeDay]));
 
   return (
     <div className="mt-8">
@@ -96,7 +99,7 @@ export function DoctorSection() {
         </button>
         {DAYS.map((day) => {
           const count = doctors.filter((doc) =>
-            coveredDays(doc.days).includes(DAY_INDEX[day])
+            coveredDays(doc.days).includes(DAY_INDEX[day]),
           ).length;
           const isActive = activeDay === day;
           const isToday = day === today;
@@ -117,9 +120,11 @@ export function DoctorSection() {
                   className="absolute -top-1 -right-1 size-2.5 rounded-full border-2 border-background bg-green-500"
                 />
               )}
-              <span className={`ml-1.5 rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
-                isActive ? "bg-white/20 text-white" : "bg-muted text-muted-foreground"
-              }`}>
+              <span
+                className={`ml-1.5 rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
+                  isActive ? "bg-white/20 text-white" : "bg-muted text-muted-foreground"
+                }`}
+              >
                 {count}
               </span>
             </button>
@@ -142,7 +147,11 @@ export function DoctorSection() {
 
       {/* Doctor grid */}
       {filtered.length > 0 ? (
-        <StaggerContainer key={activeDay} staggerChildren={0.06} className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <StaggerContainer
+          key={activeDay}
+          staggerChildren={0.06}
+          className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        >
           {filtered.map((doctor) => (
             <StaggerItem key={doctor.slug}>
               <DoctorCard doctor={doctor} />
@@ -153,7 +162,9 @@ export function DoctorSection() {
         <div className="mt-10 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border py-16 text-center">
           <span className="text-4xl">😔</span>
           <p className="font-semibold">Tidak ada dokter yang praktik hari {activeDay}</p>
-          <p className="text-sm text-muted-foreground">Coba pilih hari lain atau lihat semua jadwal.</p>
+          <p className="text-sm text-muted-foreground">
+            Coba pilih hari lain atau lihat semua jadwal.
+          </p>
           <button
             onClick={() => setActiveDay("Semua")}
             className="mt-2 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground"

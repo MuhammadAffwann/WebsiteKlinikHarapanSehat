@@ -1,6 +1,19 @@
 import { useState, useRef, useCallback } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, X, ArrowRight, CalendarCheck, Stethoscope, SmilePlus, Baby, FlaskConical, Glasses, BedDouble, Siren, ChevronDown } from "lucide-react";
+import {
+  Menu,
+  X,
+  ArrowRight,
+  CalendarCheck,
+  Stethoscope,
+  SmilePlus,
+  Baby,
+  FlaskConical,
+  Glasses,
+  BedDouble,
+  Siren,
+  ChevronDown,
+} from "lucide-react";
 
 import { BrandLogo } from "@/components/site/logo";
 import { Button } from "@/components/ui/button";
@@ -25,8 +38,8 @@ const serviceIcons: Record<string, React.ElementType> = {
   "poli-umum": Stethoscope,
   "kesehatan-gigi": SmilePlus,
   "ibu-dan-anak": Baby,
-  "laboratorium": FlaskConical,
-  "optik": Glasses,
+  laboratorium: FlaskConical,
+  optik: Glasses,
   "rawat-inap": BedDouble,
   "gawat-darurat": Siren,
 };
@@ -47,8 +60,6 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50">
-
-
       {/* Main Navbar */}
       <div className="border-b border-border/70 bg-background/95 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
@@ -73,7 +84,9 @@ export function Navbar() {
                     className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
                   >
                     {item.label}
-                    <ChevronDown className={`size-3.5 transition-transform duration-200 ${megaOpen ? "rotate-180" : ""}`} />
+                    <ChevronDown
+                      className={`size-3.5 transition-transform duration-200 ${megaOpen ? "rotate-180" : ""}`}
+                    />
                   </Link>
 
                   {/* Mega dropdown panel */}
@@ -86,7 +99,9 @@ export function Navbar() {
                   >
                     <div className="w-[680px] rounded-2xl border border-border bg-background p-5 shadow-lg">
                       <div className="mb-3 flex items-center justify-between">
-                        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Layanan Kami</p>
+                        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                          Layanan Kami
+                        </p>
                         <Link
                           to="/"
                           hash="layanan"
@@ -110,7 +125,9 @@ export function Navbar() {
                               </span>
                               <div className="min-w-0">
                                 <p className="text-sm font-medium text-foreground">{svc.title}</p>
-                                <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{svc.points[0]}</p>
+                                <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+                                  {svc.points[0]}
+                                </p>
                               </div>
                             </Link>
                           );

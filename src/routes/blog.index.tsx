@@ -29,7 +29,6 @@ function BlogPage() {
   return (
     <>
       <PageHero
-
         title="Kabar & edukasi kesehatan"
         description="Tulisan ringkas dari tim medis kami seputar pencegahan penyakit dan layanan klinik."
         backgroundImage={blogBanner}

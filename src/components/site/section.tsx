@@ -77,12 +77,7 @@ export function PageHero({
   className?: string;
 }) {
   return (
-    <div
-      className={cn(
-        "relative overflow-hidden surface-hero border-b border-border",
-        className
-      )}
-    >
+    <div className={cn("relative overflow-hidden surface-hero border-b border-border", className)}>
       {backgroundImage && (
         <div className="absolute inset-0 pointer-events-none">
           <img

@@ -95,7 +95,9 @@ export function TestimonialSection() {
                     }}
                   />
                   <div>
-                    <h4 className="font-bold text-foreground text-base leading-snug">{item.name}</h4>
+                    <h4 className="font-bold text-foreground text-base leading-snug">
+                      {item.name}
+                    </h4>
                     {/* Icon Bintang Gold / Kuning */}
                     <div className="flex items-center gap-1 mt-1">
                       {Array.from({ length: item.rating || 5 }).map((_, i) => (

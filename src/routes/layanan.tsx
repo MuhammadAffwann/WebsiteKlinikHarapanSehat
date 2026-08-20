@@ -18,7 +18,8 @@ export const Route = createFileRoute("/layanan")({
       { property: "og:title", content: "Layanan Klinik Harapan Sehat" },
       {
         property: "og:description",
-        content: "Poli umum, gigi, ibu & anak, laboratorium, optik, rawat inap, dan gawat darurat 24 jam.",
+        content:
+          "Poli umum, gigi, ibu & anak, laboratorium, optik, rawat inap, dan gawat darurat 24 jam.",
       },
     ],
   }),
@@ -34,7 +35,10 @@ function LayananPage() {
         description="Semua layanan ditangani tenaga medis berlisensi dengan biaya yang diinformasikan di awal."
       />
       <Section>
-        <StaggerContainer staggerChildren={0.08} className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <StaggerContainer
+          staggerChildren={0.08}
+          className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+        >
           {services.map((service) => (
             <StaggerItem key={service.slug}>
               <ServiceCard service={service} />

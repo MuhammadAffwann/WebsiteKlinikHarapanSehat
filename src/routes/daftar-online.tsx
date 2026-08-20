@@ -152,7 +152,7 @@ function DaftarOnlinePage() {
       const matched = services.find(
         (s) =>
           s.title.toLowerCase() === search.poli?.toLowerCase() ||
-          s.slug.toLowerCase() === search.poli?.toLowerCase()
+          s.slug.toLowerCase() === search.poli?.toLowerCase(),
       );
       return matched ? matched.title : search.poli;
     }
@@ -173,7 +173,7 @@ function DaftarOnlinePage() {
       const matched = services.find(
         (s) =>
           s.title.toLowerCase() === search.poli?.toLowerCase() ||
-          s.slug.toLowerCase() === search.poli?.toLowerCase()
+          s.slug.toLowerCase() === search.poli?.toLowerCase(),
       );
       setJenisPoli(matched ? matched.title : search.poli);
     }
@@ -217,7 +217,9 @@ function DaftarOnlinePage() {
     const queueCode = `HS-${dateFormatted}-${randomNum}`;
 
     const dokterObj = doctors.find((d) => d.slug === selectedDokter) || availableDoctors[0];
-    const dokterName = dokterObj ? `${dokterObj.name} (${dokterObj.time})` : "Dokter Tugas Hari Ini";
+    const dokterName = dokterObj
+      ? `${dokterObj.name} (${dokterObj.time})`
+      : "Dokter Tugas Hari Ini";
 
     const result: RegistrationResult = {
       queueCode,
@@ -304,7 +306,8 @@ function DaftarOnlinePage() {
                 </div>
                 <div>
                   <h3 className="text-base font-bold">
-                    Pendaftaran {patientType === "Baru" ? "Pasien Baru" : "Pasien Lama (Pernah Berobat)"}
+                    Pendaftaran{" "}
+                    {patientType === "Baru" ? "Pasien Baru" : "Pasien Lama (Pernah Berobat)"}
                   </h3>
                   <p className="text-xs text-muted-foreground">
                     {patientType === "Baru"
@@ -325,7 +328,10 @@ function DaftarOnlinePage() {
                     <>
                       <div className="grid gap-4 sm:grid-cols-2">
                         <div>
-                          <label htmlFor="namaLengkap" className="block text-xs font-semibold text-foreground mb-1.5">
+                          <label
+                            htmlFor="namaLengkap"
+                            className="block text-xs font-semibold text-foreground mb-1.5"
+                          >
                             Nama Lengkap Pasien *
                           </label>
                           <input
@@ -340,7 +346,10 @@ function DaftarOnlinePage() {
                         </div>
 
                         <div>
-                          <label htmlFor="namaAyah" className="block text-xs font-semibold text-foreground mb-1.5">
+                          <label
+                            htmlFor="namaAyah"
+                            className="block text-xs font-semibold text-foreground mb-1.5"
+                          >
                             Nama Ayah Kandung *
                           </label>
                           <input
@@ -356,7 +365,10 @@ function DaftarOnlinePage() {
                       </div>
 
                       <div>
-                        <label htmlFor="alamat" className="block text-xs font-semibold text-foreground mb-1.5">
+                        <label
+                          htmlFor="alamat"
+                          className="block text-xs font-semibold text-foreground mb-1.5"
+                        >
                           Alamat Lengkap *
                         </label>
                         <textarea
@@ -374,7 +386,10 @@ function DaftarOnlinePage() {
                     <>
                       <div className="grid gap-4 sm:grid-cols-2">
                         <div>
-                          <label htmlFor="noRm" className="block text-xs font-semibold text-foreground mb-1.5">
+                          <label
+                            htmlFor="noRm"
+                            className="block text-xs font-semibold text-foreground mb-1.5"
+                          >
                             No. Rekam Medis (RM) / NIK / BPJS *
                           </label>
                           <input
@@ -389,7 +404,10 @@ function DaftarOnlinePage() {
                         </div>
 
                         <div>
-                          <label htmlFor="namaLengkapLama" className="block text-xs font-semibold text-foreground mb-1.5">
+                          <label
+                            htmlFor="namaLengkapLama"
+                            className="block text-xs font-semibold text-foreground mb-1.5"
+                          >
                             Nama Lengkap Pasien *
                           </label>
                           <input
@@ -405,7 +423,10 @@ function DaftarOnlinePage() {
                       </div>
 
                       <div>
-                        <label htmlFor="tanggalLahir" className="block text-xs font-semibold text-foreground mb-1.5">
+                        <label
+                          htmlFor="tanggalLahir"
+                          className="block text-xs font-semibold text-foreground mb-1.5"
+                        >
                           Tanggal Lahir Pasien *
                         </label>
                         <input
@@ -421,7 +442,10 @@ function DaftarOnlinePage() {
                   )}
 
                   <div>
-                    <label htmlFor="noTelp" className="block text-xs font-semibold text-foreground mb-1.5">
+                    <label
+                      htmlFor="noTelp"
+                      className="block text-xs font-semibold text-foreground mb-1.5"
+                    >
                       Nomor Telepon / WhatsApp Aktif *
                     </label>
                     <input
@@ -446,7 +470,10 @@ function DaftarOnlinePage() {
 
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>
-                      <label htmlFor="tanggalKunjungan" className="block text-xs font-semibold text-foreground mb-1.5">
+                      <label
+                        htmlFor="tanggalKunjungan"
+                        className="block text-xs font-semibold text-foreground mb-1.5"
+                      >
                         Tanggal Kunjungan *
                       </label>
                       <input
@@ -466,7 +493,10 @@ function DaftarOnlinePage() {
                     </div>
 
                     <div>
-                      <label htmlFor="jenisPoli" className="block text-xs font-semibold text-foreground mb-1.5">
+                      <label
+                        htmlFor="jenisPoli"
+                        className="block text-xs font-semibold text-foreground mb-1.5"
+                      >
                         Jenis Poli *
                       </label>
                       <select
@@ -491,13 +521,19 @@ function DaftarOnlinePage() {
 
                   {/* Dynamic Doctor Schedule dropdown */}
                   <div>
-                    <label htmlFor="jadwalDokter" className="block text-xs font-semibold text-foreground mb-1.5">
+                    <label
+                      htmlFor="jadwalDokter"
+                      className="block text-xs font-semibold text-foreground mb-1.5"
+                    >
                       Dokter & Jadwal Praktik {selectedDayName ? `(${selectedDayName})` : ""} *
                     </label>
                     {!jenisPoli ? (
                       <div className="flex items-center gap-2 rounded-xl bg-muted p-3 text-xs text-muted-foreground border border-border">
                         <AlertCircle className="size-4 shrink-0 text-primary" />
-                        <span>Silakan pilih <strong>Jenis Poli</strong> terlebih dahulu untuk melihat daftar dokter & jadwal praktik.</span>
+                        <span>
+                          Silakan pilih <strong>Jenis Poli</strong> terlebih dahulu untuk melihat
+                          daftar dokter & jadwal praktik.
+                        </span>
                       </div>
                     ) : availableDoctors.length > 0 ? (
                       <select
@@ -518,14 +554,18 @@ function DaftarOnlinePage() {
                       <div className="flex items-center gap-2 rounded-xl bg-amber-500/10 border border-amber-500/20 p-3 text-xs text-amber-700">
                         <AlertCircle className="size-4 shrink-0" />
                         <span>
-                          Tidak ada jadwal praktik untuk <strong>{jenisPoli}</strong> pada hari <strong>{selectedDayName}</strong>. Silakan pilih tanggal kunjungan lain.
+                          Tidak ada jadwal praktik untuk <strong>{jenisPoli}</strong> pada hari{" "}
+                          <strong>{selectedDayName}</strong>. Silakan pilih tanggal kunjungan lain.
                         </span>
                       </div>
                     )}
                   </div>
 
                   <div>
-                    <label htmlFor="keluhan" className="block text-xs font-semibold text-foreground mb-1.5">
+                    <label
+                      htmlFor="keluhan"
+                      className="block text-xs font-semibold text-foreground mb-1.5"
+                    >
                       Keluhan / Gejala Utama (Opsional)
                     </label>
                     <textarea
@@ -589,7 +629,10 @@ function DaftarOnlinePage() {
                   {paymentType === "BPJS" ? (
                     <div className="grid gap-4 sm:grid-cols-2 rounded-2xl bg-emerald-50/50 p-4 border border-emerald-200/60">
                       <div>
-                        <label htmlFor="noBpjs" className="block text-xs font-semibold text-foreground mb-1.5">
+                        <label
+                          htmlFor="noBpjs"
+                          className="block text-xs font-semibold text-foreground mb-1.5"
+                        >
                           Nomor Kartu BPJS *
                         </label>
                         <input
@@ -603,7 +646,10 @@ function DaftarOnlinePage() {
                         />
                       </div>
                       <div>
-                        <label htmlFor="nikBpjs" className="block text-xs font-semibold text-foreground mb-1.5">
+                        <label
+                          htmlFor="nikBpjs"
+                          className="block text-xs font-semibold text-foreground mb-1.5"
+                        >
                           NIK (Nomor Induk Kependudukan) *
                         </label>
                         <input
@@ -620,7 +666,10 @@ function DaftarOnlinePage() {
                     </div>
                   ) : (
                     <div className="rounded-2xl bg-muted/40 p-4 border border-border">
-                      <label htmlFor="nikUmum" className="block text-xs font-semibold text-foreground mb-1.5">
+                      <label
+                        htmlFor="nikUmum"
+                        className="block text-xs font-semibold text-foreground mb-1.5"
+                      >
                         NIK (Nomor Induk Kependudukan) *
                       </label>
                       <input

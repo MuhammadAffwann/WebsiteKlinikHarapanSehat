@@ -45,7 +45,12 @@ export const services: Service[] = [
     title: "Poli Umum",
     description:
       "Pemeriksaan kesehatan harian, pengobatan penyakit ringan, hingga rujukan spesialis oleh dokter umum berpengalaman.",
-    points: ["Konsultasi dokter umum", "Surat keterangan sehat", "Pengobatan ISPA & demam", "Sistem Ijab Kabul"],
+    points: [
+      "Konsultasi dokter umum",
+      "Surat keterangan sehat",
+      "Pengobatan ISPA & demam",
+      "Sistem Ijab Kabul",
+    ],
     image: "umum",
     badge: "Paling Dicari",
   },

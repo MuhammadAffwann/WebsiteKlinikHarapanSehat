@@ -1,6 +1,21 @@
 import { useState, useRef, type ReactNode } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { ArrowRight, Calendar, CalendarCheck, ChevronLeft, ChevronRight, ClipboardList, Facebook, HeartPulse, Instagram, Mail, MapPin, MessageCircle, ShieldCheck, Stethoscope } from "lucide-react";
+import {
+  ArrowRight,
+  Calendar,
+  CalendarCheck,
+  ChevronLeft,
+  ChevronRight,
+  ClipboardList,
+  Facebook,
+  HeartPulse,
+  Instagram,
+  Mail,
+  MapPin,
+  MessageCircle,
+  ShieldCheck,
+  Stethoscope,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { PostCard, ServiceCard } from "@/components/site/cards";
@@ -33,24 +48,34 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-const advantages = [
+type AdvantageItem = {
+  icon: typeof Stethoscope;
+  title: string;
+  text: string;
+  image: string;
+};
+
+const advantages: [AdvantageItem, AdvantageItem, AdvantageItem] = [
   {
     icon: Stethoscope,
     title: "Dokter Berpengalaman",
     text: "Tim dokter umum dan spesialis yang siap mendampingi setiap tahap perawatan Anda.",
-    image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=1000&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=1000&auto=format&fit=crop",
   },
   {
     icon: ShieldCheck,
     title: "Fasilitas Terstandar",
     text: "Ruang periksa, laboratorium, dan alat medis yang steril serta terkalibrasi rutin.",
-    image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1000&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1000&auto=format&fit=crop",
   },
   {
     icon: HeartPulse,
     title: "Siaga 24 Jam",
     text: "Layanan gawat darurat dengan ambulans siaga dan rujukan cepat ke rumah sakit mitra.",
-    image: "https://images.unsplash.com/photo-1587745416684-47953f16f02f?q=80&w=1000&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1587745416684-47953f16f02f?q=80&w=1000&auto=format&fit=crop",
   },
 ];
 
@@ -61,7 +86,10 @@ const heroActions = [
     icon: (
       <div className="relative flex size-7 shrink-0 items-center justify-center sm:size-8">
         <Calendar className="size-6 text-[#0052cc] sm:size-7" strokeWidth={1.5} />
-        <Stethoscope className="absolute -bottom-0.5 -left-0.5 size-3.5 text-[#43a047] sm:size-4" strokeWidth={2.25} />
+        <Stethoscope
+          className="absolute -bottom-0.5 -left-0.5 size-3.5 text-[#43a047] sm:size-4"
+          strokeWidth={2.25}
+        />
       </div>
     ),
   },
@@ -71,7 +99,10 @@ const heroActions = [
     icon: (
       <div className="relative flex size-7 shrink-0 items-center justify-center sm:size-8">
         <Calendar className="size-6 text-[#0052cc] sm:size-7" strokeWidth={1.5} />
-        <CalendarCheck className="absolute -bottom-0.5 -left-0.5 size-3.5 text-[#43a047] sm:size-4" strokeWidth={2.25} />
+        <CalendarCheck
+          className="absolute -bottom-0.5 -left-0.5 size-3.5 text-[#43a047] sm:size-4"
+          strokeWidth={2.25}
+        />
       </div>
     ),
   },
@@ -82,7 +113,10 @@ const heroActions = [
     icon: (
       <div className="relative flex size-7 shrink-0 items-center justify-center sm:size-8">
         <ClipboardList className="size-6 text-[#0052cc] sm:size-7" strokeWidth={1.5} />
-        <HeartPulse className="absolute -bottom-0.5 -left-0.5 size-3.5 text-[#43a047] sm:size-4" strokeWidth={2.25} />
+        <HeartPulse
+          className="absolute -bottom-0.5 -left-0.5 size-3.5 text-[#43a047] sm:size-4"
+          strokeWidth={2.25}
+        />
       </div>
     ),
   },
@@ -106,7 +140,9 @@ function HeroActionCard({
       className="shadow-card flex min-w-0 flex-1 items-center gap-1.5 rounded-xl border border-border/60 bg-white px-2.5 py-2.5 transition-transform hover:-translate-y-0.5 hover:shadow-lg sm:gap-2.5 sm:rounded-2xl sm:px-3.5 sm:py-3 md:gap-3 md:px-4 md:py-3.5"
     >
       {icon}
-      <span className="min-w-0 flex-1 text-xs font-medium leading-tight text-[#333333] sm:text-sm">{label}</span>
+      <span className="min-w-0 flex-1 text-xs font-medium leading-tight text-[#333333] sm:text-sm">
+        {label}
+      </span>
       <ChevronRight className="size-3.5 shrink-0 text-[#0052cc] sm:size-4" strokeWidth={2} />
     </Link>
   );
@@ -122,7 +158,10 @@ function HomePage() {
       ? posts
       : posts.filter((post) => post.category.toLowerCase() === selectedBlogCategory.toLowerCase());
 
-  const scrollContainer = (ref: React.RefObject<HTMLDivElement | null>, direction: "left" | "right") => {
+  const scrollContainer = (
+    ref: React.RefObject<HTMLDivElement | null>,
+    direction: "left" | "right",
+  ) => {
     if (ref.current) {
       const scrollAmount = ref.current.clientWidth * 0.75;
       ref.current.scrollBy({
@@ -149,17 +188,23 @@ function HomePage() {
         </div>
 
         <div className="relative mx-auto grid max-w-[1440px] items-center gap-8 px-4 py-10 sm:gap-10 sm:py-14 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:py-20">
-          <ScrollReveal variant="fade-right" distance={30} className="relative z-10 max-w-2xl order-2 lg:order-1">
+          <ScrollReveal
+            variant="fade-right"
+            distance={30}
+            className="relative z-10 max-w-2xl order-2 lg:order-1"
+          >
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0052cc]">
               Selamat Datang di Klinik Harapan Sehat
             </p>
             <h1 className="mt-4 text-4xl font-bold leading-[1.13] text-[#1a1a2e] dark:text-foreground sm:text-5xl xl:text-6xl">
               <span className="block">Pelayanan Kesehatan</span>
-              <span className="block text-[#0052cc] dark:text-blue-400">Paripurna & Terpercaya.</span>
+              <span className="block text-[#0052cc] dark:text-blue-400">
+                Paripurna & Terpercaya.
+              </span>
             </h1>
             <p className="mt-5 max-w-lg text-base leading-relaxed text-[#555] dark:text-muted-foreground sm:text-lg">
-              Memberikan pelayanan kesehatan yang paripurna kepada masyarakat tanpa terkendala biaya,
-              didukung oleh sistem ijab kabul biaya berobat.
+              Memberikan pelayanan kesehatan yang paripurna kepada masyarakat tanpa terkendala
+              biaya, didukung oleh sistem ijab kabul biaya berobat.
             </p>
             <div className="mt-8 flex w-full flex-row gap-2 sm:gap-3">
               {heroActions.map((action) => (
@@ -174,7 +219,12 @@ function HomePage() {
             </div>
           </ScrollReveal>
 
-          <ScrollReveal variant="fade-left" distance={30} delay={0.1} className="relative order-1 lg:order-2 w-full">
+          <ScrollReveal
+            variant="fade-left"
+            distance={30}
+            delay={0.1}
+            className="relative order-1 lg:order-2 w-full"
+          >
             {/* Mobile: regular simple image card */}
             <div className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-md lg:hidden">
               <img
@@ -217,7 +267,10 @@ function HomePage() {
             titleClassName="font-normal"
           />
         </ScrollReveal>
-        <StaggerContainer staggerChildren={0.1} className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-12">
+        <StaggerContainer
+          staggerChildren={0.1}
+          className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-12"
+        >
           {/* Card 1: Dokter Berpengalaman (Besar di kiri, span 2 baris) */}
           <StaggerItem className="md:col-span-7 md:row-span-2">
             {(() => {
@@ -238,8 +291,12 @@ function HomePage() {
                       </span>
                     </div>
                     <div className="mt-auto pt-8">
-                      <h3 className="text-xl font-semibold text-white sm:text-2xl">{advantages[0].title}</h3>
-                      <p className="mt-2 text-sm leading-relaxed text-white/80 sm:text-base">{advantages[0].text}</p>
+                      <h3 className="text-xl font-semibold text-white sm:text-2xl">
+                        {advantages[0].title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-relaxed text-white/80 sm:text-base">
+                        {advantages[0].text}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -267,8 +324,12 @@ function HomePage() {
                       </span>
                     </div>
                     <div className="mt-auto pt-6">
-                      <h3 className="text-lg font-semibold text-white sm:text-xl">{advantages[1].title}</h3>
-                      <p className="mt-1.5 text-xs leading-relaxed text-white/80 sm:text-sm">{advantages[1].text}</p>
+                      <h3 className="text-lg font-semibold text-white sm:text-xl">
+                        {advantages[1].title}
+                      </h3>
+                      <p className="mt-1.5 text-xs leading-relaxed text-white/80 sm:text-sm">
+                        {advantages[1].text}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -296,8 +357,12 @@ function HomePage() {
                       </span>
                     </div>
                     <div className="mt-auto pt-6">
-                      <h3 className="text-lg font-semibold text-white sm:text-xl">{advantages[2].title}</h3>
-                      <p className="mt-1.5 text-xs leading-relaxed text-white/80 sm:text-sm">{advantages[2].text}</p>
+                      <h3 className="text-lg font-semibold text-white sm:text-xl">
+                        {advantages[2].title}
+                      </h3>
+                      <p className="mt-1.5 text-xs leading-relaxed text-white/80 sm:text-sm">
+                        {advantages[2].text}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -331,7 +396,10 @@ function HomePage() {
                 className="flex gap-6 overflow-x-auto pb-6 pt-2 scroll-smooth snap-x snap-mandatory [::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
               >
                 {services.map((service) => (
-                  <div key={service.slug} className="w-[280px] sm:w-[320px] lg:w-[340px] shrink-0 snap-start">
+                  <div
+                    key={service.slug}
+                    className="w-[280px] sm:w-[320px] lg:w-[340px] shrink-0 snap-start"
+                  >
                     <ServiceCard service={service} />
                   </div>
                 ))}
@@ -360,7 +428,6 @@ function HomePage() {
         </ScrollReveal>
       </Section>
 
-
       {/* Blog */}
       <Section id="blog">
         <ScrollReveal variant="fade-up">
@@ -372,7 +439,8 @@ function HomePage() {
                 Kabar &amp; edukasi terbaru
               </h2>
               <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                Temukan informasi kesehatan yang bermanfaat untuk hidup lebih sehat melalui artikel blog dan edukasi klinik kami.
+                Temukan informasi kesehatan yang bermanfaat untuk hidup lebih sehat melalui artikel
+                blog dan edukasi klinik kami.
               </p>
 
               <Link
@@ -391,7 +459,10 @@ function HomePage() {
                 className="flex gap-6 overflow-x-auto pb-4 pt-1 scroll-smooth snap-x snap-mandatory [::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
               >
                 {filteredBlogPosts.map((post) => (
-                  <div key={post.slug} className="w-[280px] sm:w-[320px] lg:w-[340px] shrink-0 snap-start">
+                  <div
+                    key={post.slug}
+                    className="w-[280px] sm:w-[320px] lg:w-[340px] shrink-0 snap-start"
+                  >
                     <PostCard post={post} cover={blogCover} />
                   </div>
                 ))}
@@ -448,9 +519,13 @@ function HomePage() {
                   <MessageCircle className="size-6" />
                 </span>
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-widest text-primary">WhatsApp</p>
+                  <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+                    WhatsApp
+                  </p>
                   <p className="mt-1 font-semibold">{clinic.whatsapp}</p>
-                  <p className="mt-0.5 text-xs text-muted-foreground">Balas cepat dalam jam kerja</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    Balas cepat dalam jam kerja
+                  </p>
                 </div>
               </a>
             </StaggerItem>
@@ -464,18 +539,25 @@ function HomePage() {
                   <Mail className="size-6" />
                 </span>
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-widest text-primary">Email</p>
+                  <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+                    Email
+                  </p>
                   <p className="mt-1 font-semibold">{clinic.email}</p>
-                  <p className="mt-0.5 text-xs text-muted-foreground">Kami akan membalas dalam 24 jam</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    Kami akan membalas dalam 24 jam
+                  </p>
                 </div>
               </a>
             </StaggerItem>
 
             <StaggerItem variant="fade-right">
               <div className="shadow-card rounded-2xl border border-border bg-card p-6">
-                <p className="text-xs font-semibold uppercase tracking-widest text-primary">Sosial Media Kami</p>
+                <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+                  Sosial Media Kami
+                </p>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Jangan lupa kunjungi sosial media kami — update terbaru, tips kesehatan, dan promo spesial ada di sana!
+                  Jangan lupa kunjungi sosial media kami — update terbaru, tips kesehatan, dan promo
+                  spesial ada di sana!
                 </p>
                 <div className="mt-5 flex items-center gap-3">
                   <a
@@ -503,7 +585,12 @@ function HomePage() {
                     aria-label="TikTok Klinik Harapan Sehat"
                     className="flex size-11 items-center justify-center rounded-full bg-black text-white transition-opacity hover:opacity-85"
                   >
-                    <svg className="size-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <svg
+                      className="size-5"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
                       <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.24 8.24 0 004.84 1.55V6.8a4.85 4.85 0 01-1.07-.11z" />
                     </svg>
                   </a>
@@ -513,7 +600,10 @@ function HomePage() {
           </StaggerContainer>
 
           {/* Right: Google Maps Embed */}
-          <ScrollReveal variant="fade-left" className="overflow-hidden rounded-3xl border border-border shadow-lg">
+          <ScrollReveal
+            variant="fade-left"
+            className="overflow-hidden rounded-3xl border border-border shadow-lg"
+          >
             <iframe
               title="Lokasi Klinik Harapan Sehat"
               src="https://maps.google.com/maps?q=Jl.+Raya+Cibeber+No.20,+Sukasari,+Kec.+Cilaku,+Kabupaten+Cianjur,+Jawa+Barat+43285&output=embed&hl=id"

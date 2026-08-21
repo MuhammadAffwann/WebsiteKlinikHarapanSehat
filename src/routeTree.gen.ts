@@ -15,6 +15,12 @@ import { Route as DokterRouteImport } from './routes/dokter'
 import { Route as LayananRouteImport } from './routes/layanan'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as DashboardpanelIndexRouteImport } from './routes/dashboardpanel/index'
+import { Route as DashboardpanelBlogRouteImport } from './routes/dashboardpanel/blog'
+import { Route as DashboardpanelDokterRouteImport } from './routes/dashboardpanel/dokter'
+import { Route as DashboardpanelLayananRouteImport } from './routes/dashboardpanel/layanan'
+import { Route as DashboardpanelLoginRouteImport } from './routes/dashboardpanel/login'
+import { Route as DashboardpanelTestimonialRouteImport } from './routes/dashboardpanel/testimonial'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +52,37 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardpanelIndexRoute = DashboardpanelIndexRouteImport.update({
+  id: '/dashboardpanel/',
+  path: '/dashboardpanel/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardpanelBlogRoute = DashboardpanelBlogRouteImport.update({
+  id: '/dashboardpanel/blog',
+  path: '/dashboardpanel/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardpanelDokterRoute = DashboardpanelDokterRouteImport.update({
+  id: '/dashboardpanel/dokter',
+  path: '/dashboardpanel/dokter',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardpanelLayananRoute = DashboardpanelLayananRouteImport.update({
+  id: '/dashboardpanel/layanan',
+  path: '/dashboardpanel/layanan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardpanelLoginRoute = DashboardpanelLoginRouteImport.update({
+  id: '/dashboardpanel/login',
+  path: '/dashboardpanel/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardpanelTestimonialRoute =
+  DashboardpanelTestimonialRouteImport.update({
+    id: '/dashboardpanel/testimonial',
+    path: '/dashboardpanel/testimonial',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -53,7 +90,13 @@ export interface FileRoutesByFullPath {
   '/dokter': typeof DokterRoute
   '/layanan': typeof LayananRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dashboardpanel/blog': typeof DashboardpanelBlogRoute
+  '/dashboardpanel/dokter': typeof DashboardpanelDokterRoute
+  '/dashboardpanel/layanan': typeof DashboardpanelLayananRoute
+  '/dashboardpanel/login': typeof DashboardpanelLoginRoute
+  '/dashboardpanel/testimonial': typeof DashboardpanelTestimonialRoute
   '/blog/': typeof BlogIndexRoute
+  '/dashboardpanel/': typeof DashboardpanelIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -61,7 +104,13 @@ export interface FileRoutesByTo {
   '/dokter': typeof DokterRoute
   '/layanan': typeof LayananRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dashboardpanel/blog': typeof DashboardpanelBlogRoute
+  '/dashboardpanel/dokter': typeof DashboardpanelDokterRoute
+  '/dashboardpanel/layanan': typeof DashboardpanelLayananRoute
+  '/dashboardpanel/login': typeof DashboardpanelLoginRoute
+  '/dashboardpanel/testimonial': typeof DashboardpanelTestimonialRoute
   '/blog': typeof BlogIndexRoute
+  '/dashboardpanel': typeof DashboardpanelIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -70,14 +119,43 @@ export interface FileRoutesById {
   '/dokter': typeof DokterRoute
   '/layanan': typeof LayananRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dashboardpanel/blog': typeof DashboardpanelBlogRoute
+  '/dashboardpanel/dokter': typeof DashboardpanelDokterRoute
+  '/dashboardpanel/layanan': typeof DashboardpanelLayananRoute
+  '/dashboardpanel/login': typeof DashboardpanelLoginRoute
+  '/dashboardpanel/testimonial': typeof DashboardpanelTestimonialRoute
   '/blog/': typeof BlogIndexRoute
+  '/dashboardpanel/': typeof DashboardpanelIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/daftar-online' | '/dokter' | '/layanan' | '/blog/$slug' | '/blog/'
+    | '/'
+    | '/daftar-online'
+    | '/dokter'
+    | '/layanan'
+    | '/blog/$slug'
+    | '/dashboardpanel/blog'
+    | '/dashboardpanel/dokter'
+    | '/dashboardpanel/layanan'
+    | '/dashboardpanel/login'
+    | '/dashboardpanel/testimonial'
+    | '/blog/'
+    | '/dashboardpanel/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/daftar-online' | '/dokter' | '/layanan' | '/blog/$slug' | '/blog'
+  to:
+    | '/'
+    | '/daftar-online'
+    | '/dokter'
+    | '/layanan'
+    | '/blog/$slug'
+    | '/dashboardpanel/blog'
+    | '/dashboardpanel/dokter'
+    | '/dashboardpanel/layanan'
+    | '/dashboardpanel/login'
+    | '/dashboardpanel/testimonial'
+    | '/blog'
+    | '/dashboardpanel'
   id:
     | '__root__'
     | '/'
@@ -85,7 +163,13 @@ export interface FileRouteTypes {
     | '/dokter'
     | '/layanan'
     | '/blog/$slug'
+    | '/dashboardpanel/blog'
+    | '/dashboardpanel/dokter'
+    | '/dashboardpanel/layanan'
+    | '/dashboardpanel/login'
+    | '/dashboardpanel/testimonial'
     | '/blog/'
+    | '/dashboardpanel/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -94,7 +178,13 @@ export interface RootRouteChildren {
   DokterRoute: typeof DokterRoute
   LayananRoute: typeof LayananRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  DashboardpanelBlogRoute: typeof DashboardpanelBlogRoute
+  DashboardpanelDokterRoute: typeof DashboardpanelDokterRoute
+  DashboardpanelLayananRoute: typeof DashboardpanelLayananRoute
+  DashboardpanelLoginRoute: typeof DashboardpanelLoginRoute
+  DashboardpanelTestimonialRoute: typeof DashboardpanelTestimonialRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  DashboardpanelIndexRoute: typeof DashboardpanelIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -141,6 +231,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboardpanel/': {
+      id: '/dashboardpanel/'
+      path: '/dashboardpanel'
+      fullPath: '/dashboardpanel/'
+      preLoaderRoute: typeof DashboardpanelIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboardpanel/blog': {
+      id: '/dashboardpanel/blog'
+      path: '/dashboardpanel/blog'
+      fullPath: '/dashboardpanel/blog'
+      preLoaderRoute: typeof DashboardpanelBlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboardpanel/dokter': {
+      id: '/dashboardpanel/dokter'
+      path: '/dashboardpanel/dokter'
+      fullPath: '/dashboardpanel/dokter'
+      preLoaderRoute: typeof DashboardpanelDokterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboardpanel/layanan': {
+      id: '/dashboardpanel/layanan'
+      path: '/dashboardpanel/layanan'
+      fullPath: '/dashboardpanel/layanan'
+      preLoaderRoute: typeof DashboardpanelLayananRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboardpanel/login': {
+      id: '/dashboardpanel/login'
+      path: '/dashboardpanel/login'
+      fullPath: '/dashboardpanel/login'
+      preLoaderRoute: typeof DashboardpanelLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboardpanel/testimonial': {
+      id: '/dashboardpanel/testimonial'
+      path: '/dashboardpanel/testimonial'
+      fullPath: '/dashboardpanel/testimonial'
+      preLoaderRoute: typeof DashboardpanelTestimonialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -150,7 +282,13 @@ const rootRouteChildren: RootRouteChildren = {
   DokterRoute: DokterRoute,
   LayananRoute: LayananRoute,
   BlogSlugRoute: BlogSlugRoute,
+  DashboardpanelBlogRoute: DashboardpanelBlogRoute,
+  DashboardpanelDokterRoute: DashboardpanelDokterRoute,
+  DashboardpanelLayananRoute: DashboardpanelLayananRoute,
+  DashboardpanelLoginRoute: DashboardpanelLoginRoute,
+  DashboardpanelTestimonialRoute: DashboardpanelTestimonialRoute,
   BlogIndexRoute: BlogIndexRoute,
+  DashboardpanelIndexRoute: DashboardpanelIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

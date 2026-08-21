@@ -4,7 +4,6 @@ import {
   ArrowRight,
   Calendar,
   CalendarCheck,
-  ChevronLeft,
   ChevronRight,
   ClipboardList,
   Facebook,
@@ -19,6 +18,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { PostCard, ServiceCard } from "@/components/site/cards";
+import { CarouselScrollbar } from "@/components/site/carousel-scrollbar";
 import { Pill, Section, SectionHeading } from "@/components/site/section";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/site/scroll-reveal";
 import { clinic, posts, services, stats } from "@/data/clinic";
@@ -28,8 +28,15 @@ import { cn } from "@/lib/utils";
 import heroImage from "@/assets/hero-care.jpg";
 import blogCover from "@/assets/blog-cover.jpg";
 import hsBackground from "@/assets/hsbackground.png";
+import { incrementPageViewFn } from "@/lib/dashboard";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: () => {
+    // Fire-and-forget: increment page view counter without blocking render
+    incrementPageViewFn().catch(() => {
+      // silently ignore errors — never block homepage
+    });
+  },
   head: () => ({
     meta: [
       { title: "Klinik Harapan Sehat — Klinik Keluarga 24 Jam Cianjur" },
@@ -157,19 +164,6 @@ function HomePage() {
     selectedBlogCategory === "Semua Artikel"
       ? posts
       : posts.filter((post) => post.category.toLowerCase() === selectedBlogCategory.toLowerCase());
-
-  const scrollContainer = (
-    ref: React.RefObject<HTMLDivElement | null>,
-    direction: "left" | "right",
-  ) => {
-    if (ref.current) {
-      const scrollAmount = ref.current.clientWidth * 0.75;
-      ref.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      });
-    }
-  };
 
   return (
     <>
@@ -393,7 +387,7 @@ function HomePage() {
             <div className="lg:col-span-8 overflow-hidden">
               <div
                 ref={servicesRef}
-                className="flex gap-6 overflow-x-auto pb-6 pt-2 scroll-smooth snap-x snap-mandatory [::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                className="flex gap-6 overflow-x-auto pb-4 pt-2 scroll-smooth snap-x snap-mandatory [::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
               >
                 {services.map((service) => (
                   <div
@@ -404,26 +398,8 @@ function HomePage() {
                   </div>
                 ))}
               </div>
+              <CarouselScrollbar targetRef={servicesRef} />
             </div>
-          </div>
-
-          <div className="mt-6 flex items-center justify-center gap-3">
-            <Button
-              size="icon"
-              className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"
-              onClick={() => scrollContainer(servicesRef, "left")}
-              aria-label="Scroll Layanan ke Kiri"
-            >
-              <ChevronLeft className="size-5" />
-            </Button>
-            <Button
-              size="icon"
-              className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"
-              onClick={() => scrollContainer(servicesRef, "right")}
-              aria-label="Scroll Layanan ke Kanan"
-            >
-              <ChevronRight className="size-5" />
-            </Button>
           </div>
         </ScrollReveal>
       </Section>
@@ -467,27 +443,8 @@ function HomePage() {
                   </div>
                 ))}
               </div>
+              <CarouselScrollbar targetRef={postsRef} />
             </div>
-          </div>
-
-          {/* Scroll Buttons - Centered Relative to Full Section */}
-          <div className="mt-8 flex items-center justify-center gap-3">
-            <Button
-              size="icon"
-              className="size-10 rounded-full bg-blue-600 text-white hover:bg-blue-700 shadow-md transition-colors"
-              onClick={() => scrollContainer(postsRef, "left")}
-              aria-label="Scroll Blog ke Kiri"
-            >
-              <ChevronLeft className="size-5" />
-            </Button>
-            <Button
-              size="icon"
-              className="size-10 rounded-full bg-blue-600 text-white hover:bg-blue-700 shadow-md transition-colors"
-              onClick={() => scrollContainer(postsRef, "right")}
-              aria-label="Scroll Blog ke Kanan"
-            >
-              <ChevronRight className="size-5" />
-            </Button>
           </div>
         </ScrollReveal>
       </Section>

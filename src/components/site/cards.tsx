@@ -17,7 +17,7 @@ import drPratiwi from "@/assets/drpratiwi.png";
 import drNofan from "@/assets/drnofan.png";
 import drMuhammadRudiansyah from "@/assets/drmuhammadrudiansyah.png";
 
-import type { Doctor, Post, Service } from "@/data/clinic";
+import type { Doctor, Post, Service } from "@/db/schema";
 
 const doctorPhotoMap: Record<string, string> = {
   "dr-riyan-annasith": drRiyan,
@@ -29,21 +29,45 @@ const doctorPhotoMap: Record<string, string> = {
 };
 
 /** Ganti file di src/assets untuk memakai foto klinik sendiri. */
-const serviceImages = {
+const serviceImages: Record<string, string> = {
   umum: svcUmum,
   gigi: svcGigi,
   ibuAnak: svcIbuAnak,
+  "ibu-dan-anak": svcIbuAnak,
   lab: svcLab,
+  laboratorium: svcLab,
   optic: svcOptic,
+  optik: svcOptic,
   rawatInap: svcRawatInap,
+  "rawat-inap": svcRawatInap,
   darurat: svcDarurat,
-} as const;
+  "gawat-darurat": svcDarurat,
+};
+
+function formatPostDate(dateStr?: string | null): string {
+  if (!dateStr) return "";
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString("id-ID", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  } catch {
+    return dateStr;
+  }
+}
 
 export function ServiceCard({ service }: { service: Service }) {
+  const imgSrc =
+    serviceImages[service.image] ||
+    (service.image.startsWith("http") || service.image.startsWith("/") ? service.image : svcUmum);
+
   return (
     <article className="shadow-card flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-transform hover:-translate-y-1">
       <img
-        src={serviceImages[service.image]}
+        src={imgSrc}
         alt={service.title}
         loading="lazy"
         width={800}
@@ -178,11 +202,14 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
 }
 
 export function PostCard({ post, cover }: { post: Post; cover: string }) {
+  const displayDate = formatPostDate(post.publishedAt || post.createdAt);
+  const coverSrc = post.coverImage || cover;
+
   return (
     <article className="shadow-card flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card">
       <div className="relative">
         <img
-          src={cover}
+          src={coverSrc}
           alt={post.title}
           loading="lazy"
           width={1200}
@@ -194,7 +221,7 @@ export function PostCard({ post, cover }: { post: Post; cover: string }) {
         </span>
       </div>
       <div className="flex flex-1 flex-col p-6">
-        <p className="text-xs text-muted-foreground">{post.date}</p>
+        {displayDate && <p className="text-xs text-muted-foreground">{displayDate}</p>}
         <h3 className="mt-2 font-serif text-xl leading-snug font-bold">{post.title}</h3>
         <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{post.excerpt}</p>
         <Link

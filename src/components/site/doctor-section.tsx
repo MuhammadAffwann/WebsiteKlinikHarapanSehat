@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { DoctorCard } from "@/components/site/cards";
 import { StaggerContainer, StaggerItem } from "@/components/site/scroll-reveal";
-import { doctors } from "@/data/clinic";
+import type { Doctor } from "@/db/schema";
 
 // Day order (0 = Senin, 6 = Minggu)
 const DAYS = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"] as const;
@@ -74,7 +74,7 @@ function getTodayName(): Day {
   return map[jsDay] ?? "Senin";
 }
 
-export function DoctorSection() {
+export function DoctorSection({ doctors = [] }: { doctors?: Doctor[] }) {
   const today = getTodayName();
   const [activeDay, setActiveDay] = useState<Day | "Semua">(today);
 

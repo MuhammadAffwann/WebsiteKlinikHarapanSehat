@@ -17,7 +17,7 @@ import {
 
 import { BrandLogo } from "@/components/site/logo";
 import { Button } from "@/components/ui/button";
-import { services } from "@/data/clinic";
+import type { Service } from "@/db/schema";
 
 type NavItem = {
   label: string;
@@ -44,7 +44,7 @@ const serviceIcons: Record<string, React.ElementType> = {
   "gawat-darurat": Siren,
 };
 
-export function Navbar() {
+export function Navbar({ services = [] }: { services?: Service[] }) {
   const [open, setOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
   const megaTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);

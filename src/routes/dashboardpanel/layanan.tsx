@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
+import { ImageUpload } from "@/components/dashboard/image-upload";
 import { getSessionFn } from "@/lib/auth";
 import {
   createServiceFn,
@@ -486,7 +487,7 @@ function ManageServicesPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="block text-xs font-semibold text-foreground uppercase tracking-wider">
                     Badge (Opsional)
@@ -496,20 +497,6 @@ function ManageServicesPage() {
                     value={formData.badge || ""}
                     onChange={(e) => setFormData((prev) => ({ ...prev, badge: e.target.value }))}
                     placeholder="Contoh: Paling Dicari"
-                    className="mt-1.5 block w-full rounded-xl border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-foreground uppercase tracking-wider">
-                    Gambar / Identifier <span className="text-destructive">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.image}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, image: e.target.value }))}
-                    placeholder="umum / gigi / lab / URL"
                     className="mt-1.5 block w-full rounded-xl border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
@@ -530,6 +517,18 @@ function ManageServicesPage() {
                     className="mt-1.5 block w-full rounded-xl border border-input bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
+              </div>
+
+              <div>
+                <ImageUpload
+                  label="Gambar / Foto Layanan"
+                  required
+                  value={formData.image}
+                  onChange={(url) => setFormData((prev) => ({ ...prev, image: url }))}
+                  placeholder="Klik untuk upload foto banner layanan dari device"
+                  description="Foto ini akan ditampilkan di kartu layanan homepage dan halaman layanan."
+                  previewAspect="video"
+                />
               </div>
 
               <div className="mt-6 flex items-center justify-end gap-3 border-t border-border pt-4">

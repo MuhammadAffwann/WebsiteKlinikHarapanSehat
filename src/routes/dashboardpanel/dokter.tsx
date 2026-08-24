@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
+import { ImageUpload } from "@/components/dashboard/image-upload";
 import { getSessionFn } from "@/lib/auth";
 import {
   createDoctorFn,
@@ -786,37 +787,34 @@ function ManageDoctorsPage() {
                   </div>
                 </div>
 
-                {/* 5. Foto / Image Identifier & Order Index */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="sm:col-span-2">
-                    <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
-                      Foto / Identifier Gambar (Opsional)
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.image || ""}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, image: e.target.value }))}
-                      placeholder="Identifier asset (contoh: dr-riyan-annasith) atau URL"
-                      className="w-full rounded-xl border border-border/80 bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-blue-600 focus:outline-hidden focus:ring-2 focus:ring-blue-600/20 transition-all"
-                    />
-                  </div>
+                {/* 5. Urutan Tampil & Foto Dokter */}
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
+                    Urutan Tampil (Order)
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.orderIndex}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        orderIndex: Number(e.target.value) || 0,
+                      }))
+                    }
+                    className="w-full rounded-xl border border-border/80 bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-blue-600 focus:outline-hidden focus:ring-2 focus:ring-blue-600/20 transition-all tabular-nums"
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
-                      Urutan Tampil
-                    </label>
-                    <input
-                      type="number"
-                      value={formData.orderIndex}
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          orderIndex: Number(e.target.value) || 0,
-                        }))
-                      }
-                      className="w-full rounded-xl border border-border/80 bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-blue-600 focus:outline-hidden focus:ring-2 focus:ring-blue-600/20 transition-all tabular-nums"
-                    />
-                  </div>
+                <div>
+                  <ImageUpload
+                    label="Foto Profil Dokter (Opsional)"
+                    value={formData.image || ""}
+                    onChange={(url) => setFormData((prev) => ({ ...prev, image: url }))}
+                    placeholder="Pilih atau tarik foto dokter dari device"
+                    description="Foto profil dokter untuk halaman jadwal dokter publik."
+                    previewAspect="square"
+                    allowClear
+                  />
                 </div>
 
                 {/* 6. Status Aktif Toggle */}

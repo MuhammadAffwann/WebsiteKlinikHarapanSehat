@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { getPublicServicesFn } from "@/lib/services";
 import { Navbar } from "@/components/site/navbar";
 import { Footer } from "@/components/site/footer";
 
@@ -76,6 +77,14 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  loader: async () => {
+    try {
+      const res = await getPublicServicesFn();
+      return { services: res.data || [] };
+    } catch {
+      return { services: [] };
+    }
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -134,18 +143,20 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const loaderData = Route.useLoaderData();
+  const services = loaderData?.services || [];
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isDashboard = pathname.startsWith("/dashboardpanel");
 
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen flex-col">
-        {!isDashboard && <Navbar />}
+        {!isDashboard && <Navbar services={services} />}
         <main className="flex-1">
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
         </main>
-        {!isDashboard && <Footer />}
+        {!isDashboard && <Footer services={services} />}
       </div>
     </QueryClientProvider>
   );

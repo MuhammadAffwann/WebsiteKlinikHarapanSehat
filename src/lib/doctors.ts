@@ -64,13 +64,14 @@ export const getDoctorsFn = createServerFn({ method: "GET" }).handler(async () =
       const now = new Date().toISOString();
       for (let i = 0; i < defaultDoctors.length; i++) {
         const d = defaultDoctors[i];
+        if (!d) continue;
         await db.insert(doctors).values({
           slug: d.slug,
           name: d.name,
           specialty: d.specialty,
           days: d.days,
           time: d.time,
-          image: d.image || d.slug,
+          image: ("image" in d ? (d as { image?: string }).image : null) || d.slug,
           active: true,
           orderIndex: i + 1,
           createdAt: now,
@@ -81,6 +82,53 @@ export const getDoctorsFn = createServerFn({ method: "GET" }).handler(async () =
       list = await db
         .select()
         .from(doctors)
+        .orderBy(asc(doctors.orderIndex), asc(doctors.id))
+        .all();
+    }
+  }
+
+  return { success: true as const, data: list };
+});
+
+export const getPublicDoctorsFn = createServerFn({ method: "GET" }).handler(async () => {
+  const { db } = await import("@/db");
+  const { doctors } = await import("@/db/schema");
+  const { asc, eq } = await import("drizzle-orm");
+
+  let list = await db
+    .select()
+    .from(doctors)
+    .where(eq(doctors.active, true))
+    .orderBy(asc(doctors.orderIndex), asc(doctors.id))
+    .all();
+
+  // If table is completely empty, auto-seed
+  if (list.length === 0) {
+    const { doctors: defaultDoctors } = await import("@/data/clinic");
+
+    if (Array.isArray(defaultDoctors) && defaultDoctors.length > 0) {
+      const now = new Date().toISOString();
+      for (let i = 0; i < defaultDoctors.length; i++) {
+        const d = defaultDoctors[i];
+        if (!d) continue;
+        await db.insert(doctors).values({
+          slug: d.slug,
+          name: d.name,
+          specialty: d.specialty,
+          days: d.days,
+          time: d.time,
+          image: ("image" in d ? (d as { image?: string }).image : null) || d.slug,
+          active: true,
+          orderIndex: i + 1,
+          createdAt: now,
+          updatedAt: now,
+        });
+      }
+
+      list = await db
+        .select()
+        .from(doctors)
+        .where(eq(doctors.active, true))
         .orderBy(asc(doctors.orderIndex), asc(doctors.id))
         .all();
     }

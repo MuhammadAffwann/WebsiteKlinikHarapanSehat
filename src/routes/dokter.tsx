@@ -2,9 +2,18 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { DoctorSection } from "@/components/site/doctor-section";
 import { PageHero, Section } from "@/components/site/section";
+import { getPublicDoctorsFn } from "@/lib/doctors";
 import doctorBanner from "@/assets/doctor-banner.jpg";
 
 export const Route = createFileRoute("/dokter")({
+  loader: async () => {
+    try {
+      const res = await getPublicDoctorsFn();
+      return { doctors: res.data || [] };
+    } catch {
+      return { doctors: [] };
+    }
+  },
   head: () => ({
     meta: [
       { title: "Jadwal & Tim Dokter — Klinik Harapan Sehat" },
@@ -24,6 +33,8 @@ export const Route = createFileRoute("/dokter")({
 });
 
 function DokterPage() {
+  const { doctors } = Route.useLoaderData();
+
   return (
     <>
       <PageHero
@@ -32,7 +43,7 @@ function DokterPage() {
         backgroundImage={doctorBanner}
       />
       <Section className="pt-8">
-        <DoctorSection />
+        <DoctorSection doctors={doctors} />
       </Section>
     </>
   );

@@ -14,7 +14,10 @@ import {
   Loader2,
 } from "lucide-react";
 
-import { clinic, doctors, services, type Doctor } from "@/data/clinic";
+import { clinic } from "@/data/clinic";
+import type { Doctor, Service } from "@/db/schema";
+import { getPublicServicesFn } from "@/lib/services";
+import { getPublicDoctorsFn } from "@/lib/doctors";
 import { createRegistrationFn } from "@/lib/registrations";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/site/section";
@@ -33,6 +36,23 @@ export const Route = createFileRoute("/daftar-online")({
       poli: typeof rawPoli === "string" ? rawPoli : undefined,
       dokter: typeof rawDokter === "string" ? rawDokter : undefined,
     };
+  },
+  loader: async () => {
+    try {
+      const [servicesRes, doctorsRes] = await Promise.all([
+        getPublicServicesFn(),
+        getPublicDoctorsFn(),
+      ]);
+      return {
+        services: servicesRes.data || [],
+        doctors: doctorsRes.data || [],
+      };
+    } catch {
+      return {
+        services: [],
+        doctors: [],
+      };
+    }
   },
   head: () => ({
     meta: [
@@ -104,8 +124,8 @@ function coveredDays(daysStr: string): number[] {
   return Array.from(resultSet);
 }
 
-function getAvailableDoctors(poli: string, dateStr: string): Doctor[] {
-  let filtered = doctors;
+function getAvailableDoctors(poli: string, dateStr: string, doctorsList: Doctor[]): Doctor[] {
+  let filtered = doctorsList;
 
   if (poli === "Kesehatan Gigi") {
     filtered = filtered.filter((doc) => doc.specialty === "Dokter Gigi");
@@ -142,6 +162,7 @@ type RegistrationResult = {
 };
 
 function DaftarOnlinePage() {
+  const { services, doctors } = Route.useLoaderData();
   const search = Route.useSearch();
   const [patientType, setPatientType] = useState<"Baru" | "Lama">("Baru");
   const [paymentType, setPaymentType] = useState<"BPJS" | "Non-BPJS">("Non-BPJS");
@@ -166,7 +187,7 @@ function DaftarOnlinePage() {
       }
     }
     return "";
-  }, [search.poli, search.dokter]);
+  }, [search.poli, search.dokter, services, doctors]);
 
   const [jenisPoli, setJenisPoli] = useState<string>(initialPoli);
   const [selectedDokter, setSelectedDokter] = useState<string>(search.dokter || "");
@@ -180,7 +201,7 @@ function DaftarOnlinePage() {
       );
       setJenisPoli(matched ? matched.title : search.poli);
     }
-  }, [search.poli]);
+  }, [search.poli, services]);
 
   useEffect(() => {
     if (search.dokter) {
@@ -205,8 +226,8 @@ function DaftarOnlinePage() {
 
   // Available doctors based on chosen Poli & Date
   const availableDoctors = useMemo(() => {
-    return getAvailableDoctors(jenisPoli, tanggalKunjungan);
-  }, [jenisPoli, tanggalKunjungan]);
+    return getAvailableDoctors(jenisPoli, tanggalKunjungan, doctors);
+  }, [jenisPoli, tanggalKunjungan, doctors]);
 
   const selectedDayName = useMemo(() => {
     if (!tanggalKunjungan) return "";

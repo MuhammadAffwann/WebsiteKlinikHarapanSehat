@@ -43,20 +43,47 @@ async function verifyAdminAuth() {
 }
 
 export const getServicesFn = createServerFn({ method: "GET" }).handler(async () => {
-  await verifyAdminAuth();
-
   const { db } = await import("@/db");
   const { services } = await import("@/db/schema");
   const { asc } = await import("drizzle-orm");
 
-  const list = await db
+  let list = await db
     .select()
     .from(services)
     .orderBy(asc(services.orderIndex), asc(services.id))
     .all();
 
+  // Auto-seed if empty
+  if (list.length === 0) {
+    const { services: defaultServices } = await import("@/data/clinic");
+    if (Array.isArray(defaultServices) && defaultServices.length > 0) {
+      const now = new Date().toISOString();
+      for (let i = 0; i < defaultServices.length; i++) {
+        const s = defaultServices[i];
+        await db.insert(services).values({
+          slug: s.slug,
+          title: s.title,
+          description: s.description,
+          points: s.points,
+          badge: s.badge || null,
+          image: s.image,
+          orderIndex: i + 1,
+          createdAt: now,
+          updatedAt: now,
+        });
+      }
+      list = await db
+        .select()
+        .from(services)
+        .orderBy(asc(services.orderIndex), asc(services.id))
+        .all();
+    }
+  }
+
   return { success: true as const, data: list };
 });
+
+export const getPublicServicesFn = getServicesFn;
 
 export const createServiceFn = createServerFn({ method: "POST" })
   .validator((data: ServiceInput) => {

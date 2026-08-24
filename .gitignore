@@ -41,3 +41,7 @@ dist-ssr
 
 # Agent rules (local IDE config)
 .agents/
+
+# Runtime uploaded media
+public/uploads/*
+!public/uploads/.gitkeep

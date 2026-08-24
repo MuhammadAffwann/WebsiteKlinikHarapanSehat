@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
+import { ImageUpload } from "@/components/dashboard/image-upload";
 import { getSessionFn } from "@/lib/auth";
 import { createPostFn, deletePostFn, getPostsFn, type PostInput, updatePostFn } from "@/lib/posts";
 import type { Post } from "@/db/schema";
@@ -557,15 +558,14 @@ function ManageBlogPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-foreground uppercase tracking-wider">
-                  Gambar Sampul (Cover Image URL)
-                </label>
-                <input
-                  type="text"
+                <ImageUpload
+                  label="Gambar Sampul Artikel (Cover Image)"
                   value={formData.coverImage || ""}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, coverImage: e.target.value }))}
-                  placeholder="Link/URL gambar artikel (misal: /assets/blog-cover.jpg atau URL)"
-                  className="mt-1.5 block w-full rounded-xl border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+                  onChange={(url) => setFormData((prev) => ({ ...prev, coverImage: url }))}
+                  placeholder="Upload gambar sampul artikel dari device"
+                  description="Foto ini akan menjadi thumbnail di daftar blog dan header halaman artikel."
+                  previewAspect="wide"
+                  allowClear
                 />
               </div>
 

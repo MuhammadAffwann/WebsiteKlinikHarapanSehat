@@ -2,11 +2,19 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { PostCard } from "@/components/site/cards";
 import { PageHero, Section } from "@/components/site/section";
-import { posts } from "@/data/clinic";
+import { getPublicPostsFn } from "@/lib/posts";
 import blogCover from "@/assets/blog-cover.jpg";
 import blogBanner from "@/assets/blog-banner.jpg";
 
 export const Route = createFileRoute("/blog/")({
+  loader: async () => {
+    try {
+      const res = await getPublicPostsFn();
+      return { posts: res.data || [] };
+    } catch {
+      return { posts: [] };
+    }
+  },
   head: () => ({
     meta: [
       { title: "Blog Kesehatan — Klinik Harapan Sehat" },
@@ -26,6 +34,8 @@ export const Route = createFileRoute("/blog/")({
 });
 
 function BlogPage() {
+  const { posts } = Route.useLoaderData();
+
   return (
     <>
       <PageHero

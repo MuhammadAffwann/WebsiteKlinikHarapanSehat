@@ -21,7 +21,7 @@ import { PostCard, ServiceCard } from "@/components/site/cards";
 import { CarouselScrollbar } from "@/components/site/carousel-scrollbar";
 import { Pill, Section, SectionHeading } from "@/components/site/section";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/site/scroll-reveal";
-import { clinic, posts, services, stats } from "@/data/clinic";
+import { clinic, stats } from "@/data/clinic";
 import { IjabKabulSection } from "@/components/site/ijab-kabul-section";
 import { TestimonialSection } from "@/components/site/testimonial-section";
 import { cn } from "@/lib/utils";
@@ -29,6 +29,9 @@ import heroImage from "@/assets/hero-care.jpg";
 import blogCover from "@/assets/blog-cover.jpg";
 import hsBackground from "@/assets/hsbackground.png";
 import { incrementPageViewFn } from "@/lib/dashboard";
+import { getPublicServicesFn } from "@/lib/services";
+import { getPublicPostsFn } from "@/lib/posts";
+import { getPublicTestimonialsFn } from "@/lib/testimonials";
 
 export const Route = createFileRoute("/")({
   beforeLoad: () => {
@@ -36,6 +39,26 @@ export const Route = createFileRoute("/")({
     incrementPageViewFn().catch(() => {
       // silently ignore errors — never block homepage
     });
+  },
+  loader: async () => {
+    try {
+      const [servicesRes, postsRes, testimonialsRes] = await Promise.all([
+        getPublicServicesFn(),
+        getPublicPostsFn(),
+        getPublicTestimonialsFn(),
+      ]);
+      return {
+        services: servicesRes.data || [],
+        posts: postsRes.data || [],
+        testimonials: testimonialsRes.data || [],
+      };
+    } catch {
+      return {
+        services: [],
+        posts: [],
+        testimonials: [],
+      };
+    }
   },
   head: () => ({
     meta: [
@@ -156,6 +179,7 @@ function HeroActionCard({
 }
 
 function HomePage() {
+  const { services, posts, testimonials } = Route.useLoaderData();
   const servicesRef = useRef<HTMLDivElement>(null);
   const postsRef = useRef<HTMLDivElement>(null);
   const [selectedBlogCategory, setSelectedBlogCategory] = useState<string>("Semua Artikel");
@@ -370,7 +394,7 @@ function HomePage() {
       <IjabKabulSection />
 
       {/* Testimonials */}
-      <TestimonialSection />
+      <TestimonialSection testimonials={testimonials} />
 
       {/* Services */}
       <Section id="layanan" className="bg-white">

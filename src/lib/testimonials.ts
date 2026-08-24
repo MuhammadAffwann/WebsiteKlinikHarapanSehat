@@ -115,6 +115,43 @@ export const getTestimonialsFn = createServerFn({ method: "GET" }).handler(async
   return { success: true as const, data: list };
 });
 
+export const getPublicTestimonialsFn = createServerFn({ method: "GET" }).handler(async () => {
+  const { db } = await import("@/db");
+  const { testimonials } = await import("@/db/schema");
+  const { desc, eq } = await import("drizzle-orm");
+
+  let list = await db
+    .select()
+    .from(testimonials)
+    .where(eq(testimonials.visible, true))
+    .orderBy(desc(testimonials.createdAt), desc(testimonials.id))
+    .all();
+
+  // If table is completely empty, auto-seed with default testimonials
+  if (list.length === 0) {
+    const now = new Date().toISOString();
+    for (const item of defaultTestimonialsSeed) {
+      await db.insert(testimonials).values({
+        name: item.name,
+        message: item.message,
+        rating: item.rating,
+        photo: item.photo,
+        visible: true,
+        createdAt: now,
+      });
+    }
+
+    list = await db
+      .select()
+      .from(testimonials)
+      .where(eq(testimonials.visible, true))
+      .orderBy(desc(testimonials.createdAt), desc(testimonials.id))
+      .all();
+  }
+
+  return { success: true as const, data: list };
+});
+
 export const createTestimonialFn = createServerFn({ method: "POST" })
   .validator((data: TestimonialInput) => {
     if (!data.name?.trim()) throw new Error("Nama pasien / pemberi testimoni wajib diisi.");

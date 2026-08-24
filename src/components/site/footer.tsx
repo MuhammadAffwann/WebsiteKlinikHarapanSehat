@@ -2,9 +2,10 @@ import { Link } from "@tanstack/react-router";
 import { Phone, Mail, MapPin } from "lucide-react";
 
 import { BrandLogo } from "@/components/site/logo";
-import { clinic, services } from "@/data/clinic";
+import { clinic } from "@/data/clinic";
+import type { Service } from "@/db/schema";
 
-export function Footer() {
+export function Footer({ services = [] }: { services?: Service[] }) {
   return (
     <footer className="border-t border-border bg-secondary/60">
       <div className="mx-auto grid max-w-[1440px] gap-10 px-4 py-14 sm:px-6 lg:px-8 md:grid-cols-4">

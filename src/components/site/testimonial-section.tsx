@@ -1,66 +1,69 @@
 import { Star } from "lucide-react";
 import { Section, SectionHeading } from "@/components/site/section";
 import { ScrollReveal } from "@/components/site/scroll-reveal";
-
-// ============================================================================
-// DATA TESTIMONI PASIEN
-// Catatan untuk Avatar (avatarUrl):
-// - Nilai "PLACEHOLDER" akan otomatis menampilkan foto avatar default dari ui-avatars.com.
-// - Jika Anda ingin mengganti foto profil pasien, silakan ganti string "PLACEHOLDER"
-//   dengan link/URL foto yang valid (contoh: avatarUrl: "https://domainanda.com/foto-pasien.jpg").
-// ============================================================================
+import type { Testimonial } from "@/db/schema";
 
 export interface TestimonialItem {
   name: string;
   rating: number;
-  avatarUrl: string; // PLACEHOLDER — ganti manual dengan link gambar jika ada
+  avatarUrl: string;
   text: string;
 }
 
-const testimonials: TestimonialItem[] = [
+const defaultTestimonials: TestimonialItem[] = [
   {
     name: "Ahmad Muyasar",
     rating: 5,
-    avatarUrl: "PLACEHOLDER", // <-- Ganti "PLACEHOLDER" dengan link foto jika ada
+    avatarUrl: "PLACEHOLDER",
     text: "Tempatnya nyaman, dokter sama perawatnya baik2 attitude nya juga bagus pada ramah sangat dijaga demi kenyamanan pasien. Mau umum atau pasien BPJS gak dibedain pelayanannya sama. Best banget pokoknya 👍👍👍",
   },
   {
     name: "Chen Dhani",
     rating: 5,
-    avatarUrl: "PLACEHOLDER", // <-- Ganti "PLACEHOLDER" dengan link foto jika ada
+    avatarUrl: "PLACEHOLDER",
     text: "Alhamdulillah ya Allah telah lahir anak kami pada hari ini tepatnya tanggal 2 Agustus 2026 terima kasih BD Annisa terima kasih Harapan Sehat, sudah memberikan pelayanan dan tindakan begitu cepat, sehingga kami merasa nyaman dan aman memilih tempat di Harapan Sehat.",
   },
   {
     name: "Egi Shaa",
     rating: 5,
-    avatarUrl: "PLACEHOLDER", // <-- Ganti "PLACEHOLDER" dengan link foto jika ada
+    avatarUrl: "PLACEHOLDER",
     text: "Alhamdulillah ya Allah saya merasa seneng banget ada klinik bisa bayar sesuai kemampuan.. saya berobat sampe di tanya dulu.. mau berapa jadi saya ga takut mau berobat karna bisa sesuai sama saya, sistem ijab kabul ini sangat meringankan",
   },
   {
     name: "Putri Wulandari",
     rating: 5,
-    avatarUrl: "PLACEHOLDER", // <-- Ganti "PLACEHOLDER" dengan link foto jika ada
+    avatarUrl: "PLACEHOLDER",
     text: "Pelayanannya best banget, buat Bidan Anisa dan Bidan Anna makasih banyak ya, baik banget sabar banget 😭 best banget deh pelayanan KIA-nya ⭐1000😚🤩",
   },
   {
     name: "Evi Faidah",
     rating: 5,
-    avatarUrl: "PLACEHOLDER", // <-- Ganti "PLACEHOLDER" dengan link foto jika ada
+    avatarUrl: "PLACEHOLDER",
     text: "Best banget pelayanan ramah, rekomen banget buat kalian yang mau berobat kesini 🤩🤩 jangan khawatir soal biaya karena ada pengobatan bagi yang kurang mampu 🥰🫰🏻",
   },
 ];
 
 /** Helper function untuk menghasilkan URL avatar placeholder jika diisi "PLACEHOLDER" atau kosong */
-const getAvatarUrl = (avatarUrl: string, name: string): string => {
+const getAvatarUrl = (avatarUrl: string | null | undefined, name: string): string => {
   if (!avatarUrl || avatarUrl === "PLACEHOLDER") {
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0284c7&color=fff&bold=true&rounded=true`;
   }
   return avatarUrl;
 };
 
-export function TestimonialSection() {
+export function TestimonialSection({ testimonials: dbTestimonials }: { testimonials?: Testimonial[] }) {
+  const activeItems: TestimonialItem[] =
+    dbTestimonials && dbTestimonials.length > 0
+      ? dbTestimonials.map((t) => ({
+          name: t.name,
+          rating: t.rating ?? 5,
+          avatarUrl: t.photo || "PLACEHOLDER",
+          text: t.message,
+        }))
+      : defaultTestimonials;
+
   // Melakukan duplikasi data testimoni agar marquee berjalan seamless tanpa efek terputus (infinite loop)
-  const marqueeItems = [...testimonials, ...testimonials];
+  const marqueeItems = activeItems.length > 0 ? [...activeItems, ...activeItems] : [];
 
   return (
     <Section id="testimoni" className="bg-white overflow-hidden py-12 sm:py-16">

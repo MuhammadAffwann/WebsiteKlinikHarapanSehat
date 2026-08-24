@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
+import { ImageUpload } from "@/components/dashboard/image-upload";
 import { getSessionFn } from "@/lib/auth";
 import {
   createTestimonialFn,
@@ -712,21 +713,17 @@ function ManageTestimonialsPage() {
                   />
                 </div>
 
-                {/* 4. Foto / URL Foto */}
+                {/* 4. Foto Testimoni Pasien */}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
-                    URL Foto Profil (Opsional)
-                  </label>
-                  <input
-                    type="text"
+                  <ImageUpload
+                    label="Foto Profil Pasien (Opsional)"
                     value={formData.photo || ""}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, photo: e.target.value }))}
-                    placeholder="Kosongkan jika tidak ada foto (otomatis avatar inisial)"
-                    className="w-full rounded-xl border border-border/80 bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-blue-600 focus:outline-hidden focus:ring-2 focus:ring-blue-600/20 transition-all"
+                    onChange={(url) => setFormData((prev) => ({ ...prev, photo: url }))}
+                    placeholder="Pilih atau upload foto profil pasien"
+                    description="Jika dikosongkan, avatar inisial otomatis dari nama pasien akan digunakan."
+                    previewAspect="square"
+                    allowClear
                   />
-                  <p className="text-[11px] text-muted-foreground mt-1.5">
-                    Jika dikosongkan, avatar inisial warna biru akan otomatis dibuatkan dari nama pasien.
-                  </p>
                 </div>
 
                 {/* 5. Status Tampil Toggle */}

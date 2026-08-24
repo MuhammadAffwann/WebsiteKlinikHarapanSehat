@@ -3,10 +3,18 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ServiceCard } from "@/components/site/cards";
 import { PageHero, Section } from "@/components/site/section";
 import { StaggerContainer, StaggerItem } from "@/components/site/scroll-reveal";
-import { services } from "@/data/clinic";
+import { getPublicServicesFn } from "@/lib/services";
 import hsBackground from "@/assets/hsbackground.png";
 
 export const Route = createFileRoute("/layanan")({
+  loader: async () => {
+    try {
+      const res = await getPublicServicesFn();
+      return { services: res.data || [] };
+    } catch {
+      return { services: [] };
+    }
+  },
   head: () => ({
     meta: [
       { title: "Layanan Klinik — Klinik Harapan Sehat" },
@@ -27,6 +35,8 @@ export const Route = createFileRoute("/layanan")({
 });
 
 function LayananPage() {
+  const { services } = Route.useLoaderData();
+
   return (
     <>
       <PageHero

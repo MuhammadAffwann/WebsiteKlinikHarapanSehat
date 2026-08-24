@@ -50,10 +50,127 @@ export const getPostsFn = createServerFn({ method: "GET" }).handler(async () => 
   const { posts } = await import("@/db/schema");
   const { desc } = await import("drizzle-orm");
 
-  const list = await db.select().from(posts).orderBy(desc(posts.createdAt)).all();
+  let list = await db.select().from(posts).orderBy(desc(posts.createdAt)).all();
+
+  // Auto-seed if empty
+  if (list.length === 0) {
+    const { posts: defaultPosts } = await import("@/data/clinic");
+    if (Array.isArray(defaultPosts) && defaultPosts.length > 0) {
+      const now = new Date().toISOString();
+      for (const p of defaultPosts) {
+        await db.insert(posts).values({
+          slug: p.slug,
+          title: p.title,
+          category: p.category,
+          excerpt: p.excerpt,
+          body: p.body,
+          coverImage: null,
+          status: "published",
+          publishedAt: now,
+          createdAt: now,
+          updatedAt: now,
+        });
+      }
+      list = await db.select().from(posts).orderBy(desc(posts.createdAt)).all();
+    }
+  }
 
   return { success: true as const, data: list };
 });
+
+export const getPublicPostsFn = createServerFn({ method: "GET" }).handler(async () => {
+  const { db } = await import("@/db");
+  const { posts } = await import("@/db/schema");
+  const { desc, eq } = await import("drizzle-orm");
+
+  let list = await db
+    .select()
+    .from(posts)
+    .where(eq(posts.status, "published"))
+    .orderBy(desc(posts.publishedAt), desc(posts.createdAt))
+    .all();
+
+  // Auto-seed if empty
+  if (list.length === 0) {
+    const { posts: defaultPosts } = await import("@/data/clinic");
+    if (Array.isArray(defaultPosts) && defaultPosts.length > 0) {
+      const now = new Date().toISOString();
+      for (const p of defaultPosts) {
+        await db.insert(posts).values({
+          slug: p.slug,
+          title: p.title,
+          category: p.category,
+          excerpt: p.excerpt,
+          body: p.body,
+          coverImage: null,
+          status: "published",
+          publishedAt: now,
+          createdAt: now,
+          updatedAt: now,
+        });
+      }
+      list = await db
+        .select()
+        .from(posts)
+        .where(eq(posts.status, "published"))
+        .orderBy(desc(posts.publishedAt), desc(posts.createdAt))
+        .all();
+    }
+  }
+
+  return { success: true as const, data: list };
+});
+
+export const getPublicPostBySlugFn = createServerFn({ method: "GET" })
+  .validator((data: { slug: string }) => {
+    if (!data.slug) throw new Error("Slug artikel wajib diisi.");
+    return data;
+  })
+  .handler(async ({ data }) => {
+    const { db } = await import("@/db");
+    const { posts } = await import("@/db/schema");
+    const { and, eq } = await import("drizzle-orm");
+
+    const cleanSlug = data.slug.trim().toLowerCase();
+
+    let post = await db
+      .select()
+      .from(posts)
+      .where(and(eq(posts.slug, cleanSlug), eq(posts.status, "published")))
+      .get();
+
+    // If not found and table is completely empty, seed first
+    if (!post) {
+      const countAll = await db.select().from(posts).all();
+      if (countAll.length === 0) {
+        const { posts: defaultPosts } = await import("@/data/clinic");
+        if (Array.isArray(defaultPosts) && defaultPosts.length > 0) {
+          const now = new Date().toISOString();
+          for (const p of defaultPosts) {
+            await db.insert(posts).values({
+              slug: p.slug,
+              title: p.title,
+              category: p.category,
+              excerpt: p.excerpt,
+              body: p.body,
+              coverImage: null,
+              status: "published",
+              publishedAt: now,
+              createdAt: now,
+              updatedAt: now,
+            });
+          }
+          post = await db
+            .select()
+            .from(posts)
+            .where(and(eq(posts.slug, cleanSlug), eq(posts.status, "published")))
+            .get();
+        }
+      }
+    }
+
+    return { success: true as const, data: post || null };
+  });
 
 export const createPostFn = createServerFn({ method: "POST" })
   .validator((data: PostInput) => {

@@ -20,6 +20,7 @@ import { Route as DashboardpanelBlogRouteImport } from './routes/dashboardpanel/
 import { Route as DashboardpanelDokterRouteImport } from './routes/dashboardpanel/dokter'
 import { Route as DashboardpanelLayananRouteImport } from './routes/dashboardpanel/layanan'
 import { Route as DashboardpanelLoginRouteImport } from './routes/dashboardpanel/login'
+import { Route as DashboardpanelPendaftaranRouteImport } from './routes/dashboardpanel/pendaftaran'
 import { Route as DashboardpanelTestimonialRouteImport } from './routes/dashboardpanel/testimonial'
 
 const IndexRoute = IndexRouteImport.update({
@@ -77,6 +78,12 @@ const DashboardpanelLoginRoute = DashboardpanelLoginRouteImport.update({
   path: '/dashboardpanel/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardpanelPendaftaranRoute =
+  DashboardpanelPendaftaranRouteImport.update({
+    id: '/dashboardpanel/pendaftaran',
+    path: '/dashboardpanel/pendaftaran',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DashboardpanelTestimonialRoute =
   DashboardpanelTestimonialRouteImport.update({
     id: '/dashboardpanel/testimonial',
@@ -94,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/dashboardpanel/dokter': typeof DashboardpanelDokterRoute
   '/dashboardpanel/layanan': typeof DashboardpanelLayananRoute
   '/dashboardpanel/login': typeof DashboardpanelLoginRoute
+  '/dashboardpanel/pendaftaran': typeof DashboardpanelPendaftaranRoute
   '/dashboardpanel/testimonial': typeof DashboardpanelTestimonialRoute
   '/blog/': typeof BlogIndexRoute
   '/dashboardpanel/': typeof DashboardpanelIndexRoute
@@ -108,6 +116,7 @@ export interface FileRoutesByTo {
   '/dashboardpanel/dokter': typeof DashboardpanelDokterRoute
   '/dashboardpanel/layanan': typeof DashboardpanelLayananRoute
   '/dashboardpanel/login': typeof DashboardpanelLoginRoute
+  '/dashboardpanel/pendaftaran': typeof DashboardpanelPendaftaranRoute
   '/dashboardpanel/testimonial': typeof DashboardpanelTestimonialRoute
   '/blog': typeof BlogIndexRoute
   '/dashboardpanel': typeof DashboardpanelIndexRoute
@@ -123,6 +132,7 @@ export interface FileRoutesById {
   '/dashboardpanel/dokter': typeof DashboardpanelDokterRoute
   '/dashboardpanel/layanan': typeof DashboardpanelLayananRoute
   '/dashboardpanel/login': typeof DashboardpanelLoginRoute
+  '/dashboardpanel/pendaftaran': typeof DashboardpanelPendaftaranRoute
   '/dashboardpanel/testimonial': typeof DashboardpanelTestimonialRoute
   '/blog/': typeof BlogIndexRoute
   '/dashboardpanel/': typeof DashboardpanelIndexRoute
@@ -139,6 +149,7 @@ export interface FileRouteTypes {
     | '/dashboardpanel/dokter'
     | '/dashboardpanel/layanan'
     | '/dashboardpanel/login'
+    | '/dashboardpanel/pendaftaran'
     | '/dashboardpanel/testimonial'
     | '/blog/'
     | '/dashboardpanel/'
@@ -153,6 +164,7 @@ export interface FileRouteTypes {
     | '/dashboardpanel/dokter'
     | '/dashboardpanel/layanan'
     | '/dashboardpanel/login'
+    | '/dashboardpanel/pendaftaran'
     | '/dashboardpanel/testimonial'
     | '/blog'
     | '/dashboardpanel'
@@ -167,6 +179,7 @@ export interface FileRouteTypes {
     | '/dashboardpanel/dokter'
     | '/dashboardpanel/layanan'
     | '/dashboardpanel/login'
+    | '/dashboardpanel/pendaftaran'
     | '/dashboardpanel/testimonial'
     | '/blog/'
     | '/dashboardpanel/'
@@ -182,6 +195,7 @@ export interface RootRouteChildren {
   DashboardpanelDokterRoute: typeof DashboardpanelDokterRoute
   DashboardpanelLayananRoute: typeof DashboardpanelLayananRoute
   DashboardpanelLoginRoute: typeof DashboardpanelLoginRoute
+  DashboardpanelPendaftaranRoute: typeof DashboardpanelPendaftaranRoute
   DashboardpanelTestimonialRoute: typeof DashboardpanelTestimonialRoute
   BlogIndexRoute: typeof BlogIndexRoute
   DashboardpanelIndexRoute: typeof DashboardpanelIndexRoute
@@ -266,6 +280,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardpanelLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboardpanel/pendaftaran': {
+      id: '/dashboardpanel/pendaftaran'
+      path: '/dashboardpanel/pendaftaran'
+      fullPath: '/dashboardpanel/pendaftaran'
+      preLoaderRoute: typeof DashboardpanelPendaftaranRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboardpanel/testimonial': {
       id: '/dashboardpanel/testimonial'
       path: '/dashboardpanel/testimonial'
@@ -286,6 +307,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardpanelDokterRoute: DashboardpanelDokterRoute,
   DashboardpanelLayananRoute: DashboardpanelLayananRoute,
   DashboardpanelLoginRoute: DashboardpanelLoginRoute,
+  DashboardpanelPendaftaranRoute: DashboardpanelPendaftaranRoute,
   DashboardpanelTestimonialRoute: DashboardpanelTestimonialRoute,
   BlogIndexRoute: BlogIndexRoute,
   DashboardpanelIndexRoute: DashboardpanelIndexRoute,

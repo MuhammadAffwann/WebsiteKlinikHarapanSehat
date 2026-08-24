@@ -87,6 +87,9 @@ export const registrations = sqliteTable("registrations", {
   visitDate: text("visit_date").notNull(),
   complaint: text("complaint").notNull(),
   paymentType: text("payment_type").notNull(),
+  patientType: text("patient_type"),
+  address: text("address"),
+  medicalRecordNo: text("medical_record_no"),
   status: text("status").notNull().default("menunggu"),
   createdAt: text("created_at")
     .notNull()

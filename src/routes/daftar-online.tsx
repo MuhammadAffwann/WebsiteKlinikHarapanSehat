@@ -10,9 +10,12 @@ import {
   Printer,
   AlertCircle,
   FileText,
+  MessageCircle,
+  Loader2,
 } from "lucide-react";
 
-import { doctors, services, type Doctor } from "@/data/clinic";
+import { clinic, doctors, services, type Doctor } from "@/data/clinic";
+import { createRegistrationFn } from "@/lib/registrations";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/site/section";
 import { ScrollReveal } from "@/components/site/scroll-reveal";
@@ -197,6 +200,8 @@ function DaftarOnlinePage() {
   const [nik, setNik] = useState("");
 
   const [ticketResult, setTicketResult] = useState<RegistrationResult | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Available doctors based on chosen Poli & Date
   const availableDoctors = useMemo(() => {
@@ -209,41 +214,72 @@ function DaftarOnlinePage() {
     return DAY_NAMES[d.getDay()] || "";
   }, [tanggalKunjungan]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const randomNum = Math.floor(100 + Math.random() * 900);
-    const dateFormatted = tanggalKunjungan.replace(/-/g, "");
-    const queueCode = `HS-${dateFormatted}-${randomNum}`;
+    setSubmitError(null);
 
     const dokterObj = doctors.find((d) => d.slug === selectedDokter) || availableDoctors[0];
     const dokterName = dokterObj
       ? `${dokterObj.name} (${dokterObj.time})`
       : "Dokter Tugas Hari Ini";
 
-    const result: RegistrationResult = {
-      queueCode,
-      patientType,
-      nama: namaLengkap,
-      namaAyah: patientType === "Baru" ? namaAyah : undefined,
-      alamat: patientType === "Baru" ? alamat : undefined,
-      noRm: patientType === "Lama" ? noRm : undefined,
-      noTelp,
-      tanggalKunjungan,
-      dayName: selectedDayName,
-      poli: jenisPoli,
-      dokter: dokterName,
-      pembayaran: paymentType,
-      noBpjs: paymentType === "BPJS" ? noBpjs : undefined,
-      nik: nik || undefined,
-      keluhan: keluhan.trim() || undefined,
-      waktuPendaftaran: new Date().toLocaleString("id-ID", {
-        dateStyle: "medium",
-        timeStyle: "short",
-      }),
-    };
+    setIsSubmitting(true);
 
-    setTicketResult(result);
+    try {
+      const res = await createRegistrationFn({
+        data: {
+          patientName: namaLengkap,
+          fatherName: patientType === "Baru" ? namaAyah : "-",
+          phone: noTelp,
+          service: jenisPoli,
+          doctor: dokterName,
+          visitDate: tanggalKunjungan,
+          complaint: keluhan.trim() || "-",
+          paymentType,
+          patientType,
+          address: patientType === "Baru" ? alamat : null,
+          medicalRecordNo: patientType === "Lama" ? noRm : null,
+        },
+      });
+
+      if (!res.success || !res.data) {
+        setSubmitError("Gagal menyimpan pendaftaran. Silakan coba kembali.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      const saved = res.data;
+
+      const result: RegistrationResult = {
+        queueCode: saved.queueCode,
+        patientType,
+        nama: namaLengkap,
+        namaAyah: patientType === "Baru" ? namaAyah : undefined,
+        alamat: patientType === "Baru" ? alamat : undefined,
+        noRm: patientType === "Lama" ? noRm : undefined,
+        noTelp,
+        tanggalKunjungan,
+        dayName: selectedDayName,
+        poli: jenisPoli,
+        dokter: dokterName,
+        pembayaran: paymentType,
+        noBpjs: paymentType === "BPJS" ? noBpjs : undefined,
+        nik: nik || undefined,
+        keluhan: keluhan.trim() || undefined,
+        waktuPendaftaran: new Date().toLocaleString("id-ID", {
+          dateStyle: "medium",
+          timeStyle: "short",
+        }),
+      };
+
+      setTicketResult(result);
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : "Terjadi kesalahan saat memproses pendaftaran online."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handlePrint = () => {
@@ -686,13 +722,30 @@ function DaftarOnlinePage() {
                   )}
                 </div>
 
+                {submitError && (
+                  <div className="mt-4 flex items-center gap-2.5 rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-xs sm:text-sm font-medium text-red-800 dark:text-red-300">
+                    <AlertCircle className="size-4 shrink-0 text-red-600 dark:text-red-400" />
+                    <span>{submitError}</span>
+                  </div>
+                )}
+
                 <Button
                   type="submit"
                   size="lg"
+                  disabled={isSubmitting}
                   className="mt-6 w-full rounded-full bg-primary py-6 text-base font-bold shadow-lg hover:bg-primary/90"
                 >
-                  <CalendarCheck className="mr-2 size-5" />
-                  Kirim Pendaftaran Online
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 size-5 animate-spin" />
+                      Memproses Pendaftaran...
+                    </>
+                  ) : (
+                    <>
+                      <CalendarCheck className="mr-2 size-5" />
+                      Kirim Pendaftaran Online
+                    </>
+                  )}
                 </Button>
               </form>
             </div>
@@ -790,12 +843,43 @@ function DaftarOnlinePage() {
               </div>
             </div>
 
+            {/* WhatsApp Direct Confirmation Button */}
+            {(() => {
+              const cleanPhone = clinic.whatsapp.replace(/\D/g, "");
+              const waMessage = `Halo Admin Klinik Harapan Sehat, saya telah mendaftar online dengan rincian berikut:
+
+*Kode Antrean:* ${ticketResult.queueCode}
+*Nama Pasien:* ${ticketResult.nama}
+*Jenis Pasien:* Pasien ${ticketResult.patientType}${ticketResult.namaAyah ? `\n*Nama Ayah:* ${ticketResult.namaAyah}` : ""}${ticketResult.alamat ? `\n*Alamat:* ${ticketResult.alamat}` : ""}${ticketResult.noRm ? `\n*No. RM:* ${ticketResult.noRm}` : ""}
+*No. Telp / WA:* ${ticketResult.noTelp}
+*Poli Tujuan:* ${ticketResult.poli}
+*Dokter:* ${ticketResult.dokter}
+*Tanggal Kunjungan:* ${ticketResult.dayName}, ${ticketResult.tanggalKunjungan}
+*Jenis Pembayaran:* ${ticketResult.pembayaran}${ticketResult.keluhan ? `\n*Keluhan:* ${ticketResult.keluhan}` : ""}
+
+Mohon konfirmasi pendaftaran saya. Terima kasih.`;
+
+              const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(waMessage)}`;
+
+              return (
+                <a
+                  href={waUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-emerald-600 py-3 px-4 text-sm font-bold text-white shadow-md hover:bg-emerald-700 transition-colors"
+                >
+                  <MessageCircle className="size-4" />
+                  Kirim Bukti via WhatsApp
+                </a>
+              );
+            })()}
+
             {/* Action buttons */}
-            <div className="mt-6 flex flex-col sm:flex-row gap-3">
+            <div className="mt-3 flex flex-col sm:flex-row gap-3">
               <Button onClick={handlePrint} variant="outline" className="flex-1 rounded-full">
                 <Printer className="mr-2 size-4" /> Cetak / Simpan
               </Button>
-              <Button onClick={resetForm} className="flex-1 rounded-full">
+              <Button onClick={resetForm} variant="secondary" className="flex-1 rounded-full">
                 Selesai / Daftar Lagi
               </Button>
             </div>

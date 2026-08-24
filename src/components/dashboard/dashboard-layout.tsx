@@ -22,7 +22,7 @@ interface DashboardLayoutProps {
 
 interface NavMenuItem {
   label: string;
-  to?: "/dashboardpanel" | "/dashboardpanel/layanan" | "/dashboardpanel/blog";
+  to?: string;
   icon: typeof LayoutDashboard;
   disabled?: boolean;
   badge?: string;
@@ -56,9 +56,8 @@ const navMenuItems: NavMenuItem[] = [
   },
   {
     label: "Pendaftaran",
+    to: "/dashboardpanel/pendaftaran",
     icon: CalendarCheck,
-    disabled: true,
-    badge: "Segera",
   },
 ];
 

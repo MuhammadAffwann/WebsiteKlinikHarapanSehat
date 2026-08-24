@@ -54,24 +54,31 @@ export const getDashboardStatsFn = createServerFn({ method: "GET" }).handler(asy
   await verifyAdminAuth();
 
   const { db } = await import("@/db");
-  const { services, doctors, posts, testimonials, pageViews } = await import("@/db/schema");
+  const { services, doctors, posts, testimonials, registrations, pageViews } = await import("@/db/schema");
   const { count, eq, desc } = await import("drizzle-orm");
+
+  const todayStr = new Date().toISOString().split("T")[0];
 
   const [
     servicesCount,
     doctorsCount,
     postsCount,
     testimonialsCount,
+    registrationsCount,
+    todayRegistrationsCount,
     viewsRow,
     recentServices,
     recentDoctors,
     recentPosts,
     recentTestimonials,
+    recentRegistrations,
   ] = await Promise.all([
     db.select({ value: count() }).from(services).get(),
     db.select({ value: count() }).from(doctors).get(),
     db.select({ value: count() }).from(posts).get(),
     db.select({ value: count() }).from(testimonials).get(),
+    db.select({ value: count() }).from(registrations).get(),
+    db.select({ value: count() }).from(registrations).where(eq(registrations.visitDate, todayStr)).get(),
     db.select().from(pageViews).where(eq(pageViews.id, 1)).get(),
     db.select({
       id: services.id,
@@ -120,6 +127,18 @@ export const getDashboardStatsFn = createServerFn({ method: "GET" }).handler(asy
       .orderBy(desc(testimonials.createdAt))
       .limit(5)
       .all(),
+    db.select({
+      id: registrations.id,
+      queueCode: registrations.queueCode,
+      patientName: registrations.patientName,
+      service: registrations.service,
+      status: registrations.status,
+      createdAt: registrations.createdAt,
+    })
+      .from(registrations)
+      .orderBy(desc(registrations.createdAt))
+      .limit(5)
+      .all(),
   ]);
 
   // Merge and sort recent activity (menambahkan/mengedit)
@@ -155,6 +174,14 @@ export const getDashboardStatsFn = createServerFn({ method: "GET" }).handler(asy
       title: t.name,
       createdAt: t.createdAt,
       author: "Admin Harapan Sehat",
+    })),
+    ...recentRegistrations.map((r) => ({
+      id: `reg-${r.id}`,
+      type: "pendaftaran" as const,
+      action: "mendaftar online",
+      title: `${r.patientName} (${r.queueCode})`,
+      createdAt: r.createdAt,
+      author: "Pasien",
     })),
   ]
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -202,6 +229,16 @@ export const getDashboardStatsFn = createServerFn({ method: "GET" }).handler(asy
       statusColor: t.visible ? "emerald" : "zinc",
       href: "/dashboardpanel/testimonial",
     })),
+    ...recentRegistrations.map((r) => ({
+      id: `reg-${r.id}`,
+      title: `${r.patientName} (${r.queueCode})`,
+      type: "Pendaftaran",
+      category: r.service,
+      date: r.createdAt,
+      status: r.status === "selesai" ? "Selesai" : r.status === "dipanggil" ? "Dipanggil" : "Menunggu",
+      statusColor: r.status === "selesai" ? "emerald" : r.status === "dipanggil" ? "blue" : "amber",
+      href: "/dashboardpanel/pendaftaran",
+    })),
   ]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 5);
@@ -213,6 +250,8 @@ export const getDashboardStatsFn = createServerFn({ method: "GET" }).handler(asy
     doctorsCount: doctorsCount?.value ?? 0,
     postsCount: postsCount?.value ?? 0,
     testimonialsCount: testimonialsCount?.value ?? 0,
+    registrationsCount: registrationsCount?.value ?? 0,
+    todayRegistrationsCount: todayRegistrationsCount?.value ?? 0,
     pageViewsCount: totalViews,
     recentActivity,
     recentItems,

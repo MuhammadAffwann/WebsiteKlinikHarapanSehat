@@ -185,7 +185,7 @@ function HomePage() {
           <ScrollReveal
             variant="fade-right"
             distance={30}
-            className="relative z-10 max-w-2xl order-2 lg:order-1"
+            className="relative z-10 max-w-2xl order-2 lg:order-1 text-center lg:text-left"
           >
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0052cc]">
               Selamat Datang di Klinik Harapan Sehat
@@ -196,11 +196,11 @@ function HomePage() {
                 Paripurna & Terpercaya.
               </span>
             </h1>
-            <p className="mt-5 max-w-lg text-base leading-relaxed text-[#555] dark:text-muted-foreground sm:text-lg">
+            <p className="mt-5 max-w-lg mx-auto lg:mx-0 text-base leading-relaxed text-[#555] dark:text-muted-foreground sm:text-lg">
               Memberikan pelayanan kesehatan yang paripurna kepada masyarakat tanpa terkendala
               biaya, didukung oleh sistem ijab kabul biaya berobat.
             </p>
-            <div className="mt-8 flex w-full flex-row gap-2 sm:gap-3">
+            <div className="mt-8 flex w-full flex-row gap-2 sm:gap-3 justify-center lg:justify-start">
               {heroActions.map((action) => (
                 <HeroActionCard
                   key={action.label}

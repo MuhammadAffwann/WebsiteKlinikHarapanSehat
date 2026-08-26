@@ -1,10 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { createFileRoute, useRouterState } from "@tanstack/react-router";
 
 import { ServiceCard } from "@/components/site/cards";
 import { PageHero, Section } from "@/components/site/section";
 import { StaggerContainer, StaggerItem } from "@/components/site/scroll-reveal";
 import { getPublicServicesFn } from "@/lib/services";
-import hsBackground from "@/assets/hsbackground.png";
+import layananBackground from "@/assets/backgroundlayanan.png";
 
 export const Route = createFileRoute("/layanan")({
   loader: async () => {
@@ -36,11 +37,24 @@ export const Route = createFileRoute("/layanan")({
 
 function LayananPage() {
   const { services } = Route.useLoaderData();
+  const currentHash = useRouterState({ select: (s) => s.location.hash });
+
+  useEffect(() => {
+    const hash = currentHash || (typeof window !== "undefined" ? window.location.hash.replace(/^#/, "") : "");
+    if (!hash) return undefined;
+    const timer = setTimeout(() => {
+      const el = document.getElementById(hash);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [currentHash]);
 
   return (
     <>
       <PageHero
-        backgroundImage={hsBackground}
+        backgroundImage={layananBackground}
         title="Layanan lengkap untuk seluruh keluarga"
         description="Semua layanan ditangani tenaga medis berlisensi dengan biaya yang diinformasikan di awal."
       />
@@ -50,7 +64,7 @@ function LayananPage() {
           className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
         >
           {services.map((service) => (
-            <StaggerItem key={service.slug}>
+            <StaggerItem key={service.slug} id={service.slug} className="scroll-mt-24">
               <ServiceCard service={service} />
             </StaggerItem>
           ))}

@@ -142,30 +142,18 @@ function ManageTestimonialsPage() {
     setIsSaving(true);
     try {
       if (editingItem) {
-        const res = await updateTestimonialFn({
+        await updateTestimonialFn({
           data: {
             ...formData,
             id: editingItem.id,
           },
         });
 
-        if (!res.success && res.error) {
-          setErrorMessage(res.error);
-          setIsSaving(false);
-          return;
-        }
-
         setSuccessMessage(`Testimoni dari "${formData.name}" berhasil diperbarui.`);
       } else {
-        const res = await createTestimonialFn({
+        await createTestimonialFn({
           data: formData,
         });
-
-        if (!res.success && res.error) {
-          setErrorMessage(res.error);
-          setIsSaving(false);
-          return;
-        }
 
         setSuccessMessage(`Testimoni dari "${formData.name}" berhasil ditambahkan.`);
       }

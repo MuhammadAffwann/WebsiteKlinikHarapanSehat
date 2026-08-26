@@ -12,6 +12,8 @@ import {
   FileText,
   MessageCircle,
   Loader2,
+  Info,
+  ExternalLink,
 } from "lucide-react";
 
 import { clinic } from "@/data/clinic";
@@ -684,41 +686,61 @@ function DaftarOnlinePage() {
                   </div>
 
                   {paymentType === "BPJS" ? (
-                    <div className="grid gap-4 sm:grid-cols-2 rounded-2xl bg-emerald-50/50 p-4 border border-emerald-200/60">
-                      <div>
-                        <label
-                          htmlFor="noBpjs"
-                          className="block text-xs font-semibold text-foreground mb-1.5"
-                        >
-                          Nomor Kartu BPJS *
-                        </label>
-                        <input
-                          id="noBpjs"
-                          type="text"
-                          required
-                          placeholder="000123456789"
-                          value={noBpjs}
-                          onChange={(e) => setNoBpjs(e.target.value)}
-                          className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
-                        />
+                    <div className="rounded-2xl bg-emerald-50/50 p-4 border border-emerald-200/60">
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <div>
+                          <label
+                            htmlFor="noBpjs"
+                            className="block text-xs font-semibold text-foreground mb-1.5"
+                          >
+                            Nomor Kartu BPJS *
+                          </label>
+                          <input
+                            id="noBpjs"
+                            type="text"
+                            required
+                            placeholder="000123456789"
+                            value={noBpjs}
+                            onChange={(e) => setNoBpjs(e.target.value)}
+                            className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="nikBpjs"
+                            className="block text-xs font-semibold text-foreground mb-1.5"
+                          >
+                            NIK (Nomor Induk Kependudukan) *
+                          </label>
+                          <input
+                            id="nikBpjs"
+                            type="text"
+                            required
+                            maxLength={16}
+                            placeholder="16 Digit NIK KTP / KK"
+                            value={nik}
+                            onChange={(e) => setNik(e.target.value)}
+                            className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                          />
+                        </div>
                       </div>
-                      <div>
-                        <label
-                          htmlFor="nikBpjs"
-                          className="block text-xs font-semibold text-foreground mb-1.5"
-                        >
-                          NIK (Nomor Induk Kependudukan) *
-                        </label>
-                        <input
-                          id="nikBpjs"
-                          type="text"
-                          required
-                          maxLength={16}
-                          placeholder="16 Digit NIK KTP / KK"
-                          value={nik}
-                          onChange={(e) => setNik(e.target.value)}
-                          className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
-                        />
+
+                      <div className="mt-3.5 flex items-start gap-2.5 rounded-xl bg-white/70 p-3 border border-emerald-200/50 shadow-xs">
+                        <Info className="size-4 shrink-0 text-emerald-600 mt-0.5" />
+                        <div className="text-xs leading-relaxed text-muted-foreground">
+                          <p>
+                            Pastikan status kepesertaan BPJS Anda aktif sebelum berkunjung. Anda bisa mengecek status dan detail kepesertaan melalui aplikasi Mobile JKN.
+                          </p>
+                          <a
+                            href="https://play.google.com/store/apps/details?id=app.bpjs.mobile&hl=id"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-1.5 inline-flex items-center gap-1 font-semibold text-emerald-700 hover:text-emerald-900 hover:underline"
+                          >
+                            <span>Unduh Mobile JKN</span>
+                            <ExternalLink className="size-3" />
+                          </a>
+                        </div>
                       </div>
                     </div>
                   ) : (

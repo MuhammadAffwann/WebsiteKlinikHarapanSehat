@@ -1,4 +1,10 @@
-import { createAPIFileRoute } from "@tanstack/react-start/api";
+// Helper pattern for TanStack Start API file routes
+export function createAPIFileRoute(path: string) {
+  return <T extends { GET?: (req?: Request) => Promise<Response> | Response }>(handlers: T): T & { path: string } => ({
+    path,
+    ...handlers,
+  });
+}
 
 const STATIC_PAGES = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
@@ -20,9 +26,9 @@ function toW3CDate(dateStr?: string | null): string {
 }
 
 export const APIRoute = createAPIFileRoute("/sitemap.xml")({
-  GET: async () => {
+  GET: async (_req?: Request) => {
     const siteUrl =
-      process.env["SITE_URL"]?.replace(/\/$/, "") || "https://harapansehat.id";
+      process.env["SITE_URL"]?.replace(/\/$/, "") || "https://home.harapansehat.id";
 
     // Fetch published posts directly from DB (server-side, no auth needed)
     let publishedPosts: Array<{
@@ -36,7 +42,7 @@ export const APIRoute = createAPIFileRoute("/sitemap.xml")({
       const { posts } = await import("@/db/schema");
       const { desc, eq } = await import("drizzle-orm");
 
-      publishedPosts = await db
+      const result = await db
         .select({
           slug: posts.slug,
           publishedAt: posts.publishedAt,
@@ -46,8 +52,13 @@ export const APIRoute = createAPIFileRoute("/sitemap.xml")({
         .where(eq(posts.status, "published"))
         .orderBy(desc(posts.publishedAt))
         .all();
+
+      if (Array.isArray(result)) {
+        publishedPosts = result;
+      }
     } catch {
-      // If DB not available, serve sitemap with static pages only
+      // If DB not available or table empty, serve sitemap with static pages only
+      publishedPosts = [];
     }
 
     const today = new Date().toISOString().split("T")[0]!;
@@ -62,11 +73,11 @@ export const APIRoute = createAPIFileRoute("/sitemap.xml")({
   </url>`
     ).join("");
 
-    const postUrls = publishedPosts
+    const postUrls = (publishedPosts || [])
       .map(
         (post) => `
   <url>
-    <loc>${siteUrl}/blog/${post.slug}</loc>
+    <loc>${siteUrl}/blog/${encodeURIComponent(post.slug)}</loc>
     <lastmod>${toW3CDate(post.updatedAt || post.publishedAt)}</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>

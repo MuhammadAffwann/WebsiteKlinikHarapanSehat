@@ -5,13 +5,6 @@ import {
   X,
   ArrowRight,
   CalendarCheck,
-  Stethoscope,
-  SmilePlus,
-  Baby,
-  FlaskConical,
-  Glasses,
-  BedDouble,
-  Siren,
   ChevronDown,
 } from "lucide-react";
 
@@ -28,21 +21,11 @@ type NavItem = {
 const navItems: NavItem[] = [
   { label: "Home", to: "/", hash: "atas" },
   { label: "Tentang Kami", to: "/", hash: "about" },
-  { label: "Layanan", to: "/", hash: "layanan" },
+  { label: "Layanan", to: "/layanan" },
   { label: "Cari Dokter", to: "/dokter" },
   { label: "Ijab Kabul", to: "/", hash: "ijab-kabul" },
   { label: "Blog", to: "/blog" },
 ];
-
-const serviceIcons: Record<string, React.ElementType> = {
-  "poli-umum": Stethoscope,
-  "kesehatan-gigi": SmilePlus,
-  "ibu-dan-anak": Baby,
-  laboratorium: FlaskConical,
-  optik: Glasses,
-  "rawat-inap": BedDouble,
-  "gawat-darurat": Siren,
-};
 
 export function Navbar({ services = [] }: { services?: Service[] }) {
   const [open, setOpen] = useState(false);
@@ -81,6 +64,7 @@ export function Navbar({ services = [] }: { services?: Service[] }) {
                   <Link
                     to={item.to}
                     {...(item.hash ? { hash: item.hash } : {})}
+                    onClick={() => setMegaOpen(false)}
                     className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
                   >
                     {item.label}
@@ -97,41 +81,47 @@ export function Navbar({ services = [] }: { services?: Service[] }) {
                         : "pointer-events-none -translate-y-1 opacity-0"
                     }`}
                   >
-                    <div className="w-[680px] rounded-2xl border border-border bg-background p-5 shadow-lg">
+                    <div className="w-[640px] rounded-2xl border border-border bg-background p-5 shadow-lg">
                       <div className="mb-3 flex items-center justify-between">
                         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                           Layanan Kami
                         </p>
                         <Link
-                          to="/"
-                          hash="layanan"
+                          to="/layanan"
+                          onClick={() => setMegaOpen(false)}
                           className="text-xs font-medium text-primary hover:underline"
                         >
                           Lihat semua →
                         </Link>
                       </div>
                       <div className="grid grid-cols-3 gap-1">
-                        {services.map((svc) => {
-                          const Icon = serviceIcons[svc.slug] ?? Stethoscope;
-                          return (
-                            <Link
-                              key={svc.slug}
-                              to="/layanan"
-                              hash={svc.slug}
-                              className="group flex items-start gap-3 rounded-xl px-3 py-3 transition-colors hover:bg-accent"
-                            >
-                              <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
-                                <Icon className="size-4" />
-                              </span>
-                              <div className="min-w-0">
-                                <p className="text-sm font-medium text-foreground">{svc.title}</p>
-                                <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
-                                  {svc.points[0]}
-                                </p>
-                              </div>
-                            </Link>
-                          );
-                        })}
+                        {services.map((svc) => (
+                          <Link
+                            key={svc.slug}
+                            to="/layanan"
+                            hash={svc.slug}
+                            onClick={() => {
+                              setMegaOpen(false);
+                              if (window.location.pathname === "/layanan") {
+                                const el = document.getElementById(svc.slug);
+                                if (el) {
+                                  el.scrollIntoView({
+                                    behavior: "smooth",
+                                    block: "start",
+                                  });
+                                }
+                              }
+                            }}
+                            className="group flex flex-col rounded-xl px-3 py-2.5 transition-colors hover:bg-accent"
+                          >
+                            <p className="text-sm font-medium text-foreground transition-colors group-hover:text-primary">
+                              {svc.title}
+                            </p>
+                            <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+                              {svc.points[0]}
+                            </p>
+                          </Link>
+                        ))}
                       </div>
                     </div>
                   </div>

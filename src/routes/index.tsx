@@ -1,5 +1,5 @@
-import { useState, useRef, type ReactNode } from "react";
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { useState, useRef, useEffect, type ReactNode } from "react";
+import { Link, createFileRoute, useRouterState } from "@tanstack/react-router";
 import {
   ArrowRight,
   Calendar,
@@ -32,6 +32,7 @@ import { incrementPageViewFn } from "@/lib/dashboard";
 import { getPublicServicesFn } from "@/lib/services";
 import { getPublicPostsFn } from "@/lib/posts";
 import { getPublicTestimonialsFn } from "@/lib/testimonials";
+import dokterYusufImage from "@/assets/dokteryusuf.jpg";
 
 export const Route = createFileRoute("/")({
   beforeLoad: () => {
@@ -90,8 +91,7 @@ const advantages: [AdvantageItem, AdvantageItem, AdvantageItem] = [
     icon: Stethoscope,
     title: "Dokter Berpengalaman",
     text: "Tim dokter umum dan spesialis yang siap mendampingi setiap tahap perawatan Anda.",
-    image:
-      "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=1000&auto=format&fit=crop",
+    image: dokterYusufImage,
   },
   {
     icon: ShieldCheck,
@@ -188,6 +188,20 @@ function HomePage() {
     selectedBlogCategory === "Semua Artikel"
       ? posts
       : posts.filter((post) => post.category.toLowerCase() === selectedBlogCategory.toLowerCase());
+
+  const currentHash = useRouterState({ select: (s) => s.location.hash });
+
+  useEffect(() => {
+    const hash = currentHash || (typeof window !== "undefined" ? window.location.hash.replace(/^#/, "") : "");
+    if (!hash) return undefined;
+    const timer = setTimeout(() => {
+      const el = document.getElementById(hash);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+      }
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [currentHash]);
 
   return (
     <>
@@ -299,7 +313,7 @@ function HomePage() {
                   <img
                     src={advantages[0].image}
                     alt={advantages[0].title}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="absolute inset-0 h-full w-full object-cover object-[center_30%] transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                   <div className="relative z-10 flex h-full flex-col justify-between p-6 sm:p-8">
@@ -416,7 +430,8 @@ function HomePage() {
                 {services.map((service) => (
                   <div
                     key={service.slug}
-                    className="w-[280px] sm:w-[320px] lg:w-[340px] shrink-0 snap-start"
+                    id={service.slug}
+                    className="w-[280px] sm:w-[320px] lg:w-[340px] shrink-0 snap-start scroll-mt-24"
                   >
                     <ServiceCard service={service} />
                   </div>

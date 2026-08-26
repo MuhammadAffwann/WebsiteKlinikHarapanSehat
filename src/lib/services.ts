@@ -60,6 +60,7 @@ export const getServicesFn = createServerFn({ method: "GET" }).handler(async () 
       const now = new Date().toISOString();
       for (let i = 0; i < defaultServices.length; i++) {
         const s = defaultServices[i];
+        if (!s) continue;
         await db.insert(services).values({
           slug: s.slug,
           title: s.title,

@@ -57,7 +57,7 @@ export const getDashboardStatsFn = createServerFn({ method: "GET" }).handler(asy
   const { services, doctors, posts, testimonials, registrations, pageViews } = await import("@/db/schema");
   const { count, eq, desc } = await import("drizzle-orm");
 
-  const todayStr = new Date().toISOString().split("T")[0];
+  const todayStr = new Date().toISOString().split("T")[0] ?? "";
 
   const [
     servicesCount,
@@ -67,11 +67,11 @@ export const getDashboardStatsFn = createServerFn({ method: "GET" }).handler(asy
     registrationsCount,
     todayRegistrationsCount,
     viewsRow,
-    recentServices,
-    recentDoctors,
-    recentPosts,
-    recentTestimonials,
-    recentRegistrations,
+    allServices,
+    allDoctors,
+    allPosts,
+    allTestimonials,
+    allRegistrations,
   ] = await Promise.all([
     db.select({ value: count() }).from(services).get(),
     db.select({ value: count() }).from(doctors).get(),
@@ -83,14 +83,15 @@ export const getDashboardStatsFn = createServerFn({ method: "GET" }).handler(asy
     db.select({
       id: services.id,
       title: services.title,
+      slug: services.slug,
       badge: services.badge,
+      description: services.description,
       image: services.image,
       createdAt: services.createdAt,
       updatedAt: services.updatedAt,
     })
       .from(services)
       .orderBy(desc(services.createdAt))
-      .limit(5)
       .all(),
     db.select({
       id: doctors.id,
@@ -102,11 +103,11 @@ export const getDashboardStatsFn = createServerFn({ method: "GET" }).handler(asy
     })
       .from(doctors)
       .orderBy(desc(doctors.createdAt))
-      .limit(5)
       .all(),
     db.select({
       id: posts.id,
       title: posts.title,
+      slug: posts.slug,
       category: posts.category,
       status: posts.status,
       createdAt: posts.createdAt,
@@ -114,18 +115,17 @@ export const getDashboardStatsFn = createServerFn({ method: "GET" }).handler(asy
     })
       .from(posts)
       .orderBy(desc(posts.createdAt))
-      .limit(5)
       .all(),
     db.select({
       id: testimonials.id,
       name: testimonials.name,
       rating: testimonials.rating,
+      message: testimonials.message,
       visible: testimonials.visible,
       createdAt: testimonials.createdAt,
     })
       .from(testimonials)
       .orderBy(desc(testimonials.createdAt))
-      .limit(5)
       .all(),
     db.select({
       id: registrations.id,
@@ -137,9 +137,14 @@ export const getDashboardStatsFn = createServerFn({ method: "GET" }).handler(asy
     })
       .from(registrations)
       .orderBy(desc(registrations.createdAt))
-      .limit(5)
       .all(),
   ]);
+
+  const recentServices = allServices.slice(0, 5);
+  const recentDoctors = allDoctors.slice(0, 5);
+  const recentPosts = allPosts.slice(0, 5);
+  const recentTestimonials = allTestimonials.slice(0, 5);
+  const recentRegistrations = allRegistrations.slice(0, 5);
 
   // Merge and sort recent activity (menambahkan/mengedit)
   const recentActivity = [
@@ -243,6 +248,80 @@ export const getDashboardStatsFn = createServerFn({ method: "GET" }).handler(asy
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 5);
 
+  // Global search items index
+  const searchItems = [
+    {
+      id: "nav-layanan",
+      title: "Kelola Layanan",
+      subtitle: "Manajemen data poli & layanan klinik",
+      type: "Modul",
+      href: "/dashboardpanel/layanan",
+    },
+    {
+      id: "nav-dokter",
+      title: "Kelola Dokter",
+      subtitle: "Jadwal dan daftar spesialis dokter",
+      type: "Modul",
+      href: "/dashboardpanel/dokter",
+    },
+    {
+      id: "nav-blog",
+      title: "Kelola Blog & Artikel",
+      subtitle: "Publikasi edukasi kesehatan",
+      type: "Modul",
+      href: "/dashboardpanel/blog",
+    },
+    {
+      id: "nav-testi",
+      title: "Kelola Testimoni",
+      subtitle: "Ulasan dan pengalaman pasien",
+      type: "Modul",
+      href: "/dashboardpanel/testimonial",
+    },
+    {
+      id: "nav-reg",
+      title: "Kelola Pendaftaran Antrean",
+      subtitle: "Daftar antrean dan pasien berobat",
+      type: "Modul",
+      href: "/dashboardpanel/pendaftaran",
+    },
+    ...allServices.map((s) => ({
+      id: `search-srv-${s.id}`,
+      title: s.title,
+      subtitle: s.badge ? `Layanan • ${s.badge}` : (s.description || "Layanan Medis Klinik"),
+      type: "Layanan",
+      href: "/dashboardpanel/layanan",
+    })),
+    ...allDoctors.map((d) => ({
+      id: `search-doc-${d.id}`,
+      title: d.name,
+      subtitle: `Dokter • ${d.specialty} ${d.active ? "(Aktif)" : "(Cuti)"}`,
+      type: "Dokter",
+      href: "/dashboardpanel/dokter",
+    })),
+    ...allPosts.map((p) => ({
+      id: `search-pst-${p.id}`,
+      title: p.title,
+      subtitle: `Blog • ${p.category} (${p.status === "published" ? "Terbit" : "Draft"})`,
+      type: "Blog",
+      href: "/dashboardpanel/blog",
+    })),
+    ...allTestimonials.map((t) => ({
+      id: `search-tst-${t.id}`,
+      title: t.name,
+      subtitle: `Testimoni • "${t.message.slice(0, 45)}..."`,
+      type: "Testimoni",
+      href: "/dashboardpanel/testimonial",
+    })),
+    ...allRegistrations.map((r) => ({
+      id: `search-reg-${r.id}`,
+      title: r.patientName,
+      subtitle: `Pendaftaran • ${r.queueCode} (${r.service})`,
+      type: "Pendaftaran",
+      href: "/dashboardpanel/pendaftaran",
+    })),
+  ];
+
   const totalViews = viewsRow?.count ?? 0;
 
   return {
@@ -255,5 +334,6 @@ export const getDashboardStatsFn = createServerFn({ method: "GET" }).handler(asy
     pageViewsCount: totalViews,
     recentActivity,
     recentItems,
+    searchItems,
   };
 });

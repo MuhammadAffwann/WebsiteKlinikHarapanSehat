@@ -1,9 +1,8 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
-import { useState, useEffect, useCallback, useId } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef, useId } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
-  Bell,
   CheckCircle2,
   ChevronRight,
   Clock,
@@ -22,6 +21,7 @@ import {
   TrendingUp,
   User,
   Users,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
@@ -69,7 +69,7 @@ function timeAgo(dateStr: string): string {
 
 type ActivityItem = {
   id: string;
-  type: "layanan" | "blog";
+  type: string;
   action: string;
   title: string;
   createdAt: string;
@@ -87,14 +87,7 @@ type RecentItem = {
   href: string;
 };
 
-type StatsType = {
-  servicesCount: number;
-  doctorsCount: number;
-  postsCount: number;
-  pageViewsCount: number;
-  recentActivity: ActivityItem[];
-  recentItems: RecentItem[];
-};
+type StatsType = Awaited<ReturnType<typeof getDashboardStatsFn>>;
 
 /* ─── Main Dashboard Page ─── */
 function DashboardIndexPage() {
@@ -103,7 +96,19 @@ function DashboardIndexPage() {
   const [stats, setStats] = useState<StatsType>(initialStats);
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchFocused, setSearchFocused] = useState(false);
   const [activeBarIndex, setActiveBarIndex] = useState(3); // Default highlighted day (Kamis)
+  const [currentTime, setCurrentTime] = useState<Date | null>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+
+  // Live real-time clock updater
+  useEffect(() => {
+    setCurrentTime(new Date());
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -114,6 +119,29 @@ function DashboardIndexPage() {
       // ignore error
     }
     setRefreshing(false);
+  }, []);
+
+  // Filter search items
+  const query = searchQuery.trim().toLowerCase();
+  const searchResults = useMemo(() => {
+    if (!query) return [];
+    return (stats.searchItems || []).filter((item) => {
+      const matchTitle = item.title.toLowerCase().includes(query);
+      const matchSubtitle = item.subtitle.toLowerCase().includes(query);
+      const matchType = item.type.toLowerCase().includes(query);
+      return matchTitle || matchSubtitle || matchType;
+    });
+  }, [query, stats.searchItems]);
+
+  // Click outside listener to close search dropdown
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
+        setSearchFocused(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   // Daily visitors chart simulation mapped to total visits
@@ -134,53 +162,162 @@ function DashboardIndexPage() {
     <DashboardLayout userEmail={session.user?.email}>
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 space-y-6">
         
-        {/* ─── Top Header Bar (Search & User Profile) ─── */}
+        {/* ─── Top Header Bar (Search, Refresh & User Profile) ─── */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-          {/* Search Bar */}
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Cari modul, layanan, atau artikel..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-10 pl-10 pr-4 rounded-full border border-border/80 bg-card text-sm text-foreground placeholder:text-muted-foreground/60 shadow-xs focus:outline-hidden focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-            />
-          </div>
+          {/* Search Bar & Refresh Button */}
+          <div className="flex items-center gap-2.5 flex-1 max-w-xl">
+            <div ref={searchContainerRef} className="relative flex-1">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Cari modul, layanan, dokter, artikel..."
+                value={searchQuery}
+                onFocus={() => setSearchFocused(true)}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") {
+                    setSearchFocused(false);
+                  }
+                }}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setSearchFocused(true);
+                }}
+                className="w-full h-10 pl-10 pr-9 rounded-full border border-border/80 bg-card text-sm text-foreground placeholder:text-muted-foreground/60 shadow-xs focus:outline-hidden focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery("");
+                    setSearchFocused(false);
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground rounded-full hover:bg-muted/80 transition-colors"
+                  title="Hapus pencarian"
+                >
+                  <X className="size-3.5" />
+                </button>
+              )}
 
-          {/* User & Notifications */}
-          <div className="flex items-center justify-end gap-3 shrink-0">
+              {/* ─── Live Search Floating Results Dropdown ─── */}
+              {searchFocused && searchQuery.trim().length > 0 && (
+                <div className="absolute left-0 top-full mt-2 w-full sm:w-[500px] z-50 rounded-2xl border border-border bg-card/95 backdrop-blur-md p-2 shadow-xl animate-in fade-in-0 zoom-in-95 duration-150">
+                  <div className="flex items-center justify-between px-3 py-2 border-b border-border/50 text-xs text-muted-foreground font-medium">
+                    <span>Hasil Pencarian ({searchResults.length})</span>
+                    <span className="text-[10px] bg-muted px-2 py-0.5 rounded-full">Tekan ESC untuk tutup</span>
+                  </div>
+
+                  <div className="max-h-[340px] overflow-y-auto p-1 space-y-1">
+                    {searchResults.length > 0 ? (
+                      searchResults.map((item) => {
+                        const Icon =
+                          item.type === "Layanan"
+                            ? Layers
+                            : item.type === "Dokter"
+                              ? Stethoscope
+                              : item.type === "Blog"
+                                ? Newspaper
+                                : item.type === "Testimoni"
+                                  ? Heart
+                                  : item.type === "Pendaftaran"
+                                    ? Users
+                                    : ArrowRight;
+
+                        const typeBadgeColor =
+                          item.type === "Layanan"
+                            ? "bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20"
+                            : item.type === "Dokter"
+                              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+                              : item.type === "Blog"
+                                ? "bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20"
+                                : item.type === "Testimoni"
+                                  ? "bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20"
+                                  : item.type === "Pendaftaran"
+                                    ? "bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20"
+                                    : "bg-muted text-muted-foreground border border-border";
+
+                        return (
+                          <Link
+                            key={item.id}
+                            to={item.href}
+                            onClick={() => {
+                              setSearchFocused(false);
+                              setSearchQuery("");
+                            }}
+                            className="flex items-center gap-3 rounded-xl p-2.5 transition-colors hover:bg-accent/80 group"
+                          >
+                            <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-muted/80 text-foreground group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                              <Icon className="size-4" />
+                            </div>
+                            <div className="min-w-0 flex-1 text-left">
+                              <div className="flex items-center gap-2">
+                                <p className="text-xs font-semibold text-foreground truncate group-hover:text-primary transition-colors">
+                                  {item.title}
+                                </p>
+                                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${typeBadgeColor}`}>
+                                  {item.type}
+                                </span>
+                              </div>
+                              <p className="text-[11px] text-muted-foreground truncate mt-0.5">
+                                {item.subtitle}
+                              </p>
+                            </div>
+                            <ChevronRight className="size-4 text-muted-foreground/40 group-hover:text-foreground group-hover:translate-x-0.5 transition-all shrink-0" />
+                          </Link>
+                        );
+                      })
+                    ) : (
+                      <div className="py-7 text-center">
+                        <Search className="size-7 mx-auto text-muted-foreground/40 mb-2" />
+                        <p className="text-xs font-semibold text-foreground">Tidak ditemukan hasil</p>
+                        <p className="text-[11px] text-muted-foreground mt-0.5">
+                          Tidak ada data yang cocok dengan "{searchQuery}"
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Refresh Button - Moved next to Search Bar */}
             <Button
               variant="outline"
               size="sm"
               onClick={handleRefresh}
               disabled={refreshing}
-              className="h-10 rounded-full px-3.5 text-xs font-medium border-border/80 shadow-xs gap-1.5 hover:bg-muted/80"
+              className="h-10 rounded-full px-3.5 text-xs font-medium border-border/80 shadow-xs gap-1.5 hover:bg-muted/80 shrink-0"
               title="Perbarui Data"
             >
               <RefreshCw className={`size-3.5 text-muted-foreground ${refreshing ? "animate-spin" : ""}`} />
               <span className="hidden sm:inline">Refresh</span>
             </Button>
+          </div>
 
-            {/* Notification Icon */}
-            <button className="relative flex size-10 items-center justify-center rounded-full border border-border/80 bg-card text-muted-foreground shadow-xs hover:bg-muted/80 transition-colors">
-              <Bell className="size-4" />
-              <span className="absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white shadow-xs">
-                3
-              </span>
-            </button>
-
-            {/* Admin Profile */}
-            <div className="flex items-center gap-2.5 rounded-full border border-border/80 bg-card py-1.5 pl-2 pr-4 shadow-xs">
-              <div className="flex size-7 items-center justify-center rounded-full bg-emerald-600 text-white font-semibold text-xs shadow-xs">
-                {session.user?.email?.[0]?.toUpperCase() || "A"}
+          {/* Real-time Clock Widget */}
+          <div className="flex items-center justify-end gap-3 shrink-0">
+            <div className="flex items-center gap-2.5 rounded-full border border-border/80 bg-card py-1.5 pl-2.5 pr-4 shadow-xs">
+              <div className="flex size-7 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <Clock className="size-4 animate-pulse" />
               </div>
               <div className="flex flex-col text-left">
-                <span className="text-xs font-bold text-foreground leading-tight">
-                  Admin Harapan Sehat
+                <span className="text-xs font-bold text-foreground font-mono tracking-tight leading-tight">
+                  {currentTime
+                    ? currentTime.toLocaleTimeString("id-ID", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                      }) + " WIB"
+                    : "--:--:-- WIB"}
                 </span>
                 <span className="text-[10px] text-muted-foreground leading-tight">
-                  {session.user?.email || "admin@harapansehat.com"}
+                  {currentTime
+                    ? currentTime.toLocaleDateString("id-ID", {
+                        weekday: "long",
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      })
+                    : "Memuat waktu..."}
                 </span>
               </div>
             </div>
@@ -282,117 +419,77 @@ function DashboardIndexPage() {
           </div>
         </div>
 
-        {/* ─── Row 2: Middle Section (Chart + Promo/Info Card) ─── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-          {/* Left Chart: Grafik Pengunjung Harian (8 cols) */}
-          <div className="lg:col-span-8 rounded-3xl border border-border/70 bg-card p-6 sm:p-7 shadow-xs flex flex-col justify-between">
-            {/* Chart Header */}
-            <div className="flex items-start justify-between gap-4 mb-6">
-              <div>
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Grafik Pengunjung Harian
-                </p>
-                <div className="flex items-baseline gap-3 mt-1">
-                  <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-foreground">
-                    {stats.pageViewsCount.toLocaleString("id-ID")}
-                    <span className="text-sm font-normal text-muted-foreground ml-1.5">Kunjungan</span>
-                  </h3>
-                  <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded-full">
-                    <TrendingUp className="size-3" /> +14% minggu ini
-                  </span>
-                </div>
-              </div>
-
-              {/* Day filter/badge */}
-              <div className="flex items-center gap-1 bg-muted/60 p-1 rounded-xl text-xs font-medium text-muted-foreground">
-                <span className="px-2.5 py-1 rounded-lg bg-card text-foreground font-semibold shadow-2xs">
-                  7 Hari Terakhir
+        {/* ─── Row 2: Full-width Visitor Chart ─── */}
+        <div className="w-full rounded-3xl border border-border/70 bg-card p-6 sm:p-7 shadow-xs flex flex-col justify-between">
+          {/* Chart Header */}
+          <div className="flex items-start justify-between gap-4 mb-6">
+            <div>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Grafik Pengunjung Harian
+              </p>
+              <div className="flex items-baseline gap-3 mt-1">
+                <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-foreground">
+                  {stats.pageViewsCount.toLocaleString("id-ID")}
+                  <span className="text-sm font-normal text-muted-foreground ml-1.5">Kunjungan</span>
+                </h3>
+                <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded-full">
+                  <TrendingUp className="size-3" /> +14% minggu ini
                 </span>
               </div>
             </div>
 
-            {/* Bar Chart Container */}
-            <div className="relative pt-12 pb-2">
-              <div className="flex items-end justify-between gap-2 sm:gap-4 h-48 sm:h-52 px-2 sm:px-6">
-                {chartDays.map((item, idx) => {
-                  const heightPercent = Math.max(15, Math.round((item.value / maxChartValue) * 100));
-                  const isSelected = activeBarIndex === idx;
-
-                  return (
-                    <div
-                      key={item.day}
-                      onClick={() => setActiveBarIndex(idx)}
-                      className="group relative flex-1 flex flex-col items-center cursor-pointer h-full justify-end"
-                    >
-                      {/* Interactive Tooltip on active bar */}
-                      {isSelected && (
-                        <div className="absolute -top-11 z-20 flex flex-col items-center animate-in fade-in zoom-in-95 duration-150">
-                          <div className="rounded-lg bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-3 py-1 text-xs font-bold shadow-lg tabular-nums whitespace-nowrap">
-                            {item.value} Kunjungan
-                          </div>
-                          <div className="size-2 bg-slate-900 dark:bg-slate-100 rotate-45 -mt-1" />
-                        </div>
-                      )}
-
-                      {/* Bar Pillar */}
-                      <div
-                        style={{ height: `${heightPercent}%` }}
-                        className={`w-full max-w-[48px] rounded-2xl transition-all duration-300 ${
-                          isSelected
-                            ? "bg-blue-600 dark:bg-blue-500 shadow-md shadow-blue-500/25 ring-2 ring-blue-400/40"
-                            : "bg-muted/80 group-hover:bg-muted-foreground/20"
-                        }`}
-                      />
-
-                      {/* Day Label */}
-                      <span
-                        className={`mt-3 text-xs font-semibold transition-colors ${
-                          isSelected ? "text-foreground font-bold" : "text-muted-foreground/70 group-hover:text-foreground"
-                        }`}
-                      >
-                        {item.day}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
+            {/* Day filter/badge */}
+            <div className="flex items-center gap-1 bg-muted/60 p-1 rounded-xl text-xs font-medium text-muted-foreground">
+              <span className="px-2.5 py-1 rounded-lg bg-card text-foreground font-semibold shadow-2xs">
+                7 Hari Terakhir
+              </span>
             </div>
           </div>
 
-          {/* Right Card: Feature / Promo Banner (4 cols) */}
-          <div className="lg:col-span-4 relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white p-7 shadow-md flex flex-col justify-between">
-            {/* Background glowing circles */}
-            <div className="absolute -top-16 -right-16 size-48 rounded-full bg-white/10 blur-2xl pointer-events-none" />
-            <div className="absolute -bottom-16 -left-16 size-48 rounded-full bg-indigo-500/20 blur-2xl pointer-events-none" />
-            
-            <div className="relative z-10 space-y-4">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-[11px] font-bold tracking-wider uppercase backdrop-blur-md">
-                <Sparkles className="size-3 text-yellow-300" />
-                PANEL HARAPAN SEHAT
-              </div>
+          {/* Bar Chart Container */}
+          <div className="relative pt-12 pb-2">
+            <div className="flex items-end justify-between gap-3 sm:gap-6 md:gap-8 h-48 sm:h-56 px-2 sm:px-8 md:px-12">
+              {chartDays.map((item, idx) => {
+                const heightPercent = Math.max(15, Math.round((item.value / maxChartValue) * 100));
+                const isSelected = activeBarIndex === idx;
 
-              {/* Title */}
-              <h3 className="text-xl sm:text-2xl font-black leading-snug tracking-tight">
-                Kelola Konten & Layanan Klinik
-              </h3>
+                return (
+                  <div
+                    key={item.day}
+                    onClick={() => setActiveBarIndex(idx)}
+                    className="group relative flex-1 flex flex-col items-center cursor-pointer h-full justify-end"
+                  >
+                    {/* Interactive Tooltip on active bar */}
+                    {isSelected && (
+                      <div className="absolute -top-11 z-20 flex flex-col items-center animate-in fade-in zoom-in-95 duration-150">
+                        <div className="rounded-lg bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-3 py-1 text-xs font-bold shadow-lg tabular-nums whitespace-nowrap">
+                          {item.value} Kunjungan
+                        </div>
+                        <div className="size-2 bg-slate-900 dark:bg-slate-100 rotate-45 -mt-1" />
+                      </div>
+                    )}
 
-              {/* Description */}
-              <p className="text-xs sm:text-sm text-blue-100/90 leading-relaxed">
-                Tambahkan info poli baru, perbarui artikel kesehatan masyarakat, atau cek antrean pasien dengan cepat.
-              </p>
-            </div>
+                    {/* Bar Pillar */}
+                    <div
+                      style={{ height: `${heightPercent}%` }}
+                      className={`w-full max-w-[64px] rounded-2xl transition-all duration-300 ${
+                        isSelected
+                          ? "bg-blue-600 dark:bg-blue-500 shadow-md shadow-blue-500/25 ring-2 ring-blue-400/40"
+                          : "bg-muted/80 group-hover:bg-muted-foreground/20"
+                      }`}
+                    />
 
-            {/* CTA Button */}
-            <div className="relative z-10 pt-6">
-              <Button
-                asChild
-                className="w-full h-11 rounded-2xl bg-white text-blue-700 hover:bg-blue-50 font-bold text-xs shadow-md transition-transform active:scale-98"
-              >
-                <Link to="/dashboardpanel/layanan">
-                  <Plus className="mr-1.5 size-4 stroke-[2.5]" /> Tambah Layanan Baru
-                </Link>
-              </Button>
+                    {/* Day Label */}
+                    <span
+                      className={`mt-3 text-xs font-semibold transition-colors ${
+                        isSelected ? "text-foreground font-bold" : "text-muted-foreground/70 group-hover:text-foreground"
+                      }`}
+                    >
+                      {item.day}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

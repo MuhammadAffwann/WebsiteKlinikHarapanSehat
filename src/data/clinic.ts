@@ -6,8 +6,8 @@
 export const clinic = {
   name: "Klinik Harapan Sehat",
   phone: "0263336097",
-  whatsapp: "+62 851-2996-7569",
-  whatsappUrl: "https://wa.me/6285129967569",
+  whatsapp: "+62 858-7155-5157",
+  whatsappUrl: "https://wa.me/6285871555157",
   doctorScheduleUrl: "https://jadwal-dokter.harapansehat.id",
   email: "admin@klinikharapansehat.id",
   address: "Jl. Raya Cibeber No.20, Sukasari, Kec. Cilaku, Kabupaten Cianjur, Jawa Barat 43285",

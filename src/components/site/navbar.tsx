@@ -24,7 +24,8 @@ const navItems: NavItem[] = [
   { label: "Layanan", to: "/layanan" },
   { label: "Cari Dokter", to: "/dokter" },
   { label: "Ijab Kabul", to: "/", hash: "ijab-kabul" },
-  { label: "Blog", to: "/blog" },
+  { label: "FAQ", to: "/", hash: "faq" },
+  { label: "Blog", to: "/", hash: "blog" },
 ];
 
 export function Navbar({ services = [] }: { services?: Service[] }) {

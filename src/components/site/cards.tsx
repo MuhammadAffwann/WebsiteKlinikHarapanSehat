@@ -65,7 +65,7 @@ export function ServiceCard({ service }: { service: Service }) {
     (service.image.startsWith("http") || service.image.startsWith("/") ? service.image : svcUmum);
 
   return (
-    <article className="shadow-card flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-transform hover:-translate-y-1">
+    <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-border/50 bg-[#fffefe] shadow-[0_8px_24px_-4px_rgba(15,23,42,0.10),0_2px_8px_-2px_rgba(15,23,42,0.06)] transition-transform hover:-translate-y-1">
       <img
         src={imgSrc}
         alt={service.title}
@@ -206,7 +206,7 @@ export function PostCard({ post, cover }: { post: Post; cover: string }) {
   const coverSrc = post.coverImage || cover;
 
   return (
-    <article className="shadow-card flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card">
+    <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-border/50 bg-[#fffefe] shadow-[0_8px_24px_-4px_rgba(15,23,42,0.10),0_2px_8px_-2px_rgba(15,23,42,0.06)]">
       <div className="relative">
         <img
           src={coverSrc}

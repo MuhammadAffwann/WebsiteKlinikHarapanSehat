@@ -7,7 +7,7 @@ import type { Service } from "@/db/schema";
 
 export function Footer({ services = [] }: { services?: Service[] }) {
   return (
-    <footer className="border-t border-border bg-secondary/60">
+    <footer className="border-t border-border bg-[#f7fbfa]">
       <div className="mx-auto grid max-w-[1440px] gap-10 px-4 py-14 sm:px-6 lg:px-8 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-center">

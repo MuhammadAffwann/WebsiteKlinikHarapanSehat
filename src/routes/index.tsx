@@ -23,6 +23,7 @@ import { Pill, Section, SectionHeading } from "@/components/site/section";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/site/scroll-reveal";
 import { clinic, stats } from "@/data/clinic";
 import { IjabKabulSection } from "@/components/site/ijab-kabul-section";
+import { FaqSection } from "@/components/site/faq-section";
 import { TestimonialSection } from "@/components/site/testimonial-section";
 import { cn } from "@/lib/utils";
 import heroImage from "@/assets/hero-care.jpg";
@@ -122,6 +123,7 @@ const heroActions = [
         />
       </div>
     ),
+    mobileIcon: <Calendar className="size-7 text-[#0052cc]" strokeWidth={1.5} />,
   },
   {
     label: "Daftar Online",
@@ -135,6 +137,7 @@ const heroActions = [
         />
       </div>
     ),
+    mobileIcon: <CalendarCheck className="size-7 text-[#0052cc]" strokeWidth={1.5} />,
   },
   {
     label: "Lihat Layanan",
@@ -149,6 +152,7 @@ const heroActions = [
         />
       </div>
     ),
+    mobileIcon: <ClipboardList className="size-7 text-[#0052cc]" strokeWidth={1.5} />,
   },
 ];
 
@@ -157,24 +161,43 @@ function HeroActionCard({
   to,
   hash,
   icon,
+  mobileIcon,
 }: {
   label: string;
   to: "/" | "/daftar-online" | "/dokter";
   hash?: string;
   icon: ReactNode;
+  mobileIcon: ReactNode;
 }) {
   return (
-    <Link
-      to={to}
-      {...(hash ? { hash } : {})}
-      className="shadow-card flex min-w-0 flex-1 items-center gap-1.5 rounded-xl border border-border/60 bg-white px-2.5 py-2.5 transition-transform hover:-translate-y-0.5 hover:shadow-lg sm:gap-2.5 sm:rounded-2xl sm:px-3.5 sm:py-3 md:gap-3 md:px-4 md:py-3.5"
-    >
-      {icon}
-      <span className="min-w-0 flex-1 text-xs font-medium leading-tight text-[#333333] sm:text-sm">
-        {label}
-      </span>
-      <ChevronRight className="size-3.5 shrink-0 text-[#0052cc] sm:size-4" strokeWidth={2} />
-    </Link>
+    <>
+      {/* Mobile Version: Grid Card */}
+      <Link
+        to={to}
+        {...(hash ? { hash } : {})}
+        className="flex flex-col items-center gap-2 sm:hidden"
+      >
+        <div className="flex size-14 items-center justify-center rounded-2xl bg-white shadow-md border border-border/40">
+          {mobileIcon}
+        </div>
+        <span className="text-[10px] font-medium leading-tight text-[#333333] text-center">
+          {label}
+        </span>
+      </Link>
+
+      {/* Desktop/Tablet Version: Pill (Original) */}
+      <Link
+        to={to}
+        {...(hash ? { hash } : {})}
+        className="shadow-card hidden sm:flex min-w-0 flex-1 items-center gap-1.5 rounded-xl border border-border/60 bg-white px-2.5 py-2.5 transition-transform hover:-translate-y-0.5 hover:shadow-lg sm:gap-2.5 sm:rounded-2xl sm:px-3.5 sm:py-3 md:gap-3 md:px-4 md:py-3.5"
+      >
+        {icon}
+        <span className="min-w-0 flex-1 text-xs font-medium leading-tight text-[#333333] sm:text-sm">
+          {label}
+        </span>
+        <ChevronRight className="size-3.5 shrink-0 text-[#0052cc] sm:size-4" strokeWidth={2} />
+      </Link>
+    </>
   );
 }
 
@@ -192,7 +215,8 @@ function HomePage() {
   const currentHash = useRouterState({ select: (s) => s.location.hash });
 
   useEffect(() => {
-    const hash = currentHash || (typeof window !== "undefined" ? window.location.hash.replace(/^#/, "") : "");
+    const hash =
+      currentHash || (typeof window !== "undefined" ? window.location.hash.replace(/^#/, "") : "");
     if (!hash) return undefined;
     const timer = setTimeout(() => {
       const el = document.getElementById(hash);
@@ -206,16 +230,14 @@ function HomePage() {
   return (
     <>
       {/* Hero */}
-      <div id="atas" className="relative overflow-hidden bg-background border-b border-border/40">
-        {/* Desktop full-bleed image with gradient fade */}
+      <div id="atas" className="relative overflow-hidden border-b border-border/40 surface-hero">
+        {/* Desktop full-bleed image with mask fade */}
         <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 overflow-hidden lg:block">
           <img
             src={hsBackground}
             alt="Gedung Klinik Harapan Sehat"
-            className="h-full w-full object-cover object-[center_20%]"
+            className="h-full w-full object-cover object-[center_20%] [mask-image:linear-gradient(to_right,transparent_0%,black_35%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_35%)]"
           />
-          {/* Gradient fade from solid background on the left to transparent on the right */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/50 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background/40" />
         </div>
 
@@ -238,7 +260,7 @@ function HomePage() {
               Memberikan pelayanan kesehatan yang paripurna kepada masyarakat tanpa terkendala
               biaya, didukung oleh sistem ijab kabul biaya berobat.
             </p>
-            <div className="mt-8 flex w-full flex-row gap-2 sm:gap-3 justify-center lg:justify-start">
+            <div className="mt-8 grid w-full grid-cols-3 gap-4 sm:flex sm:flex-row sm:gap-3 justify-center lg:justify-start">
               {heroActions.map((action) => (
                 <HeroActionCard
                   key={action.label}
@@ -246,6 +268,7 @@ function HomePage() {
                   to={action.to}
                   {...("hash" in action ? { hash: action.hash } : {})}
                   icon={action.icon}
+                  mobileIcon={action.mobileIcon}
                 />
               ))}
             </div>
@@ -258,7 +281,7 @@ function HomePage() {
             className="relative order-1 lg:order-2 w-full"
           >
             {/* Mobile: regular simple image card */}
-            <div className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-md lg:hidden">
+            <div className="-mx-4 sm:-mx-6 -mt-10 sm:-mt-14 lg:hidden">
               <img
                 src={hsBackground}
                 alt="Gedung Klinik Harapan Sehat"
@@ -407,6 +430,9 @@ function HomePage() {
       {/* Ijab Kabul */}
       <IjabKabulSection />
 
+      {/* FAQ */}
+      <FaqSection />
+
       {/* Testimonials */}
       <TestimonialSection testimonials={testimonials} />
 
@@ -444,7 +470,7 @@ function HomePage() {
       </Section>
 
       {/* Blog */}
-      <Section id="blog">
+      <Section id="blog" className="bg-[#f7fbfa]">
         <ScrollReveal variant="fade-up">
           {/* Grid Container */}
           <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
@@ -454,8 +480,8 @@ function HomePage() {
                 Kabar &amp; edukasi terbaru
               </h2>
               <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                Temukan informasi kesehatan yang bermanfaat untuk hidup lebih sehat melalui artikel
-                blog dan edukasi klinik kami.
+                Akses berbagai informasi dan edukasi medis bermanfaat melalui blog resmi klinik kami
+                untuk mendukung pola hidup sehat Anda.
               </p>
 
               <Link

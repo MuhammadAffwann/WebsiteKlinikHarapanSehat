@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import hsBackground from "@/assets/hsbackground.png";
 import { Lock, Mail, AlertCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BrandLogo } from "@/components/site/logo";
@@ -51,7 +52,12 @@ function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12 dark:bg-slate-950 sm:px-6 lg:px-8">
+    <div
+      className="flex min-h-screen items-center justify-center bg-cover bg-center bg-no-repeat px-4 py-12"
+      style={{
+        backgroundImage: `linear-gradient(rgba(248, 250, 252, 0.7), rgba(248, 250, 252, 0.7)), url(${hsBackground})`,
+      }}
+    >
       <div className="w-full max-w-md space-y-8 rounded-2xl border border-border bg-card p-8 shadow-xl">
         <div className="text-center">
           <div className="flex justify-center">

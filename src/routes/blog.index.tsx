@@ -43,7 +43,7 @@ function BlogPage() {
         description="Tulisan ringkas dari tim medis kami seputar pencegahan penyakit dan layanan klinik."
         backgroundImage={blogBanner}
       />
-      <Section>
+      <Section className="bg-[#f7fbfa]">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
             <PostCard key={post.slug} post={post} cover={blogCover} />

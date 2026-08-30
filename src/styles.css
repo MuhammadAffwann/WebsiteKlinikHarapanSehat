@@ -96,13 +96,14 @@
   --sidebar-border: oklch(0.92 0.012 256);
   --sidebar-ring: oklch(0.52 0.21 260);
 
-  /* Effects */
+        /* Effects */
   --gradient-hero: linear-gradient(
-    160deg,
-    oklch(0.97 0.02 262) 0%,
-    oklch(0.99 0.008 250) 45%,
-    oklch(0.97 0.03 175) 100%
+    to bottom,
+    #F2F6F9 0%,
+    #E4EDF1 50%,
+    #FEFFFE 100%
   );
+  --color-hero-blend: oklch(0.98 0.005 235);
   --gradient-primary: linear-gradient(135deg, oklch(0.52 0.21 260), oklch(0.62 0.17 245));
   --shadow-card:
     0 1px 2px oklch(0.17 0.03 258 / 0.04), 0 12px 32px -18px oklch(0.17 0.03 258 / 0.22);
@@ -144,6 +145,13 @@
   --sidebar-accent-foreground: oklch(0.9 0.05 258);
   --sidebar-border: oklch(1 0 0 / 12%);
   --sidebar-ring: oklch(0.68 0.16 255);
+  --gradient-hero: linear-gradient(
+    to bottom,
+    oklch(0.2 0.02 262) 0%,
+    oklch(0.18 0.03 262) 50%,
+    oklch(0.16 0.03 262) 100%
+  );
+
 }
 
 @layer base {
@@ -207,7 +215,7 @@ html {
 .animate-marquee-continuous {
   display: flex;
   width: max-content;
-  animation: marquee-left 35s linear infinite;
+  animation: marquee-left 50s linear infinite;
 }
 
 .animate-marquee-continuous:hover,

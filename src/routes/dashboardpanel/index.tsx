@@ -97,7 +97,8 @@ function DashboardIndexPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchFocused, setSearchFocused] = useState(false);
-  const [activeBarIndex, setActiveBarIndex] = useState(3); // Default highlighted day (Kamis)
+  const todayBarIndex = (new Date().getDay() + 6) % 7; // 0=Sen,1=Sel,...,6=Min
+  const [activeBarIndex, setActiveBarIndex] = useState(todayBarIndex);
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
@@ -150,7 +151,7 @@ function DashboardIndexPage() {
     { day: "Sen", value: Math.max(4, Math.round(baseCount * 0.18)), fullDay: "Senin" },
     { day: "Sel", value: Math.max(6, Math.round(baseCount * 0.28)), fullDay: "Selasa" },
     { day: "Rab", value: Math.max(5, Math.round(baseCount * 0.22)), fullDay: "Rabu" },
-    { day: "Kam", value: Math.max(12, Math.round(baseCount * 0.45) + 8), fullDay: "Kamis (Hari Ini)" },
+    { day: "Kam", value: Math.max(12, Math.round(baseCount * 0.45) + 8), fullDay: "Kamis" },
     { day: "Jum", value: Math.max(8, Math.round(baseCount * 0.35)), fullDay: "Jumat" },
     { day: "Sab", value: Math.max(7, Math.round(baseCount * 0.26)), fullDay: "Sabtu" },
     { day: "Min", value: Math.max(3, Math.round(baseCount * 0.15)), fullDay: "Minggu" },
@@ -329,91 +330,77 @@ function DashboardIndexPage() {
           {/* 1. Total Layanan */}
           <Link
             to="/dashboardpanel/layanan"
-            className="group relative flex items-center justify-between p-5 rounded-2xl border border-border/70 bg-card shadow-xs hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
+            className="group relative flex flex-col justify-between p-5 rounded-2xl border border-border/70 bg-card shadow-xs hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 min-h-[110px]"
           >
-            <div className="flex items-center gap-3.5">
-              <div className="flex size-11 items-center justify-center rounded-full bg-orange-500/15 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400 group-hover:scale-105 transition-transform">
-                <Layers className="size-5" />
-              </div>
-              <div>
-                <p className="text-xs font-medium text-muted-foreground">Total Layanan</p>
-                <div className="flex items-baseline gap-2 mt-0.5">
-                  <span className="text-2xl font-black tracking-tight text-foreground tabular-nums">
-                    {stats.servicesCount}
-                  </span>
-                  <span className="inline-flex items-center text-[11px] font-semibold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded-md">
-                    +{stats.servicesCount}
-                  </span>
-                </div>
+            <div>
+              <p className="text-xs font-medium text-muted-foreground">Total Layanan</p>
+              <div className="flex items-baseline gap-2 mt-2">
+                <span className="text-4xl font-black tracking-tight text-foreground tabular-nums">
+                  {stats.servicesCount}
+                </span>
+                <span className="inline-flex items-center text-[11px] font-semibold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded-md">
+                  +{stats.servicesCount}
+                </span>
               </div>
             </div>
-            <ChevronRight className="size-4 text-muted-foreground/40 group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
+            <div className="flex justify-end mt-3">
+              <ChevronRight className="size-4 text-muted-foreground/40 group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
+            </div>
           </Link>
 
           {/* 2. Jumlah Dokter */}
           <Link
             to="/dashboardpanel/dokter"
-            className="group relative flex items-center justify-between p-5 rounded-2xl border border-border/70 bg-card shadow-xs hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
+            className="group relative flex flex-col justify-between p-5 rounded-2xl border border-border/70 bg-card shadow-xs hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 min-h-[110px]"
           >
-            <div className="flex items-center gap-3.5">
-              <div className="flex size-11 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400 group-hover:scale-105 transition-transform">
-                <Stethoscope className="size-5" />
-              </div>
-              <div>
-                <p className="text-xs font-medium text-muted-foreground">Jumlah Dokter</p>
-                <div className="flex items-baseline gap-2 mt-0.5">
-                  <span className="text-2xl font-black tracking-tight text-foreground tabular-nums">
-                    {stats.doctorsCount}
-                  </span>
-                  <span className="inline-flex items-center text-[11px] font-semibold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded-md">
-                    +{stats.doctorsCount}
-                  </span>
-                </div>
+            <div>
+              <p className="text-xs font-medium text-muted-foreground">Jumlah Dokter</p>
+              <div className="flex items-baseline gap-2 mt-2">
+                <span className="text-4xl font-black tracking-tight text-foreground tabular-nums">
+                  {stats.doctorsCount}
+                </span>
+                <span className="inline-flex items-center text-[11px] font-semibold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded-md">
+                  +{stats.doctorsCount}
+                </span>
               </div>
             </div>
-            <ChevronRight className="size-4 text-muted-foreground/40 group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
+            <div className="flex justify-end mt-3">
+              <ChevronRight className="size-4 text-muted-foreground/40 group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
+            </div>
           </Link>
 
           {/* 3. Blog & Edukasi */}
           <Link
             to="/dashboardpanel/blog"
-            className="group relative flex items-center justify-between p-5 rounded-2xl border border-border/70 bg-card shadow-xs hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
+            className="group relative flex flex-col justify-between p-5 rounded-2xl border border-border/70 bg-card shadow-xs hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 min-h-[110px]"
           >
-            <div className="flex items-center gap-3.5">
-              <div className="flex size-11 items-center justify-center rounded-full bg-blue-500/15 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400 group-hover:scale-105 transition-transform">
-                <Newspaper className="size-5" />
-              </div>
-              <div>
-                <p className="text-xs font-medium text-muted-foreground">Artikel Blog</p>
-                <div className="flex items-baseline gap-2 mt-0.5">
-                  <span className="text-2xl font-black tracking-tight text-foreground tabular-nums">
-                    {stats.postsCount}
-                  </span>
-                  <span className="inline-flex items-center text-[11px] font-semibold text-blue-600 bg-blue-500/10 px-1.5 py-0.5 rounded-md">
-                    +{stats.postsCount}
-                  </span>
-                </div>
+            <div>
+              <p className="text-xs font-medium text-muted-foreground">Artikel Blog</p>
+              <div className="flex items-baseline gap-2 mt-2">
+                <span className="text-4xl font-black tracking-tight text-foreground tabular-nums">
+                  {stats.postsCount}
+                </span>
+                <span className="inline-flex items-center text-[11px] font-semibold text-blue-600 bg-blue-500/10 px-1.5 py-0.5 rounded-md">
+                  +{stats.postsCount}
+                </span>
               </div>
             </div>
-            <ChevronRight className="size-4 text-muted-foreground/40 group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
+            <div className="flex justify-end mt-3">
+              <ChevronRight className="size-4 text-muted-foreground/40 group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
+            </div>
           </Link>
 
           {/* 4. Total Kunjungan */}
-          <div className="relative flex items-center justify-between p-5 rounded-2xl border border-border/70 bg-card shadow-xs">
-            <div className="flex items-center gap-3.5">
-              <div className="flex size-11 items-center justify-center rounded-full bg-rose-500/15 text-rose-600 dark:bg-rose-500/20 dark:text-rose-400">
-                <Eye className="size-5" />
-              </div>
-              <div>
-                <p className="text-xs font-medium text-muted-foreground">Total Kunjungan</p>
-                <div className="flex items-baseline gap-2 mt-0.5">
-                  <span className="text-2xl font-black tracking-tight text-foreground tabular-nums">
-                    {stats.pageViewsCount.toLocaleString("id-ID")}
-                  </span>
-                  <span className="inline-flex items-center text-[10px] font-semibold text-rose-600 bg-rose-500/10 px-1.5 py-0.5 rounded-md">
-                    Live
-                  </span>
-                </div>
+          <div className="relative flex flex-col justify-between p-5 rounded-2xl border border-border/70 bg-card shadow-xs min-h-[110px]">
+            <div>
+              <p className="text-xs font-medium text-muted-foreground">Total Kunjungan</p>
+              <div className="flex items-baseline gap-2 mt-2">
+                <span className="text-4xl font-black tracking-tight text-foreground tabular-nums">
+                  {stats.pageViewsCount.toLocaleString("id-ID")}
+                </span>
+                <span className="inline-flex items-center text-[10px] font-semibold text-rose-600 bg-rose-500/10 px-1.5 py-0.5 rounded-md">
+                  Live
+                </span>
               </div>
             </div>
           </div>

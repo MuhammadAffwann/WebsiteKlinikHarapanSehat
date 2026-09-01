@@ -741,12 +741,12 @@ function DaftarOnlinePage() {
                     <CreditCard className="size-4" /> Metode Pembayaran & Identitas Medis
                   </h4>
 
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-2.5 sm:gap-3.5">
                     <label
-                      className={`flex cursor-pointer items-center justify-center gap-2 rounded-2xl border p-4 text-center transition-all ${
+                      className={`group relative flex cursor-pointer items-center gap-2.5 sm:gap-3 rounded-2xl border p-3 sm:p-4 transition-all ${
                         paymentType === "Non-BPJS"
-                          ? "border-primary bg-primary/10 text-primary font-bold shadow-sm"
-                          : "border-input bg-background text-muted-foreground hover:bg-muted"
+                          ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-xs"
+                          : "border-input bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/40 hover:text-foreground"
                       }`}
                     >
                       <input
@@ -757,14 +757,30 @@ function DaftarOnlinePage() {
                         onChange={() => setPaymentType("Non-BPJS")}
                         className="sr-only"
                       />
-                      <span>Non-BPJS / Umum</span>
+                      <div
+                        className={`flex size-8 sm:size-9 shrink-0 items-center justify-center rounded-xl transition-colors ${
+                          paymentType === "Non-BPJS"
+                            ? "bg-primary text-primary-foreground shadow-xs"
+                            : "bg-muted text-muted-foreground group-hover:bg-muted/80"
+                        }`}
+                      >
+                        <CreditCard className="size-4" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <span className="block text-xs sm:text-sm font-bold text-foreground leading-tight">
+                          Non-BPJS
+                        </span>
+                        <span className="block text-[10px] sm:text-[11px] text-muted-foreground leading-tight mt-0.5">
+                          Umum / Mandiri
+                        </span>
+                      </div>
                     </label>
 
                     <label
-                      className={`flex cursor-pointer items-center justify-center gap-2 rounded-2xl border p-4 text-center transition-all ${
+                      className={`group relative flex cursor-pointer items-center gap-2.5 sm:gap-3 rounded-2xl border p-3 sm:p-4 transition-all ${
                         paymentType === "BPJS"
-                          ? "border-emerald-600 bg-emerald-50 text-emerald-700 font-bold shadow-sm"
-                          : "border-input bg-background text-muted-foreground hover:bg-muted"
+                          ? "border-emerald-600 bg-emerald-500/10 text-emerald-700 ring-2 ring-emerald-500/20 shadow-xs dark:text-emerald-300 dark:border-emerald-700"
+                          : "border-input bg-card text-muted-foreground hover:border-emerald-500/40 hover:bg-muted/40 hover:text-foreground"
                       }`}
                     >
                       <input
@@ -775,36 +791,44 @@ function DaftarOnlinePage() {
                         onChange={() => setPaymentType("BPJS")}
                         className="sr-only"
                       />
-                      <ShieldCheck className="size-4 text-emerald-600" />
-                      <span>BPJS Kesehatan</span>
+                      <div
+                        className={`flex size-8 sm:size-9 shrink-0 items-center justify-center rounded-xl transition-colors ${
+                          paymentType === "BPJS"
+                            ? "bg-emerald-600 text-white shadow-xs"
+                            : "bg-muted text-muted-foreground group-hover:bg-muted/80"
+                        }`}
+                      >
+                        <ShieldCheck className="size-4" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <span className="block text-xs sm:text-sm font-bold text-foreground leading-tight">
+                          BPJS
+                        </span>
+                        <span className="block text-[10px] sm:text-[11px] text-muted-foreground leading-tight mt-0.5">
+                          BPJS Kesehatan
+                        </span>
+                      </div>
                     </label>
                   </div>
 
                   {paymentType === "BPJS" ? (
-                    <div className="rounded-2xl bg-emerald-500/10 p-4 sm:p-5 border border-emerald-500/30">
-                      <div className="flex items-start gap-3">
-                        <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm mt-0.5">
-                          <ShieldCheck className="size-5" />
-                        </div>
-                        <div className="text-xs sm:text-sm leading-relaxed text-foreground space-y-2">
-                          <p className="font-bold text-emerald-800 dark:text-emerald-300">
-                            Himbauan Pendaftaran Pasien BPJS Kesehatan
-                          </p>
-                          <p className="text-muted-foreground text-xs leading-relaxed">
-                            Bagi pasien BPJS Kesehatan, disarankan untuk melakukan pendaftaran antrean dan memastikan status kepesertaan BPJS Anda aktif melalui aplikasi <strong>Mobile JKN</strong> sebelum berkunjung ke klinik.
-                          </p>
-                          <div className="pt-1">
-                            <a
-                              href="https://play.google.com/store/apps/details?id=app.bpjs.mobile&hl=id"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white transition-all hover:bg-emerald-700 shadow-xs"
-                            >
-                              <span>Buka / Unduh Aplikasi Mobile JKN</span>
-                              <ExternalLink className="size-3.5" />
-                            </a>
-                          </div>
-                        </div>
+                    <div className="rounded-2xl bg-emerald-500/10 p-5 sm:p-6 border border-emerald-500/25 text-center">
+                      <p className="text-sm font-bold text-emerald-800 dark:text-emerald-300">
+                        Himbauan Pendaftaran Pasien BPJS Kesehatan
+                      </p>
+                      <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-lg mx-auto">
+                        Bagi pasien BPJS Kesehatan, disarankan untuk melakukan pendaftaran antrean dan memastikan status kepesertaan BPJS Anda aktif melalui aplikasi <strong>Mobile JKN</strong> sebelum berkunjung ke klinik.
+                      </p>
+                      <div className="mt-4 flex justify-center">
+                        <a
+                          href="https://play.google.com/store/apps/details?id=app.bpjs.mobile&hl=id"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-xs sm:text-sm font-bold text-white transition-all hover:bg-emerald-700 shadow-sm active:scale-[0.98]"
+                        >
+                          <span>Buka / Unduh Aplikasi Mobile JKN</span>
+                          <ExternalLink className="size-3.5 shrink-0" />
+                        </a>
                       </div>
                     </div>
                   ) : (

@@ -197,6 +197,12 @@
 /* Landing page anchor scrolling */
 html {
   scroll-behavior: smooth;
+  /* Prevent page-level horizontal scroll on mobile/tablet */
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
 }
 [id] {
   scroll-margin-top: 5rem;

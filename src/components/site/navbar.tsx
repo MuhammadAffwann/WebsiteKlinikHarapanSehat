@@ -76,13 +76,13 @@ export function Navbar({ services = [] }: { services?: Service[] }) {
 
                   {/* Mega dropdown panel */}
                   <div
-                    className={`absolute left-1/2 top-full pt-3 -translate-x-1/2 transition-all duration-200 ${
+                    className={`absolute left-1/2 top-full pt-3 -translate-x-1/2 transition-all duration-200 max-w-[calc(100vw-2rem)] ${
                       megaOpen
                         ? "pointer-events-auto translate-y-0 opacity-100"
                         : "pointer-events-none -translate-y-1 opacity-0"
                     }`}
                   >
-                    <div className="w-[640px] rounded-2xl border border-border bg-background p-5 shadow-lg">
+                    <div className="w-[min(640px,calc(100vw-2rem))] rounded-2xl border border-border bg-background p-5 shadow-lg">
                       <div className="mb-3 flex items-center justify-between">
                         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                           Layanan Kami

@@ -86,13 +86,13 @@ export function DoctorSection({ doctors = [] }: { doctors?: Doctor[] }) {
   return (
     <div className="mt-8">
       {/* Day filter pills */}
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="grid grid-cols-4 gap-2 sm:flex sm:flex-wrap sm:gap-2.5">
         <button
           onClick={() => setActiveDay("Semua")}
-          className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+          className={`flex items-center justify-center rounded-xl sm:rounded-full px-2 py-2 text-xs sm:px-4 sm:py-2 sm:text-sm font-medium transition-all ${
             activeDay === "Semua"
-              ? "bg-primary text-primary-foreground"
-              : "bg-secondary text-muted-foreground hover:bg-secondary/80"
+              ? "bg-primary text-primary-foreground shadow-sm"
+              : "bg-secondary text-muted-foreground hover:bg-secondary/80 hover:text-foreground"
           }`}
         >
           Semua
@@ -107,21 +107,21 @@ export function DoctorSection({ doctors = [] }: { doctors?: Doctor[] }) {
             <button
               key={day}
               onClick={() => setActiveDay(day)}
-              className={`relative rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+              className={`relative flex items-center justify-center gap-1 rounded-xl sm:rounded-full px-1.5 py-2 text-xs sm:px-4 sm:py-2 sm:text-sm font-medium transition-all ${
                 isActive
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary text-muted-foreground hover:bg-secondary/80"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "bg-secondary text-muted-foreground hover:bg-secondary/80 hover:text-foreground"
               }`}
             >
-              {day}
+              <span className="truncate">{day}</span>
               {isToday && (
                 <span
                   title="Hari ini"
-                  className="absolute -top-1 -right-1 size-2.5 rounded-full border-2 border-background bg-green-500"
+                  className="absolute -top-1 -right-1 size-2 sm:size-2.5 rounded-full border-2 border-background bg-green-500"
                 />
               )}
               <span
-                className={`ml-1.5 rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
+                className={`rounded-full px-1.5 py-0.5 text-[9px] sm:text-[10px] font-bold shrink-0 ${
                   isActive ? "bg-white/20 text-white" : "bg-muted text-muted-foreground"
                 }`}
               >

@@ -26,7 +26,6 @@ import { IjabKabulSection } from "@/components/site/ijab-kabul-section";
 import { FaqSection } from "@/components/site/faq-section";
 import { TestimonialSection } from "@/components/site/testimonial-section";
 import { cn } from "@/lib/utils";
-import heroImage from "@/assets/hero-care.jpg";
 import blogCover from "@/assets/blog-cover.jpg";
 import hsBackground from "@/assets/hsbackground.png";
 import { incrementPageViewFn } from "@/lib/dashboard";
@@ -230,7 +229,7 @@ function HomePage() {
   return (
     <>
       {/* Hero */}
-      <div id="atas" className="relative overflow-hidden border-b border-border/40 surface-hero">
+      <div id="atas" className="relative overflow-hidden border-b border-border/40 surface-hero" style={{ maxWidth: "100vw" }}>
         {/* Desktop full-bleed image with mask fade */}
         <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 overflow-hidden lg:block">
           <img
@@ -238,29 +237,41 @@ function HomePage() {
             alt="Gedung Klinik Harapan Sehat"
             className="h-full w-full object-cover object-[center_20%] [mask-image:linear-gradient(to_right,transparent_0%,black_35%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_35%)]"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background/40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-background/40" />
         </div>
 
-        <div className="relative mx-auto grid max-w-[1440px] items-center gap-8 px-4 py-10 sm:gap-10 sm:py-14 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:py-20">
+        <div className="relative mx-auto grid max-w-[1440px] items-center gap-6 px-4 pt-10 pb-12 sm:px-6 sm:pt-14 sm:pb-16 md:px-12 md:pt-16 md:pb-20 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:py-24">
+          {/* Mobile & Tablet Image (Full-bleed Edge-to-Edge) */}
+          <div className="relative -mx-4 -mt-10 mb-2 overflow-hidden sm:-mx-6 sm:-mt-14 sm:mb-3 md:-mx-12 md:-mt-16 md:mb-4 lg:hidden">
+            <img
+              src={hsBackground}
+              alt="Gedung Klinik Harapan Sehat"
+              width={1200}
+              height={800}
+              className="aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] w-full object-cover object-[center_30%]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/15 to-transparent lg:hidden" />
+          </div>
+
           <ScrollReveal
             variant="fade-right"
             distance={30}
-            className="relative z-10 max-w-2xl order-2 lg:order-1 text-center lg:text-left"
+            className="relative z-10 max-w-2xl text-left -mt-2 sm:-mt-3 md:-mt-4 lg:mt-0"
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0052cc]">
+            <p className="text-xs font-semibold text-[#0052cc] sm:text-sm md:text-base">
               Selamat Datang di Klinik Harapan Sehat
             </p>
-            <h1 className="mt-4 text-4xl font-bold leading-[1.13] text-[#1a1a2e] dark:text-foreground sm:text-5xl xl:text-6xl">
+            <h1 className="mt-2 text-3xl font-normal leading-[1.2] text-[#1a1a2e] dark:text-foreground sm:text-4xl md:text-5xl lg:text-[3.5rem] lg:leading-[1.18]">
               <span className="block">Pelayanan Kesehatan</span>
               <span className="block text-[#0052cc] dark:text-blue-400">
                 Paripurna & Terpercaya.
               </span>
             </h1>
-            <p className="mt-5 max-w-lg mx-auto lg:mx-0 text-base leading-relaxed text-[#555] dark:text-muted-foreground sm:text-lg">
+            <p className="mt-4 max-w-lg text-left text-sm leading-relaxed text-[#555] dark:text-muted-foreground sm:text-base md:text-lg md:mt-6">
               Memberikan pelayanan kesehatan yang paripurna kepada masyarakat tanpa terkendala
               biaya, didukung oleh sistem ijab kabul biaya berobat.
             </p>
-            <div className="mt-8 grid w-full grid-cols-3 gap-4 sm:flex sm:flex-row sm:gap-3 justify-center lg:justify-start">
+            <div className="mt-8 grid w-full grid-cols-3 gap-4 sm:flex sm:flex-row sm:gap-3 justify-start md:mt-10">
               {heroActions.map((action) => (
                 <HeroActionCard
                   key={action.label}
@@ -272,26 +283,6 @@ function HomePage() {
                 />
               ))}
             </div>
-          </ScrollReveal>
-
-          <ScrollReveal
-            variant="fade-left"
-            distance={30}
-            delay={0.1}
-            className="relative order-1 lg:order-2 w-full"
-          >
-            {/* Mobile: regular simple image card */}
-            <div className="-mx-4 sm:-mx-6 -mt-10 sm:-mt-14 lg:hidden">
-              <img
-                src={hsBackground}
-                alt="Gedung Klinik Harapan Sehat"
-                width={1200}
-                height={800}
-                className="aspect-[4/3] w-full object-cover"
-              />
-            </div>
-            {/* Desktop spacer to preserve layout height if needed */}
-            <div className="hidden lg:block min-h-[320px]" />
           </ScrollReveal>
         </div>
       </div>
@@ -439,8 +430,8 @@ function HomePage() {
       {/* Services */}
       <Section id="layanan" className="bg-white">
         <ScrollReveal variant="fade-up">
-          <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
-            <div className="lg:col-span-4">
+          <div className="grid gap-8 md:grid-cols-12 md:items-center">
+            <div className="md:col-span-4 lg:col-span-4">
               <SectionHeading
                 title="Pusat layanan unggulan"
                 description="Klinik Harapan Sehat mendukung perjalanan kesehatan anda dengan layanan yang terpercaya dan penuh perhatian."
@@ -448,7 +439,7 @@ function HomePage() {
               />
             </div>
 
-            <div className="lg:col-span-8 overflow-hidden">
+            <div className="md:col-span-8 lg:col-span-8 overflow-hidden">
               <div
                 ref={servicesRef}
                 className="flex gap-6 overflow-x-auto pb-4 pt-2 scroll-smooth snap-x snap-mandatory [::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
@@ -473,9 +464,9 @@ function HomePage() {
       <Section id="blog" className="bg-[#f7fbfa]">
         <ScrollReveal variant="fade-up">
           {/* Grid Container */}
-          <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
+          <div className="grid gap-8 md:grid-cols-12 md:items-center">
             {/* Left Column: Heading, Description, Link */}
-            <div className="flex flex-col justify-center lg:col-span-4 lg:pr-4">
+            <div className="flex flex-col justify-center md:col-span-4 lg:col-span-4 lg:pr-4">
               <h2 className="text-3xl font-normal leading-tight tracking-tight sm:text-4xl text-foreground">
                 Kabar &amp; edukasi terbaru
               </h2>
@@ -493,7 +484,7 @@ function HomePage() {
             </div>
 
             {/* Right Column: Carousel Cards */}
-            <div className="lg:col-span-8 overflow-hidden">
+            <div className="md:col-span-8 lg:col-span-8 overflow-hidden">
               {/* Cards Container */}
               <div
                 ref={postsRef}
@@ -527,7 +518,7 @@ function HomePage() {
         </ScrollReveal>
 
         {/* Contact cards + Map */}
-        <div className="mt-10 grid gap-6 lg:grid-cols-2">
+        <div className="mt-10 grid gap-6 md:grid-cols-2">
           {/* Left: Contact Cards + Socmed */}
           <StaggerContainer staggerChildren={0.1} className="flex flex-col gap-4">
             <StaggerItem variant="fade-right">

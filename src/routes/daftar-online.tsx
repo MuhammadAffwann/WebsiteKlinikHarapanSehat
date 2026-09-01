@@ -166,8 +166,18 @@ type RegistrationResult = {
 function DaftarOnlinePage() {
   const { services, doctors } = Route.useLoaderData();
   const search = Route.useSearch();
-  const [patientType, setPatientType] = useState<"Baru" | "Lama">("Baru");
+  const [patientType, setPatientType] = useState<"Baru" | "Lama" | null>(null);
+  const [isLoadingForm, setIsLoadingForm] = useState<boolean>(false);
   const [paymentType, setPaymentType] = useState<"BPJS" | "Non-BPJS">("Non-BPJS");
+
+  const handleSelectPatientType = (type: "Baru" | "Lama") => {
+    if (patientType === type) return;
+    setIsLoadingForm(true);
+    setPatientType(type);
+    setTimeout(() => {
+      setIsLoadingForm(false);
+    }, 350);
+  };
 
   // Form states
   const todayStr = new Date().toISOString().split("T")[0];
@@ -201,15 +211,19 @@ function DaftarOnlinePage() {
           s.title.toLowerCase() === search.poli?.toLowerCase() ||
           s.slug.toLowerCase() === search.poli?.toLowerCase(),
       );
-      setJenisPoli(matched ? matched.title : search.poli);
+      if (matched) setJenisPoli(matched.title);
     }
   }, [search.poli, services]);
 
   useEffect(() => {
     if (search.dokter) {
       setSelectedDokter(search.dokter);
+      const matchedDoc = doctors.find((d) => d.slug === search.dokter);
+      if (matchedDoc) {
+        setJenisPoli(matchedDoc.specialty === "Dokter Gigi" ? "Kesehatan Gigi" : "Poli Umum");
+      }
     }
-  }, [search.dokter]);
+  }, [search.dokter, doctors]);
 
   const [namaLengkap, setNamaLengkap] = useState("");
   const [namaAyah, setNamaAyah] = useState("");
@@ -239,6 +253,7 @@ function DaftarOnlinePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!patientType) return;
     setSubmitError(null);
 
     const dokterObj = doctors.find((d) => d.slug === selectedDokter) || availableDoctors[0];
@@ -311,6 +326,7 @@ function DaftarOnlinePage() {
 
   const resetForm = () => {
     setTicketResult(null);
+    setPatientType(null);
     setNamaLengkap("");
     setNamaAyah("");
     setAlamat("");
@@ -328,60 +344,139 @@ function DaftarOnlinePage() {
         <ScrollReveal variant="fade-up">
           {/* Main Card */}
           <div className="mx-auto max-w-3xl overflow-hidden rounded-3xl border border-border bg-card shadow-2xl">
-            {/* Header tab switcher */}
-            <div className="grid grid-cols-2 border-b border-border bg-muted/40 p-2 gap-2">
-              <button
-                type="button"
-                onClick={() => setPatientType("Baru")}
-                className={`flex items-center justify-center gap-2 rounded-2xl py-3.5 px-4 text-sm font-bold transition-all ${
-                  patientType === "Baru"
-                    ? "bg-primary text-primary-foreground shadow-md"
-                    : "text-muted-foreground hover:bg-background/80 hover:text-foreground"
-                }`}
-              >
-                <UserPlus className="size-4" />
-                Pasien Baru
-              </button>
+            {/* Question Header: Apakah sudah pernah daftar sebelumnya? */}
+            <div className="border-b border-border bg-muted/30 p-5 sm:p-7">
+              <p className="text-xs font-bold uppercase tracking-wider text-primary mb-1">
+                Kategori Pendaftaran Pasien
+              </p>
+              <h2 className="text-base sm:text-lg font-bold text-foreground mb-1.5">
+                Apakah Anda sudah pernah mendaftar / berobat di Klinik Harapan Sehat sebelumnya?
+              </h2>
+              <p className="text-xs text-muted-foreground mb-4">
+                Pilih <strong className="text-foreground">Ya</strong> jika sudah pernah berobat di Klinik Harapan Sehat, atau pilih <strong className="text-foreground">Tidak</strong> jika ini kunjungan pertama Anda.
+              </p>
 
-              <button
-                type="button"
-                onClick={() => setPatientType("Lama")}
-                className={`flex items-center justify-center gap-2 rounded-2xl py-3.5 px-4 text-sm font-bold transition-all ${
-                  patientType === "Lama"
-                    ? "bg-primary text-primary-foreground shadow-md"
-                    : "text-muted-foreground hover:bg-background/80 hover:text-foreground"
-                }`}
-              >
-                <UserCheck className="size-4" />
-                Pasien Lama
-              </button>
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                {/* Opsi YA -> Pasien Lama */}
+                <button
+                  type="button"
+                  onClick={() => handleSelectPatientType("Lama")}
+                  className={`group relative flex flex-col sm:flex-row items-center sm:items-start gap-2.5 sm:gap-3 rounded-2xl border p-3.5 sm:p-4 text-center sm:text-left transition-all ${
+                    patientType === "Lama"
+                      ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-sm"
+                      : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/50 hover:text-foreground"
+                  }`}
+                >
+                  <div
+                    className={`flex size-9 sm:size-10 shrink-0 items-center justify-center rounded-xl font-bold transition-colors ${
+                      patientType === "Lama"
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "bg-muted text-muted-foreground group-hover:bg-muted/80"
+                    }`}
+                  >
+                    <UserCheck className="size-5" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-center sm:justify-start gap-1.5 flex-wrap">
+                      <span className="text-sm sm:text-base font-bold text-foreground">Ya</span>
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                          patientType === "Lama"
+                            ? "bg-primary/20 text-primary"
+                            : "bg-muted text-muted-foreground"
+                        }`}
+                      >
+                        Pasien Lama
+                      </span>
+                    </div>
+                    <span className="mt-0.5 block text-[11px] text-muted-foreground leading-tight">
+                      Sudah pernah berobat
+                    </span>
+                  </div>
+                </button>
+
+                {/* Opsi TIDAK -> Pasien Baru */}
+                <button
+                  type="button"
+                  onClick={() => handleSelectPatientType("Baru")}
+                  className={`group relative flex flex-col sm:flex-row items-center sm:items-start gap-2.5 sm:gap-3 rounded-2xl border p-3.5 sm:p-4 text-center sm:text-left transition-all ${
+                    patientType === "Baru"
+                      ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-sm"
+                      : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/50 hover:text-foreground"
+                  }`}
+                >
+                  <div
+                    className={`flex size-9 sm:size-10 shrink-0 items-center justify-center rounded-xl font-bold transition-colors ${
+                      patientType === "Baru"
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "bg-muted text-muted-foreground group-hover:bg-muted/80"
+                    }`}
+                  >
+                    <UserPlus className="size-5" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-center sm:justify-start gap-1.5 flex-wrap">
+                      <span className="text-sm sm:text-base font-bold text-foreground">Tidak</span>
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                          patientType === "Baru"
+                            ? "bg-primary/20 text-primary"
+                            : "bg-muted text-muted-foreground"
+                        }`}
+                      >
+                        Pasien Baru
+                      </span>
+                    </div>
+                    <span className="mt-0.5 block text-[11px] text-muted-foreground leading-tight">
+                      Kunjungan pertama
+                    </span>
+                  </div>
+                </button>
+              </div>
             </div>
 
-            {/* Form content */}
-            <div className="p-6 sm:p-10">
-              <div className="mb-6 flex items-center gap-3 rounded-2xl bg-primary/5 p-4 border border-primary/10">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold">
-                  {patientType === "Baru" ? "1" : "2"}
+            {/* Form state handling */}
+            {patientType === null ? (
+              <div className="flex flex-col items-center justify-center p-8 sm:p-14 text-center text-muted-foreground bg-muted/5 border-t border-border">
+                <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary mb-3.5 shadow-sm">
+                  <FileText className="size-7" />
                 </div>
-                <div>
-                  <h3 className="text-base font-bold">
-                    Pendaftaran{" "}
-                    {patientType === "Baru" ? "Pasien Baru" : "Pasien Lama (Pernah Berobat)"}
-                  </h3>
-                  <p className="text-xs text-muted-foreground">
-                    {patientType === "Baru"
-                      ? "Lengkapi data identitas pertama kali untuk mendapatkan Nomor Rekam Medis (RM)."
-                      : "Masukkan Nomor RM / NIK / No. BPJS Anda untuk langsung menjadwalkan kunjungan."}
-                  </p>
-                </div>
+                <h4 className="text-base font-bold text-foreground">Pilih Kategori Pasien</h4>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-sm leading-relaxed">
+                  Silakan pilih opsi <strong className="text-foreground font-semibold">Ya</strong> atau <strong className="text-foreground font-semibold">Tidak</strong> di atas untuk memuat formulir pendaftaran yang sesuai.
+                </p>
               </div>
+            ) : isLoadingForm ? (
+              <div className="flex flex-col items-center justify-center p-12 sm:p-16 text-center border-t border-border animate-in fade-in duration-300">
+                <Loader2 className="size-8 animate-spin text-primary mb-3" />
+                <p className="text-sm font-bold text-foreground">Menyiapkan formulir pendaftaran...</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Mohon tunggu sebentar</p>
+              </div>
+            ) : (
+              /* Form content */
+              <div className="p-6 sm:p-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                <div className="mb-6 flex items-center gap-3 rounded-2xl bg-primary/5 p-4 border border-primary/10">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold">
+                    1
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold">
+                      Formulir Pendaftaran {patientType === "Lama" ? "Pasien Lama" : "Pasien Baru"}
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      {patientType === "Lama"
+                        ? "Silakan lengkapi Nomor Rekam Medis (RM) / NIK dan jadwal kunjungan Anda."
+                        : "Lengkapi data identitas pertama kali untuk mendapatkan Nomor Rekam Medis (RM)."}
+                    </p>
+                  </div>
+                </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Section 1: Data Identitas Pasien */}
-                <div className="space-y-4">
-                  <h4 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-primary">
-                    <FileText className="size-4" /> Data Identitas Pasien
-                  </h4>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Section 1: Data Identitas Pasien */}
+                  <div className="space-y-4">
+                    <h4 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-primary">
+                      <FileText className="size-4" /> Data Identitas Pasien
+                    </h4>
 
                   {patientType === "Baru" ? (
                     <>
@@ -686,60 +781,29 @@ function DaftarOnlinePage() {
                   </div>
 
                   {paymentType === "BPJS" ? (
-                    <div className="rounded-2xl bg-emerald-50/50 p-4 border border-emerald-200/60">
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <div>
-                          <label
-                            htmlFor="noBpjs"
-                            className="block text-xs font-semibold text-foreground mb-1.5"
-                          >
-                            Nomor Kartu BPJS *
-                          </label>
-                          <input
-                            id="noBpjs"
-                            type="text"
-                            required
-                            placeholder="000123456789"
-                            value={noBpjs}
-                            onChange={(e) => setNoBpjs(e.target.value)}
-                            className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
-                          />
+                    <div className="rounded-2xl bg-emerald-500/10 p-4 sm:p-5 border border-emerald-500/30">
+                      <div className="flex items-start gap-3">
+                        <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm mt-0.5">
+                          <ShieldCheck className="size-5" />
                         </div>
-                        <div>
-                          <label
-                            htmlFor="nikBpjs"
-                            className="block text-xs font-semibold text-foreground mb-1.5"
-                          >
-                            NIK (Nomor Induk Kependudukan) *
-                          </label>
-                          <input
-                            id="nikBpjs"
-                            type="text"
-                            required
-                            maxLength={16}
-                            placeholder="16 Digit NIK KTP / KK"
-                            value={nik}
-                            onChange={(e) => setNik(e.target.value)}
-                            className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="mt-3.5 flex items-start gap-2.5 rounded-xl bg-white/70 p-3 border border-emerald-200/50 shadow-xs">
-                        <Info className="size-4 shrink-0 text-emerald-600 mt-0.5" />
-                        <div className="text-xs leading-relaxed text-muted-foreground">
-                          <p>
-                            Pastikan status kepesertaan BPJS Anda aktif sebelum berkunjung. Anda bisa mengecek status dan detail kepesertaan melalui aplikasi Mobile JKN.
+                        <div className="text-xs sm:text-sm leading-relaxed text-foreground space-y-2">
+                          <p className="font-bold text-emerald-800 dark:text-emerald-300">
+                            Himbauan Pendaftaran Pasien BPJS Kesehatan
                           </p>
-                          <a
-                            href="https://play.google.com/store/apps/details?id=app.bpjs.mobile&hl=id"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="mt-1.5 inline-flex items-center gap-1 font-semibold text-emerald-700 hover:text-emerald-900 hover:underline"
-                          >
-                            <span>Unduh Mobile JKN</span>
-                            <ExternalLink className="size-3" />
-                          </a>
+                          <p className="text-muted-foreground text-xs leading-relaxed">
+                            Bagi pasien BPJS Kesehatan, disarankan untuk melakukan pendaftaran antrean dan memastikan status kepesertaan BPJS Anda aktif melalui aplikasi <strong>Mobile JKN</strong> sebelum berkunjung ke klinik.
+                          </p>
+                          <div className="pt-1">
+                            <a
+                              href="https://play.google.com/store/apps/details?id=app.bpjs.mobile&hl=id"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white transition-all hover:bg-emerald-700 shadow-xs"
+                            >
+                              <span>Buka / Unduh Aplikasi Mobile JKN</span>
+                              <ExternalLink className="size-3.5" />
+                            </a>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -792,6 +856,7 @@ function DaftarOnlinePage() {
                 </Button>
               </form>
             </div>
+            )}
           </div>
         </ScrollReveal>
       </Section>

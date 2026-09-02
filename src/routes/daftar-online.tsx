@@ -361,26 +361,29 @@ function DaftarOnlinePage() {
                 <button
                   type="button"
                   onClick={() => handleSelectPatientType("Lama")}
-                  className={`group relative flex flex-col sm:flex-row items-center sm:items-start gap-2.5 sm:gap-3 rounded-2xl border p-3.5 sm:p-4 text-center sm:text-left transition-all ${
+                  className={`group relative flex flex-col items-center justify-center gap-2 rounded-2xl border p-4 sm:p-5 text-center transition-all ${
                     patientType === "Lama"
                       ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-sm"
                       : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/50 hover:text-foreground"
                   }`}
                 >
                   <div
-                    className={`flex size-9 sm:size-10 shrink-0 items-center justify-center rounded-xl font-bold transition-colors ${
+                    className={`flex size-11 sm:size-12 shrink-0 items-center justify-center rounded-2xl font-bold transition-colors ${
                       patientType === "Lama"
                         ? "bg-primary text-primary-foreground shadow-sm"
                         : "bg-muted text-muted-foreground group-hover:bg-muted/80"
                     }`}
                   >
-                    <UserCheck className="size-5" />
+                    <UserCheck className="size-5 sm:size-6" />
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center justify-center sm:justify-start gap-1.5 flex-wrap">
-                      <span className="text-sm sm:text-base font-bold text-foreground">Ya</span>
+                  
+                  <div className="space-y-1">
+                    <p className="text-base sm:text-lg font-bold text-foreground leading-none">
+                      Ya
+                    </p>
+                    <div>
                       <span
-                        className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                        className={`inline-block rounded-full px-2.5 py-0.5 text-[10px] sm:text-[11px] font-semibold ${
                           patientType === "Lama"
                             ? "bg-primary/20 text-primary"
                             : "bg-muted text-muted-foreground"
@@ -389,9 +392,9 @@ function DaftarOnlinePage() {
                         Pasien Lama
                       </span>
                     </div>
-                    <span className="mt-0.5 block text-[11px] text-muted-foreground leading-tight">
+                    <p className="text-[11px] sm:text-xs text-muted-foreground leading-tight pt-0.5">
                       Sudah pernah berobat
-                    </span>
+                    </p>
                   </div>
                 </button>
 
@@ -399,26 +402,29 @@ function DaftarOnlinePage() {
                 <button
                   type="button"
                   onClick={() => handleSelectPatientType("Baru")}
-                  className={`group relative flex flex-col sm:flex-row items-center sm:items-start gap-2.5 sm:gap-3 rounded-2xl border p-3.5 sm:p-4 text-center sm:text-left transition-all ${
+                  className={`group relative flex flex-col items-center justify-center gap-2 rounded-2xl border p-4 sm:p-5 text-center transition-all ${
                     patientType === "Baru"
                       ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-sm"
                       : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/50 hover:text-foreground"
                   }`}
                 >
                   <div
-                    className={`flex size-9 sm:size-10 shrink-0 items-center justify-center rounded-xl font-bold transition-colors ${
+                    className={`flex size-11 sm:size-12 shrink-0 items-center justify-center rounded-2xl font-bold transition-colors ${
                       patientType === "Baru"
                         ? "bg-primary text-primary-foreground shadow-sm"
                         : "bg-muted text-muted-foreground group-hover:bg-muted/80"
                     }`}
                   >
-                    <UserPlus className="size-5" />
+                    <UserPlus className="size-5 sm:size-6" />
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center justify-center sm:justify-start gap-1.5 flex-wrap">
-                      <span className="text-sm sm:text-base font-bold text-foreground">Tidak</span>
+                  
+                  <div className="space-y-1">
+                    <p className="text-base sm:text-lg font-bold text-foreground leading-none">
+                      Tidak
+                    </p>
+                    <div>
                       <span
-                        className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                        className={`inline-block rounded-full px-2.5 py-0.5 text-[10px] sm:text-[11px] font-semibold ${
                           patientType === "Baru"
                             ? "bg-primary/20 text-primary"
                             : "bg-muted text-muted-foreground"
@@ -427,9 +433,9 @@ function DaftarOnlinePage() {
                         Pasien Baru
                       </span>
                     </div>
-                    <span className="mt-0.5 block text-[11px] text-muted-foreground leading-tight">
+                    <p className="text-[11px] sm:text-xs text-muted-foreground leading-tight pt-0.5">
                       Kunjungan pertama
-                    </span>
+                    </p>
                   </div>
                 </button>
               </div>

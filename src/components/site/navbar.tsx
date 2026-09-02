@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   Menu,
@@ -19,7 +19,7 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { label: "Home", to: "/", hash: "atas" },
+  { label: "Home", to: "/", hash: "home" },
   { label: "Tentang Kami", to: "/", hash: "about" },
   { label: "Layanan", to: "/layanan" },
   { label: "Cari Dokter", to: "/dokter" },
@@ -31,7 +31,17 @@ const navItems: NavItem[] = [
 export function Navbar({ services = [] }: { services?: Service[] }) {
   const [open, setOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const megaTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const openMega = useCallback(() => {
     if (megaTimeout.current) clearTimeout(megaTimeout.current);
@@ -42,13 +52,36 @@ export function Navbar({ services = [] }: { services?: Service[] }) {
     megaTimeout.current = setTimeout(() => setMegaOpen(false), 150);
   }, []);
 
+  const handleNavClick = (item: NavItem) => {
+    setOpen(false);
+    setMegaOpen(false);
+    if (item.to === "/" && (item.hash === "home" || !item.hash)) {
+      if (window.location.pathname === "/") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } else if (item.hash && window.location.pathname === item.to) {
+      const el = document.getElementById(item.hash);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
+
+  const handleLogoClick = () => {
+    setOpen(false);
+    setMegaOpen(false);
+    if (window.location.pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
-    <header className="sticky top-0 z-50">
+    <header className={`sticky top-0 z-50 w-full transition-shadow duration-200 ${isScrolled ? "shadow-md shadow-black/5" : ""}`}>
       {/* Main Navbar */}
-      <div className="border-b border-border/70 bg-background/95 backdrop-blur">
+      <div className="border-b border-border/70 bg-background/95 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           {/* Left: Brand Logo */}
-          <Link to="/" className="flex shrink-0 items-center py-1" onClick={() => setOpen(false)}>
+          <Link to="/" className="flex shrink-0 items-center py-1" onClick={handleLogoClick}>
             <BrandLogo />
           </Link>
 
@@ -65,7 +98,7 @@ export function Navbar({ services = [] }: { services?: Service[] }) {
                   <Link
                     to={item.to}
                     {...(item.hash ? { hash: item.hash } : {})}
-                    onClick={() => setMegaOpen(false)}
+                    onClick={() => handleNavClick(item)}
                     className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
                   >
                     {item.label}
@@ -76,11 +109,10 @@ export function Navbar({ services = [] }: { services?: Service[] }) {
 
                   {/* Mega dropdown panel */}
                   <div
-                    className={`absolute left-1/2 top-full pt-3 -translate-x-1/2 transition-all duration-200 max-w-[calc(100vw-2rem)] ${
-                      megaOpen
+                    className={`absolute left-1/2 top-full pt-3 -translate-x-1/2 transition-all duration-200 max-w-[calc(100vw-2rem)] ${megaOpen
                         ? "pointer-events-auto translate-y-0 opacity-100"
                         : "pointer-events-none -translate-y-1 opacity-0"
-                    }`}
+                      }`}
                   >
                     <div className="w-[min(640px,calc(100vw-2rem))] rounded-2xl border border-border bg-background p-5 shadow-lg">
                       <div className="mb-3 flex items-center justify-between">
@@ -132,6 +164,7 @@ export function Navbar({ services = [] }: { services?: Service[] }) {
                   key={item.label}
                   to={item.to}
                   {...(item.hash ? { hash: item.hash } : {})}
+                  onClick={() => handleNavClick(item)}
                   className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
                 >
                   {item.label}
@@ -143,7 +176,16 @@ export function Navbar({ services = [] }: { services?: Service[] }) {
           {/* Right: Action button */}
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             <Button asChild size="sm" className="hidden rounded-full font-semibold sm:inline-flex">
-              <Link to="/" hash="kontak">
+              <Link
+                to="/"
+                hash="kontak"
+                onClick={() => {
+                  if (window.location.pathname === "/") {
+                    const el = document.getElementById("kontak");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+              >
                 Hubungi Kami <ArrowRight className="size-4" />
               </Link>
             </Button>
@@ -169,7 +211,7 @@ export function Navbar({ services = [] }: { services?: Service[] }) {
                 <Link
                   to={item.to}
                   {...(item.hash ? { hash: item.hash } : {})}
-                  onClick={() => setOpen(false)}
+                  onClick={() => handleNavClick(item)}
                   className="block rounded-lg px-2 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
                 >
                   {item.label}
@@ -184,7 +226,17 @@ export function Navbar({ services = [] }: { services?: Service[] }) {
               </Link>
             </Button>
             <Button asChild className="w-full rounded-full">
-              <Link to="/" hash="kontak" onClick={() => setOpen(false)}>
+              <Link
+                to="/"
+                hash="kontak"
+                onClick={() => {
+                  setOpen(false);
+                  if (window.location.pathname === "/") {
+                    const el = document.getElementById("kontak");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+              >
                 Hubungi Kami <ArrowRight className="size-4" />
               </Link>
             </Button>

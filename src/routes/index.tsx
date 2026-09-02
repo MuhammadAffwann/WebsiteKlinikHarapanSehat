@@ -217,10 +217,14 @@ function HomePage() {
     const hash =
       currentHash || (typeof window !== "undefined" ? window.location.hash.replace(/^#/, "") : "");
     if (!hash) return undefined;
+    if (hash === "home" || hash === "atas") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return undefined;
+    }
     const timer = setTimeout(() => {
       const el = document.getElementById(hash);
       if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+        el.scrollIntoView({ behavior: "smooth" });
       }
     }, 100);
     return () => clearTimeout(timer);
@@ -229,7 +233,7 @@ function HomePage() {
   return (
     <>
       {/* Hero */}
-      <div id="atas" className="relative overflow-hidden border-b border-border/40 surface-hero" style={{ maxWidth: "100vw" }}>
+      <div id="home" className="relative overflow-hidden border-b border-border/40 surface-hero" style={{ maxWidth: "100vw" }}>
         {/* Desktop full-bleed image with mask fade */}
         <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 overflow-hidden lg:block">
           <img

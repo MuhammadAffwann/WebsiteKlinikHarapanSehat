@@ -9,7 +9,7 @@ export const clinic = {
   whatsapp: "+62 858-7155-5157",
   whatsappUrl: "https://wa.me/6285871555157",
   doctorScheduleUrl: "https://jadwal-dokter.harapansehat.id",
-  email: "admin@klinikharapansehat.id",
+  email: "operasionalhs@gmail.com",
   address: "Jl. Raya Cibeber No.20, Sukasari, Kec. Cilaku, Kabupaten Cianjur, Jawa Barat 43285",
   hours: [
     { day: "Senin – Jumat", time: "08.00 – 21.00" },

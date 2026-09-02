@@ -167,6 +167,7 @@ function DaftarOnlinePage() {
   const { services, doctors } = Route.useLoaderData();
   const search = Route.useSearch();
   const [patientType, setPatientType] = useState<"Baru" | "Lama" | null>(null);
+  const [identifierType, setIdentifierType] = useState<"RM" | "NIK" | "BPJS" | null>(null);
   const [isLoadingForm, setIsLoadingForm] = useState<boolean>(false);
   const [paymentType, setPaymentType] = useState<"BPJS" | "Non-BPJS">("Non-BPJS");
 
@@ -174,6 +175,7 @@ function DaftarOnlinePage() {
     if (patientType === type) return;
     setIsLoadingForm(true);
     setPatientType(type);
+    setIdentifierType(null);
     setTimeout(() => {
       setIsLoadingForm(false);
     }, 350);
@@ -256,12 +258,28 @@ function DaftarOnlinePage() {
     if (!patientType) return;
     setSubmitError(null);
 
+    if (patientType === "Lama" && !identifierType) {
+      setSubmitError("Silakan pilih salah satu jenis identitas berobat (No. RM, NIK, atau No. BPJS) terlebih dahulu.");
+      return;
+    }
+
     const dokterObj = doctors.find((d) => d.slug === selectedDokter) || availableDoctors[0];
     const dokterName = dokterObj
       ? `${dokterObj.name} (${dokterObj.time})`
       : "Dokter Tugas Hari Ini";
 
     setIsSubmitting(true);
+
+    const medRecordNo =
+      patientType === "Lama"
+        ? identifierType === "RM"
+          ? noRm
+          : identifierType === "NIK"
+          ? `NIK: ${nik}`
+          : identifierType === "BPJS"
+          ? `BPJS: ${noBpjs}`
+          : null
+        : null;
 
     try {
       const res = await createRegistrationFn({
@@ -276,7 +294,7 @@ function DaftarOnlinePage() {
           paymentType,
           patientType,
           address: patientType === "Baru" ? alamat : null,
-          medicalRecordNo: patientType === "Lama" ? noRm : null,
+          medicalRecordNo: medRecordNo,
         },
       });
 
@@ -294,14 +312,19 @@ function DaftarOnlinePage() {
         nama: namaLengkap,
         namaAyah: patientType === "Baru" ? namaAyah : undefined,
         alamat: patientType === "Baru" ? alamat : undefined,
-        noRm: patientType === "Lama" ? noRm : undefined,
+        noRm: patientType === "Lama" && identifierType === "RM" ? noRm : undefined,
         noTelp,
         tanggalKunjungan,
         dayName: selectedDayName,
         poli: jenisPoli,
         dokter: dokterName,
         pembayaran: paymentType,
-        noBpjs: paymentType === "BPJS" ? noBpjs : undefined,
+        noBpjs:
+          paymentType === "BPJS"
+            ? noBpjs
+            : patientType === "Lama" && identifierType === "BPJS"
+            ? noBpjs
+            : undefined,
         nik: nik || undefined,
         keluhan: keluhan.trim() || undefined,
         waktuPendaftaran: new Date().toLocaleString("id-ID", {
@@ -327,6 +350,7 @@ function DaftarOnlinePage() {
   const resetForm = () => {
     setTicketResult(null);
     setPatientType(null);
+    setIdentifierType(null);
     setNamaLengkap("");
     setNamaAyah("");
     setAlamat("");
@@ -543,24 +567,126 @@ function DaftarOnlinePage() {
                       </div>
                     </>
                   ) : (
-                    <>
+                    <div className="space-y-4">
+                      {/* Pilihan Jenis Identitas Pasien Lama */}
+                      <div>
+                        <label className="block text-xs font-semibold text-foreground mb-1.5">
+                          Identitas Berobat yang Digunakan *
+                        </label>
+                        <div className="grid grid-cols-3 gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setIdentifierType("RM")}
+                            className={`flex items-center justify-center gap-1.5 rounded-xl border py-2.5 px-2 text-xs font-semibold transition-all ${
+                              identifierType === "RM"
+                                ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-xs font-bold"
+                                : "border-input bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/40 hover:text-foreground"
+                            }`}
+                          >
+                            <FileText className="size-3.5 shrink-0" />
+                            <span>No. RM</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setIdentifierType("NIK")}
+                            className={`flex items-center justify-center gap-1.5 rounded-xl border py-2.5 px-2 text-xs font-semibold transition-all ${
+                              identifierType === "NIK"
+                                ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-xs font-bold"
+                                : "border-input bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/40 hover:text-foreground"
+                            }`}
+                          >
+                            <CreditCard className="size-3.5 shrink-0" />
+                            <span>NIK</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setIdentifierType("BPJS")}
+                            className={`flex items-center justify-center gap-1.5 rounded-xl border py-2.5 px-2 text-xs font-semibold transition-all ${
+                              identifierType === "BPJS"
+                                ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-xs font-bold"
+                                : "border-input bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/40 hover:text-foreground"
+                            }`}
+                          >
+                            <ShieldCheck className="size-3.5 shrink-0" />
+                            <span>No. BPJS</span>
+                          </button>
+                        </div>
+                      </div>
+
                       <div className="grid gap-4 sm:grid-cols-2">
                         <div>
-                          <label
-                            htmlFor="noRm"
-                            className="block text-xs font-semibold text-foreground mb-1.5"
-                          >
-                            No. Rekam Medis (RM) / NIK / BPJS *
-                          </label>
-                          <input
-                            id="noRm"
-                            type="text"
-                            required
-                            placeholder="cth. RM-089123 / 3203xxxx"
-                            value={noRm}
-                            onChange={(e) => setNoRm(e.target.value)}
-                            className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
-                          />
+                          {identifierType === null && (
+                            <div>
+                              <label className="block text-xs font-semibold text-muted-foreground mb-1.5">
+                                Nomor Identitas Pasien *
+                              </label>
+                              <div className="flex items-center gap-2 rounded-xl border border-dashed border-input bg-muted/40 px-3.5 py-2.5 text-xs text-muted-foreground">
+                                <Info className="size-3.5 shrink-0 text-primary" />
+                                <span>Pilih opsi di atas (No. RM, NIK, atau BPJS)</span>
+                              </div>
+                            </div>
+                          )}
+
+                          {identifierType === "RM" && (
+                            <div>
+                              <label
+                                htmlFor="noRm"
+                                className="block text-xs font-semibold text-foreground mb-1.5"
+                              >
+                                No. Rekam Medis (RM) *
+                              </label>
+                              <input
+                                id="noRm"
+                                type="text"
+                                required
+                                placeholder="cth. RM-089123"
+                                value={noRm}
+                                onChange={(e) => setNoRm(e.target.value)}
+                                className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                              />
+                            </div>
+                          )}
+
+                          {identifierType === "NIK" && (
+                            <div>
+                              <label
+                                htmlFor="nikPasienLama"
+                                className="block text-xs font-semibold text-foreground mb-1.5"
+                              >
+                                NIK (Nomor Induk Kependudukan) *
+                              </label>
+                              <input
+                                id="nikPasienLama"
+                                type="text"
+                                required
+                                maxLength={16}
+                                placeholder="16 Digit NIK KTP Pasien"
+                                value={nik}
+                                onChange={(e) => setNik(e.target.value)}
+                                className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                              />
+                            </div>
+                          )}
+
+                          {identifierType === "BPJS" && (
+                            <div>
+                              <label
+                                htmlFor="noBpjsLama"
+                                className="block text-xs font-semibold text-foreground mb-1.5"
+                              >
+                                No. Kartu BPJS *
+                              </label>
+                              <input
+                                id="noBpjsLama"
+                                type="text"
+                                required
+                                placeholder="13 Digit No. Kartu BPJS"
+                                value={noBpjs}
+                                onChange={(e) => setNoBpjs(e.target.value)}
+                                className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                              />
+                            </div>
+                          )}
                         </div>
 
                         <div>
@@ -574,7 +700,7 @@ function DaftarOnlinePage() {
                             id="namaLengkapLama"
                             type="text"
                             required
-                            placeholder="Sesuai kartu berobat"
+                            placeholder="Sesuai kartu berobat / KTP"
                             value={namaLengkap}
                             onChange={(e) => setNamaLengkap(e.target.value)}
                             className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
@@ -598,7 +724,7 @@ function DaftarOnlinePage() {
                           className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
                         />
                       </div>
-                    </>
+                    </div>
                   )}
 
                   <div>
@@ -838,24 +964,26 @@ function DaftarOnlinePage() {
                       </div>
                     </div>
                   ) : (
-                    <div className="rounded-2xl bg-muted/40 p-4 border border-border">
-                      <label
-                        htmlFor="nikUmum"
-                        className="block text-xs font-semibold text-foreground mb-1.5"
-                      >
-                        NIK (Nomor Induk Kependudukan) *
-                      </label>
-                      <input
-                        id="nikUmum"
-                        type="text"
-                        required
-                        maxLength={16}
-                        placeholder="16 Digit NIK KTP Pasien"
-                        value={nik}
-                        onChange={(e) => setNik(e.target.value)}
-                        className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
-                      />
-                    </div>
+                    !(patientType === "Lama" && identifierType === "NIK") && (
+                      <div className="rounded-2xl bg-muted/40 p-4 border border-border">
+                        <label
+                          htmlFor="nikUmum"
+                          className="block text-xs font-semibold text-foreground mb-1.5"
+                        >
+                          NIK (Nomor Induk Kependudukan) *
+                        </label>
+                        <input
+                          id="nikUmum"
+                          type="text"
+                          required
+                          maxLength={16}
+                          placeholder="16 Digit NIK KTP Pasien"
+                          value={nik}
+                          onChange={(e) => setNik(e.target.value)}
+                          className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                        />
+                      </div>
+                    )
                   )}
                 </div>
 
@@ -940,6 +1068,18 @@ function DaftarOnlinePage() {
                     <p className="font-bold text-foreground">{ticketResult.noRm}</p>
                   </div>
                 )}
+                {ticketResult.nik && (
+                  <div>
+                    <p className="text-muted-foreground">NIK KTP:</p>
+                    <p className="font-bold text-foreground">{ticketResult.nik}</p>
+                  </div>
+                )}
+                {ticketResult.noBpjs && (
+                  <div>
+                    <p className="text-muted-foreground">No. BPJS:</p>
+                    <p className="font-bold text-foreground">{ticketResult.noBpjs}</p>
+                  </div>
+                )}
                 <div>
                   <p className="text-muted-foreground">No. Telp / WA:</p>
                   <p className="font-bold text-foreground">{ticketResult.noTelp}</p>
@@ -988,7 +1128,7 @@ function DaftarOnlinePage() {
 
 *Kode Antrean:* ${ticketResult.queueCode}
 *Nama Pasien:* ${ticketResult.nama}
-*Jenis Pasien:* Pasien ${ticketResult.patientType}${ticketResult.namaAyah ? `\n*Nama Ayah:* ${ticketResult.namaAyah}` : ""}${ticketResult.alamat ? `\n*Alamat:* ${ticketResult.alamat}` : ""}${ticketResult.noRm ? `\n*No. RM:* ${ticketResult.noRm}` : ""}
+*Jenis Pasien:* Pasien ${ticketResult.patientType}${ticketResult.namaAyah ? `\n*Nama Ayah:* ${ticketResult.namaAyah}` : ""}${ticketResult.alamat ? `\n*Alamat:* ${ticketResult.alamat}` : ""}${ticketResult.noRm ? `\n*No. RM:* ${ticketResult.noRm}` : ""}${ticketResult.nik ? `\n*NIK:* ${ticketResult.nik}` : ""}${ticketResult.noBpjs ? `\n*No. BPJS:* ${ticketResult.noBpjs}` : ""}
 *No. Telp / WA:* ${ticketResult.noTelp}
 *Poli Tujuan:* ${ticketResult.poli}
 *Dokter:* ${ticketResult.dokter}

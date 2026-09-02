@@ -266,9 +266,9 @@ function HomePage() {
               Selamat Datang di Klinik Harapan Sehat
             </p>
             <h1 className="mt-2 text-3xl font-normal leading-[1.2] text-[#1a1a2e] dark:text-foreground sm:text-4xl md:text-5xl lg:text-[3.5rem] lg:leading-[1.18]">
-              <span className="block">Pelayanan Kesehatan</span>
+              <span className="block">Ijab Kabul,</span>
               <span className="block text-[#0052cc] dark:text-blue-400">
-                Paripurna & Terpercaya.
+                Biaya Berobat.
               </span>
             </h1>
             <p className="mt-4 max-w-lg text-left text-sm leading-relaxed text-[#555] dark:text-muted-foreground sm:text-base md:text-lg md:mt-6">

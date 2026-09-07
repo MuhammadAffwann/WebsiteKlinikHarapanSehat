@@ -275,10 +275,10 @@ function DaftarOnlinePage() {
         ? identifierType === "RM"
           ? noRm
           : identifierType === "NIK"
-          ? `NIK: ${nik}`
-          : identifierType === "BPJS"
-          ? `BPJS: ${noBpjs}`
-          : null
+            ? `NIK: ${nik}`
+            : identifierType === "BPJS"
+              ? `BPJS: ${noBpjs}`
+              : null
         : null;
 
     try {
@@ -323,8 +323,8 @@ function DaftarOnlinePage() {
           paymentType === "BPJS"
             ? noBpjs
             : patientType === "Lama" && identifierType === "BPJS"
-            ? noBpjs
-            : undefined,
+              ? noBpjs
+              : undefined,
         nik: nik || undefined,
         keluhan: keluhan.trim() || undefined,
         waktuPendaftaran: new Date().toLocaleString("id-ID", {
@@ -385,33 +385,30 @@ function DaftarOnlinePage() {
                 <button
                   type="button"
                   onClick={() => handleSelectPatientType("Lama")}
-                  className={`group relative flex flex-col items-center justify-center gap-2 rounded-2xl border p-4 sm:p-5 text-center transition-all ${
-                    patientType === "Lama"
-                      ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-sm"
-                      : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/50 hover:text-foreground"
-                  }`}
+                  className={`group relative flex flex-col items-center justify-center gap-2 rounded-2xl border p-4 sm:p-5 text-center transition-all ${patientType === "Lama"
+                    ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-sm"
+                    : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/50 hover:text-foreground"
+                    }`}
                 >
                   <div
-                    className={`flex size-11 sm:size-12 shrink-0 items-center justify-center rounded-2xl font-bold transition-colors ${
-                      patientType === "Lama"
-                        ? "bg-primary text-primary-foreground shadow-sm"
-                        : "bg-muted text-muted-foreground group-hover:bg-muted/80"
-                    }`}
+                    className={`flex size-11 sm:size-12 shrink-0 items-center justify-center rounded-2xl font-bold transition-colors ${patientType === "Lama"
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "bg-muted text-muted-foreground group-hover:bg-muted/80"
+                      }`}
                   >
                     <UserCheck className="size-5 sm:size-6" />
                   </div>
-                  
+
                   <div className="space-y-1">
                     <p className="text-base sm:text-lg font-bold text-foreground leading-none">
                       Ya
                     </p>
                     <div>
                       <span
-                        className={`inline-block rounded-full px-2.5 py-0.5 text-[10px] sm:text-[11px] font-semibold ${
-                          patientType === "Lama"
-                            ? "bg-primary/20 text-primary"
-                            : "bg-muted text-muted-foreground"
-                        }`}
+                        className={`inline-block rounded-full px-2.5 py-0.5 text-[10px] sm:text-[11px] font-semibold ${patientType === "Lama"
+                          ? "bg-primary/20 text-primary"
+                          : "bg-muted text-muted-foreground"
+                          }`}
                       >
                         Pasien Lama
                       </span>
@@ -426,33 +423,30 @@ function DaftarOnlinePage() {
                 <button
                   type="button"
                   onClick={() => handleSelectPatientType("Baru")}
-                  className={`group relative flex flex-col items-center justify-center gap-2 rounded-2xl border p-4 sm:p-5 text-center transition-all ${
-                    patientType === "Baru"
-                      ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-sm"
-                      : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/50 hover:text-foreground"
-                  }`}
+                  className={`group relative flex flex-col items-center justify-center gap-2 rounded-2xl border p-4 sm:p-5 text-center transition-all ${patientType === "Baru"
+                    ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-sm"
+                    : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/50 hover:text-foreground"
+                    }`}
                 >
                   <div
-                    className={`flex size-11 sm:size-12 shrink-0 items-center justify-center rounded-2xl font-bold transition-colors ${
-                      patientType === "Baru"
-                        ? "bg-primary text-primary-foreground shadow-sm"
-                        : "bg-muted text-muted-foreground group-hover:bg-muted/80"
-                    }`}
+                    className={`flex size-11 sm:size-12 shrink-0 items-center justify-center rounded-2xl font-bold transition-colors ${patientType === "Baru"
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "bg-muted text-muted-foreground group-hover:bg-muted/80"
+                      }`}
                   >
                     <UserPlus className="size-5 sm:size-6" />
                   </div>
-                  
+
                   <div className="space-y-1">
                     <p className="text-base sm:text-lg font-bold text-foreground leading-none">
                       Tidak
                     </p>
                     <div>
                       <span
-                        className={`inline-block rounded-full px-2.5 py-0.5 text-[10px] sm:text-[11px] font-semibold ${
-                          patientType === "Baru"
-                            ? "bg-primary/20 text-primary"
-                            : "bg-muted text-muted-foreground"
-                        }`}
+                        className={`inline-block rounded-full px-2.5 py-0.5 text-[10px] sm:text-[11px] font-semibold ${patientType === "Baru"
+                          ? "bg-primary/20 text-primary"
+                          : "bg-muted text-muted-foreground"
+                          }`}
                       >
                         Pasien Baru
                       </span>
@@ -508,512 +502,515 @@ function DaftarOnlinePage() {
                       <FileText className="size-4" /> Data Identitas Pasien
                     </h4>
 
-                  {patientType === "Baru" ? (
-                    <>
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <div>
-                          <label
-                            htmlFor="namaLengkap"
-                            className="block text-xs font-semibold text-foreground mb-1.5"
-                          >
-                            Nama Lengkap Pasien *
-                          </label>
-                          <input
-                            id="namaLengkap"
-                            type="text"
-                            required
-                            placeholder="Sesuai KTP / KK"
-                            value={namaLengkap}
-                            onChange={(e) => setNamaLengkap(e.target.value)}
-                            className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
-                          />
+                    {patientType === "Baru" ? (
+                      <>
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <div>
+                            <label
+                              htmlFor="namaLengkap"
+                              className="block text-xs font-semibold text-foreground mb-1.5"
+                            >
+                              Nama Lengkap Pasien *
+                            </label>
+                            <input
+                              id="namaLengkap"
+                              type="text"
+                              required
+                              placeholder="Sesuai KTP / KK"
+                              value={namaLengkap}
+                              onChange={(e) => setNamaLengkap(e.target.value)}
+                              className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                            />
+                          </div>
+
+                          <div>
+                            <label
+                              htmlFor="namaAyah"
+                              className="block text-xs font-semibold text-foreground mb-1.5"
+                            >
+                              Nama Ayah Kandung *
+                            </label>
+                            <input
+                              id="namaAyah"
+                              type="text"
+                              required
+                              placeholder="Nama ayah kandung pasien"
+                              value={namaAyah}
+                              onChange={(e) => setNamaAyah(e.target.value)}
+                              className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                            />
+                          </div>
                         </div>
 
                         <div>
                           <label
-                            htmlFor="namaAyah"
+                            htmlFor="alamat"
                             className="block text-xs font-semibold text-foreground mb-1.5"
                           >
-                            Nama Ayah Kandung *
+                            Alamat Lengkap *
                           </label>
-                          <input
-                            id="namaAyah"
-                            type="text"
+                          <textarea
+                            id="alamat"
+                            rows={2}
                             required
-                            placeholder="Nama ayah kandung pasien"
-                            value={namaAyah}
-                            onChange={(e) => setNamaAyah(e.target.value)}
+                            placeholder="Jl. Raya / Kampung, RT/RW, Desa/Kelurahan, Kecamatan"
+                            value={alamat}
+                            onChange={(e) => setAlamat(e.target.value)}
                             className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
                           />
                         </div>
-                      </div>
-
-                      <div>
-                        <label
-                          htmlFor="alamat"
-                          className="block text-xs font-semibold text-foreground mb-1.5"
-                        >
-                          Alamat Lengkap *
-                        </label>
-                        <textarea
-                          id="alamat"
-                          rows={2}
-                          required
-                          placeholder="Jl. Raya / Kampung, RT/RW, Desa/Kelurahan, Kecamatan"
-                          value={alamat}
-                          onChange={(e) => setAlamat(e.target.value)}
-                          className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <div className="space-y-4">
-                      {/* Pilihan Jenis Identitas Pasien Lama */}
-                      <div>
-                        <label className="block text-xs font-semibold text-foreground mb-1.5">
-                          Identitas Berobat yang Digunakan *
-                        </label>
-                        <div className="grid grid-cols-3 gap-2">
-                          <button
-                            type="button"
-                            onClick={() => setIdentifierType("RM")}
-                            className={`flex items-center justify-center gap-1.5 rounded-xl border py-2.5 px-2 text-xs font-semibold transition-all ${
-                              identifierType === "RM"
-                                ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-xs font-bold"
-                                : "border-input bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/40 hover:text-foreground"
-                            }`}
-                          >
-                            <FileText className="size-3.5 shrink-0" />
-                            <span>No. RM</span>
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setIdentifierType("NIK")}
-                            className={`flex items-center justify-center gap-1.5 rounded-xl border py-2.5 px-2 text-xs font-semibold transition-all ${
-                              identifierType === "NIK"
-                                ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-xs font-bold"
-                                : "border-input bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/40 hover:text-foreground"
-                            }`}
-                          >
-                            <CreditCard className="size-3.5 shrink-0" />
-                            <span>NIK</span>
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setIdentifierType("BPJS")}
-                            className={`flex items-center justify-center gap-1.5 rounded-xl border py-2.5 px-2 text-xs font-semibold transition-all ${
-                              identifierType === "BPJS"
-                                ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-xs font-bold"
-                                : "border-input bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/40 hover:text-foreground"
-                            }`}
-                          >
-                            <ShieldCheck className="size-3.5 shrink-0" />
-                            <span>No. BPJS</span>
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="grid gap-4 sm:grid-cols-2">
+                      </>
+                    ) : (
+                      <div className="space-y-4">
+                        {/* Pilihan Jenis Identitas Pasien Lama */}
                         <div>
-                          {identifierType === null && (
-                            <div>
-                              <label className="block text-xs font-semibold text-muted-foreground mb-1.5">
-                                Nomor Identitas Pasien *
-                              </label>
-                              <div className="flex items-center gap-2 rounded-xl border border-dashed border-input bg-muted/40 px-3.5 py-2.5 text-xs text-muted-foreground">
-                                <Info className="size-3.5 shrink-0 text-primary" />
-                                <span>Pilih opsi di atas (No. RM, NIK, atau BPJS)</span>
+                          <label className="block text-xs font-semibold text-foreground mb-1.5">
+                            Identitas Berobat yang Digunakan *
+                          </label>
+                          <div className="grid grid-cols-3 gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setIdentifierType("RM")}
+                              className={`flex items-center justify-center gap-1.5 rounded-xl border py-2.5 px-2 text-xs font-semibold transition-all ${identifierType === "RM"
+                                ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-xs font-bold"
+                                : "border-input bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/40 hover:text-foreground"
+                                }`}
+                            >
+                              <FileText className="size-3.5 shrink-0" />
+                              <span>No. RM</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setIdentifierType("NIK")}
+                              className={`flex items-center justify-center gap-1.5 rounded-xl border py-2.5 px-2 text-xs font-semibold transition-all ${identifierType === "NIK"
+                                ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-xs font-bold"
+                                : "border-input bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/40 hover:text-foreground"
+                                }`}
+                            >
+                              <CreditCard className="size-3.5 shrink-0" />
+                              <span>NIK</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setIdentifierType("BPJS")}
+                              className={`flex items-center justify-center gap-1.5 rounded-xl border py-2.5 px-2 text-xs font-semibold transition-all ${identifierType === "BPJS"
+                                ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-xs font-bold"
+                                : "border-input bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/40 hover:text-foreground"
+                                }`}
+                            >
+                              <ShieldCheck className="size-3.5 shrink-0" />
+                              <span>No. BPJS</span>
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <div>
+                            {identifierType === null && (
+                              <div>
+                                <label className="block text-xs font-semibold text-muted-foreground mb-1.5">
+                                  Nomor Identitas Pasien *
+                                </label>
+                                <div className="flex items-center gap-2 rounded-xl border border-dashed border-input bg-muted/40 px-3.5 py-2.5 text-xs text-muted-foreground">
+                                  <Info className="size-3.5 shrink-0 text-primary" />
+                                  <span>Pilih opsi di atas (No. RM, NIK, atau BPJS)</span>
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            )}
 
-                          {identifierType === "RM" && (
-                            <div>
-                              <label
-                                htmlFor="noRm"
-                                className="block text-xs font-semibold text-foreground mb-1.5"
-                              >
-                                No. Rekam Medis (RM) *
-                              </label>
-                              <input
-                                id="noRm"
-                                type="text"
-                                required
-                                placeholder="cth. RM-089123"
-                                value={noRm}
-                                onChange={(e) => setNoRm(e.target.value)}
-                                className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
-                              />
-                            </div>
-                          )}
+                            {identifierType === "RM" && (
+                              <div>
+                                <label
+                                  htmlFor="noRm"
+                                  className="block text-xs font-semibold text-foreground mb-1.5"
+                                >
+                                  No. Rekam Medis (RM) *
+                                </label>
+                                <input
+                                  id="noRm"
+                                  type="text"
+                                  required
+                                  maxLength={20}
+                                  placeholder="contoh. RM-089123"
+                                  value={noRm}
+                                  onChange={(e) => setNoRm(e.target.value.slice(0, 20))}
+                                  className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                                />
+                              </div>
+                            )}
 
-                          {identifierType === "NIK" && (
-                            <div>
-                              <label
-                                htmlFor="nikPasienLama"
-                                className="block text-xs font-semibold text-foreground mb-1.5"
-                              >
-                                NIK (Nomor Induk Kependudukan) *
-                              </label>
-                              <input
-                                id="nikPasienLama"
-                                type="text"
-                                required
-                                maxLength={16}
-                                placeholder="16 Digit NIK KTP Pasien"
-                                value={nik}
-                                onChange={(e) => setNik(e.target.value)}
-                                className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
-                              />
-                            </div>
-                          )}
+                            {identifierType === "NIK" && (
+                              <div>
+                                <label
+                                  htmlFor="nikPasienLama"
+                                  className="block text-xs font-semibold text-foreground mb-1.5"
+                                >
+                                  NIK (Nomor Induk Kependudukan) *
+                                </label>
+                                <input
+                                  id="nikPasienLama"
+                                  type="text"
+                                  required
+                                  maxLength={16}
+                                  placeholder="16 Digit NIK KTP Pasien"
+                                  value={nik}
+                                  onChange={(e) => setNik(e.target.value)}
+                                  className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                                />
+                              </div>
+                            )}
 
-                          {identifierType === "BPJS" && (
-                            <div>
-                              <label
-                                htmlFor="noBpjsLama"
-                                className="block text-xs font-semibold text-foreground mb-1.5"
-                              >
-                                No. Kartu BPJS *
-                              </label>
-                              <input
-                                id="noBpjsLama"
-                                type="text"
-                                required
-                                placeholder="13 Digit No. Kartu BPJS"
-                                value={noBpjs}
-                                onChange={(e) => setNoBpjs(e.target.value)}
-                                className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
-                              />
-                            </div>
-                          )}
+                            {identifierType === "BPJS" && (
+                              <div className="space-y-2">
+                                <div>
+                                  <label
+                                    htmlFor="noBpjsLama"
+                                    className="block text-xs font-semibold text-foreground mb-1.5"
+                                  >
+                                    No. Kartu BPJS *
+                                  </label>
+                                  <input
+                                    id="noBpjsLama"
+                                    type="text"
+                                    required
+                                    maxLength={20}
+                                    placeholder="Nomor Kartu BPJS"
+                                    value={noBpjs}
+                                    onChange={(e) => setNoBpjs(e.target.value.slice(0, 20))}
+                                    className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                                  />
+                                </div>
+                                <div className="flex items-start gap-2 rounded-xl bg-amber-500/10 border border-amber-500/20 p-3 text-xs text-amber-800 dark:text-amber-300">
+                                  <AlertCircle className="size-4 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
+                                  <span>
+                                    <strong>Peringatan:</strong> Pastikan status kepesertaan BPJS Kesehatan Anda dalam kondisi <strong>aktif</strong> sebelum melakukan pendaftaran berobat.
+                                  </span>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          <div>
+                            <label
+                              htmlFor="namaLengkapLama"
+                              className="block text-xs font-semibold text-foreground mb-1.5"
+                            >
+                              Nama Lengkap Pasien *
+                            </label>
+                            <input
+                              id="namaLengkapLama"
+                              type="text"
+                              required
+                              placeholder="Sesuai kartu berobat / KTP"
+                              value={namaLengkap}
+                              onChange={(e) => setNamaLengkap(e.target.value)}
+                              className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                            />
+                          </div>
                         </div>
 
                         <div>
                           <label
-                            htmlFor="namaLengkapLama"
+                            htmlFor="tanggalLahir"
                             className="block text-xs font-semibold text-foreground mb-1.5"
                           >
-                            Nama Lengkap Pasien *
+                            Tanggal Lahir Pasien *
                           </label>
                           <input
-                            id="namaLengkapLama"
-                            type="text"
+                            id="tanggalLahir"
+                            type="date"
                             required
-                            placeholder="Sesuai kartu berobat / KTP"
-                            value={namaLengkap}
-                            onChange={(e) => setNamaLengkap(e.target.value)}
+                            value={tanggalLahir}
+                            onChange={(e) => setTanggalLahir(e.target.value)}
                             className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
                           />
                         </div>
                       </div>
+                    )}
 
-                      <div>
-                        <label
-                          htmlFor="tanggalLahir"
-                          className="block text-xs font-semibold text-foreground mb-1.5"
-                        >
-                          Tanggal Lahir Pasien *
-                        </label>
-                        <input
-                          id="tanggalLahir"
-                          type="date"
-                          required
-                          value={tanggalLahir}
-                          onChange={(e) => setTanggalLahir(e.target.value)}
-                          className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  <div>
-                    <label
-                      htmlFor="noTelp"
-                      className="block text-xs font-semibold text-foreground mb-1.5"
-                    >
-                      Nomor Telepon / WhatsApp Aktif *
-                    </label>
-                    <input
-                      id="noTelp"
-                      type="tel"
-                      required
-                      placeholder="08xxxxxxxxxx"
-                      value={noTelp}
-                      onChange={(e) => setNoTelp(e.target.value)}
-                      className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
-                    />
-                  </div>
-                </div>
-
-                <div className="h-px bg-border my-4" />
-
-                {/* Section 2: Jadwal & Poli */}
-                <div className="space-y-4">
-                  <h4 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-primary">
-                    <CalendarCheck className="size-4" /> Rencana Kunjungan & Poli
-                  </h4>
-
-                  <div className="grid gap-4 sm:grid-cols-2">
                     <div>
                       <label
-                        htmlFor="tanggalKunjungan"
+                        htmlFor="noTelp"
                         className="block text-xs font-semibold text-foreground mb-1.5"
                       >
-                        Tanggal Kunjungan *
+                        Nomor Telepon / WhatsApp Aktif *
                       </label>
                       <input
-                        id="tanggalKunjungan"
-                        type="date"
-                        min={todayStr}
+                        id="noTelp"
+                        type="tel"
                         required
-                        value={tanggalKunjungan}
-                        onChange={(e) => setTanggalKunjungan(e.target.value)}
+                        placeholder="08xxxxxxxxxx"
+                        value={noTelp}
+                        onChange={(e) => setNoTelp(e.target.value)}
                         className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
                       />
-                      {selectedDayName && (
-                        <p className="mt-1 text-[11px] font-medium text-emerald-600">
-                          Hari {selectedDayName}
-                        </p>
+                    </div>
+                  </div>
+
+                  <div className="h-px bg-border my-4" />
+
+                  {/* Section 2: Jadwal & Poli */}
+                  <div className="space-y-4">
+                    <h4 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-primary">
+                      <CalendarCheck className="size-4" /> Rencana Kunjungan & Poli
+                    </h4>
+
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label
+                          htmlFor="tanggalKunjungan"
+                          className="block text-xs font-semibold text-foreground mb-1.5"
+                        >
+                          Tanggal Kunjungan *
+                        </label>
+                        <input
+                          id="tanggalKunjungan"
+                          type="date"
+                          min={todayStr}
+                          required
+                          value={tanggalKunjungan}
+                          onChange={(e) => setTanggalKunjungan(e.target.value)}
+                          className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                        />
+                        {selectedDayName && (
+                          <p className="mt-1 text-[11px] font-medium text-emerald-600">
+                            Hari {selectedDayName}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="jenisPoli"
+                          className="block text-xs font-semibold text-foreground mb-1.5"
+                        >
+                          Jenis Poli *
+                        </label>
+                        <select
+                          id="jenisPoli"
+                          required
+                          value={jenisPoli}
+                          onChange={(e) => {
+                            setJenisPoli(e.target.value);
+                            setSelectedDokter("");
+                          }}
+                          className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                        >
+                          <option value="">-- Pilih Jenis Poli --</option>
+                          {services.map((svc) => (
+                            <option key={svc.slug} value={svc.title}>
+                              {svc.title}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Dynamic Doctor Schedule dropdown */}
+                    <div>
+                      <label
+                        htmlFor="jadwalDokter"
+                        className="block text-xs font-semibold text-foreground mb-1.5"
+                      >
+                        Dokter & Jadwal Praktik {selectedDayName ? `(${selectedDayName})` : ""} *
+                      </label>
+                      {!jenisPoli ? (
+                        <div className="flex items-center gap-2 rounded-xl bg-muted p-3 text-xs text-muted-foreground border border-border">
+                          <AlertCircle className="size-4 shrink-0 text-primary" />
+                          <span>
+                            Silakan pilih <strong>Jenis Poli</strong> terlebih dahulu untuk melihat
+                            daftar dokter & jadwal praktik.
+                          </span>
+                        </div>
+                      ) : availableDoctors.length > 0 ? (
+                        <select
+                          id="jadwalDokter"
+                          required
+                          value={selectedDokter}
+                          onChange={(e) => setSelectedDokter(e.target.value)}
+                          className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                        >
+                          <option value="">-- Pilih Dokter Praktik ({selectedDayName}) --</option>
+                          {availableDoctors.map((doc) => (
+                            <option key={doc.slug} value={doc.slug}>
+                              {doc.name} — ({doc.time})
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <div className="flex items-center gap-2 rounded-xl bg-amber-500/10 border border-amber-500/20 p-3 text-xs text-amber-700">
+                          <AlertCircle className="size-4 shrink-0" />
+                          <span>
+                            Tidak ada jadwal praktik untuk <strong>{jenisPoli}</strong> pada hari{" "}
+                            <strong>{selectedDayName}</strong>. Silakan pilih tanggal kunjungan lain.
+                          </span>
+                        </div>
                       )}
                     </div>
 
                     <div>
                       <label
-                        htmlFor="jenisPoli"
+                        htmlFor="keluhan"
                         className="block text-xs font-semibold text-foreground mb-1.5"
                       >
-                        Jenis Poli *
+                        Keluhan / Gejala Utama (Opsional)
                       </label>
-                      <select
-                        id="jenisPoli"
-                        required
-                        value={jenisPoli}
-                        onChange={(e) => {
-                          setJenisPoli(e.target.value);
-                          setSelectedDokter("");
-                        }}
+                      <textarea
+                        id="keluhan"
+                        rows={2}
+                        placeholder="Contoh: Demam tinggi 2 hari, batuk berdahak, nyeri lambung, dll."
+                        value={keluhan}
+                        onChange={(e) => setKeluhan(e.target.value)}
                         className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
-                      >
-                        <option value="">-- Pilih Jenis Poli --</option>
-                        {services.map((svc) => (
-                          <option key={svc.slug} value={svc.title}>
-                            {svc.title}
-                          </option>
-                        ))}
-                      </select>
+                      />
                     </div>
                   </div>
 
-                  {/* Dynamic Doctor Schedule dropdown */}
-                  <div>
-                    <label
-                      htmlFor="jadwalDokter"
-                      className="block text-xs font-semibold text-foreground mb-1.5"
-                    >
-                      Dokter & Jadwal Praktik {selectedDayName ? `(${selectedDayName})` : ""} *
-                    </label>
-                    {!jenisPoli ? (
-                      <div className="flex items-center gap-2 rounded-xl bg-muted p-3 text-xs text-muted-foreground border border-border">
-                        <AlertCircle className="size-4 shrink-0 text-primary" />
-                        <span>
-                          Silakan pilih <strong>Jenis Poli</strong> terlebih dahulu untuk melihat
-                          daftar dokter & jadwal praktik.
-                        </span>
-                      </div>
-                    ) : availableDoctors.length > 0 ? (
-                      <select
-                        id="jadwalDokter"
-                        required
-                        value={selectedDokter}
-                        onChange={(e) => setSelectedDokter(e.target.value)}
-                        className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  <div className="h-px bg-border my-4" />
+
+                  {/* Section 3: Pembayaran (BPJS / Non-BPJS) */}
+                  <div className="space-y-4">
+                    <h4 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-primary">
+                      <CreditCard className="size-4" /> Metode Pembayaran & Identitas Medis
+                    </h4>
+
+                    <div className="grid grid-cols-2 gap-2.5 sm:gap-3.5">
+                      <label
+                        className={`group relative flex cursor-pointer items-center gap-2.5 sm:gap-3 rounded-2xl border p-3 sm:p-4 transition-all ${paymentType === "Non-BPJS"
+                          ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-xs"
+                          : "border-input bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/40 hover:text-foreground"
+                          }`}
                       >
-                        <option value="">-- Pilih Dokter Praktik ({selectedDayName}) --</option>
-                        {availableDoctors.map((doc) => (
-                          <option key={doc.slug} value={doc.slug}>
-                            {doc.name} — ({doc.time})
-                          </option>
-                        ))}
-                      </select>
-                    ) : (
-                      <div className="flex items-center gap-2 rounded-xl bg-amber-500/10 border border-amber-500/20 p-3 text-xs text-amber-700">
-                        <AlertCircle className="size-4 shrink-0" />
-                        <span>
-                          Tidak ada jadwal praktik untuk <strong>{jenisPoli}</strong> pada hari{" "}
-                          <strong>{selectedDayName}</strong>. Silakan pilih tanggal kunjungan lain.
-                        </span>
+                        <input
+                          type="radio"
+                          name="paymentType"
+                          value="Non-BPJS"
+                          checked={paymentType === "Non-BPJS"}
+                          onChange={() => setPaymentType("Non-BPJS")}
+                          className="sr-only"
+                        />
+                        <div
+                          className={`flex size-8 sm:size-9 shrink-0 items-center justify-center rounded-xl transition-colors ${paymentType === "Non-BPJS"
+                            ? "bg-primary text-primary-foreground shadow-xs"
+                            : "bg-muted text-muted-foreground group-hover:bg-muted/80"
+                            }`}
+                        >
+                          <CreditCard className="size-4" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <span className="block text-xs sm:text-sm font-bold text-foreground leading-tight">
+                            Non-BPJS
+                          </span>
+                          <span className="block text-[10px] sm:text-[11px] text-muted-foreground leading-tight mt-0.5">
+                            Umum / Mandiri
+                          </span>
+                        </div>
+                      </label>
+
+                      <label
+                        className={`group relative flex cursor-pointer items-center gap-2.5 sm:gap-3 rounded-2xl border p-3 sm:p-4 transition-all ${paymentType === "BPJS"
+                          ? "border-emerald-600 bg-emerald-500/10 text-emerald-700 ring-2 ring-emerald-500/20 shadow-xs dark:text-emerald-300 dark:border-emerald-700"
+                          : "border-input bg-card text-muted-foreground hover:border-emerald-500/40 hover:bg-muted/40 hover:text-foreground"
+                          }`}
+                      >
+                        <input
+                          type="radio"
+                          name="paymentType"
+                          value="BPJS"
+                          checked={paymentType === "BPJS"}
+                          onChange={() => setPaymentType("BPJS")}
+                          className="sr-only"
+                        />
+                        <div
+                          className={`flex size-8 sm:size-9 shrink-0 items-center justify-center rounded-xl transition-colors ${paymentType === "BPJS"
+                            ? "bg-emerald-600 text-white shadow-xs"
+                            : "bg-muted text-muted-foreground group-hover:bg-muted/80"
+                            }`}
+                        >
+                          <ShieldCheck className="size-4" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <span className="block text-xs sm:text-sm font-bold text-foreground leading-tight">
+                            BPJS
+                          </span>
+                          <span className="block text-[10px] sm:text-[11px] text-muted-foreground leading-tight mt-0.5">
+                            BPJS Kesehatan
+                          </span>
+                        </div>
+                      </label>
+                    </div>
+
+                    {paymentType === "BPJS" ? (
+                      <div className="rounded-2xl bg-emerald-500/10 p-5 sm:p-6 border border-emerald-500/25 text-center">
+                        <p className="text-sm font-bold text-emerald-800 dark:text-emerald-300">
+                          Himbauan Pendaftaran Pasien BPJS Kesehatan
+                        </p>
+                        <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-lg mx-auto">
+                          Bagi pasien BPJS Kesehatan, disarankan untuk melakukan pendaftaran antrean dan memastikan status kepesertaan BPJS Anda aktif melalui aplikasi <strong>Mobile JKN</strong> sebelum berkunjung ke klinik.
+                        </p>
+                        <div className="mt-4 flex justify-center">
+                          <a
+                            href="https://play.google.com/store/apps/details?id=app.bpjs.mobile&hl=id"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-xs sm:text-sm font-bold text-white transition-all hover:bg-emerald-700 shadow-sm active:scale-[0.98]"
+                          >
+                            <span>Buka / Unduh Aplikasi Mobile JKN</span>
+                            <ExternalLink className="size-3.5 shrink-0" />
+                          </a>
+                        </div>
                       </div>
+                    ) : (
+                      (patientType === "Baru" || identifierType === "RM" || identifierType === "BPJS") && (
+                        <div className="rounded-2xl bg-muted/40 p-4 border border-border">
+                          <label
+                            htmlFor="nikUmum"
+                            className="block text-xs font-semibold text-foreground mb-1.5"
+                          >
+                            NIK (Nomor Induk Kependudukan) *
+                          </label>
+                          <input
+                            id="nikUmum"
+                            type="text"
+                            required
+                            maxLength={16}
+                            placeholder="16 Digit NIK KTP Pasien"
+                            value={nik}
+                            onChange={(e) => setNik(e.target.value)}
+                            className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                          />
+                        </div>
+                      )
                     )}
                   </div>
 
-                  <div>
-                    <label
-                      htmlFor="keluhan"
-                      className="block text-xs font-semibold text-foreground mb-1.5"
-                    >
-                      Keluhan / Gejala Utama (Opsional)
-                    </label>
-                    <textarea
-                      id="keluhan"
-                      rows={2}
-                      placeholder="Contoh: Demam tinggi 2 hari, batuk berdahak, nyeri lambung, dll."
-                      value={keluhan}
-                      onChange={(e) => setKeluhan(e.target.value)}
-                      className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
-                    />
-                  </div>
-                </div>
-
-                <div className="h-px bg-border my-4" />
-
-                {/* Section 3: Pembayaran (BPJS / Non-BPJS) */}
-                <div className="space-y-4">
-                  <h4 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-primary">
-                    <CreditCard className="size-4" /> Metode Pembayaran & Identitas Medis
-                  </h4>
-
-                  <div className="grid grid-cols-2 gap-2.5 sm:gap-3.5">
-                    <label
-                      className={`group relative flex cursor-pointer items-center gap-2.5 sm:gap-3 rounded-2xl border p-3 sm:p-4 transition-all ${
-                        paymentType === "Non-BPJS"
-                          ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-xs"
-                          : "border-input bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/40 hover:text-foreground"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="paymentType"
-                        value="Non-BPJS"
-                        checked={paymentType === "Non-BPJS"}
-                        onChange={() => setPaymentType("Non-BPJS")}
-                        className="sr-only"
-                      />
-                      <div
-                        className={`flex size-8 sm:size-9 shrink-0 items-center justify-center rounded-xl transition-colors ${
-                          paymentType === "Non-BPJS"
-                            ? "bg-primary text-primary-foreground shadow-xs"
-                            : "bg-muted text-muted-foreground group-hover:bg-muted/80"
-                        }`}
-                      >
-                        <CreditCard className="size-4" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <span className="block text-xs sm:text-sm font-bold text-foreground leading-tight">
-                          Non-BPJS
-                        </span>
-                        <span className="block text-[10px] sm:text-[11px] text-muted-foreground leading-tight mt-0.5">
-                          Umum / Mandiri
-                        </span>
-                      </div>
-                    </label>
-
-                    <label
-                      className={`group relative flex cursor-pointer items-center gap-2.5 sm:gap-3 rounded-2xl border p-3 sm:p-4 transition-all ${
-                        paymentType === "BPJS"
-                          ? "border-emerald-600 bg-emerald-500/10 text-emerald-700 ring-2 ring-emerald-500/20 shadow-xs dark:text-emerald-300 dark:border-emerald-700"
-                          : "border-input bg-card text-muted-foreground hover:border-emerald-500/40 hover:bg-muted/40 hover:text-foreground"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="paymentType"
-                        value="BPJS"
-                        checked={paymentType === "BPJS"}
-                        onChange={() => setPaymentType("BPJS")}
-                        className="sr-only"
-                      />
-                      <div
-                        className={`flex size-8 sm:size-9 shrink-0 items-center justify-center rounded-xl transition-colors ${
-                          paymentType === "BPJS"
-                            ? "bg-emerald-600 text-white shadow-xs"
-                            : "bg-muted text-muted-foreground group-hover:bg-muted/80"
-                        }`}
-                      >
-                        <ShieldCheck className="size-4" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <span className="block text-xs sm:text-sm font-bold text-foreground leading-tight">
-                          BPJS
-                        </span>
-                        <span className="block text-[10px] sm:text-[11px] text-muted-foreground leading-tight mt-0.5">
-                          BPJS Kesehatan
-                        </span>
-                      </div>
-                    </label>
-                  </div>
-
-                  {paymentType === "BPJS" ? (
-                    <div className="rounded-2xl bg-emerald-500/10 p-5 sm:p-6 border border-emerald-500/25 text-center">
-                      <p className="text-sm font-bold text-emerald-800 dark:text-emerald-300">
-                        Himbauan Pendaftaran Pasien BPJS Kesehatan
-                      </p>
-                      <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-lg mx-auto">
-                        Bagi pasien BPJS Kesehatan, disarankan untuk melakukan pendaftaran antrean dan memastikan status kepesertaan BPJS Anda aktif melalui aplikasi <strong>Mobile JKN</strong> sebelum berkunjung ke klinik.
-                      </p>
-                      <div className="mt-4 flex justify-center">
-                        <a
-                          href="https://play.google.com/store/apps/details?id=app.bpjs.mobile&hl=id"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-xs sm:text-sm font-bold text-white transition-all hover:bg-emerald-700 shadow-sm active:scale-[0.98]"
-                        >
-                          <span>Buka / Unduh Aplikasi Mobile JKN</span>
-                          <ExternalLink className="size-3.5 shrink-0" />
-                        </a>
-                      </div>
+                  {submitError && (
+                    <div className="mt-4 flex items-center gap-2.5 rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-xs sm:text-sm font-medium text-red-800 dark:text-red-300">
+                      <AlertCircle className="size-4 shrink-0 text-red-600 dark:text-red-400" />
+                      <span>{submitError}</span>
                     </div>
-                  ) : (
-                    !(patientType === "Lama" && identifierType === "NIK") && (
-                      <div className="rounded-2xl bg-muted/40 p-4 border border-border">
-                        <label
-                          htmlFor="nikUmum"
-                          className="block text-xs font-semibold text-foreground mb-1.5"
-                        >
-                          NIK (Nomor Induk Kependudukan) *
-                        </label>
-                        <input
-                          id="nikUmum"
-                          type="text"
-                          required
-                          maxLength={16}
-                          placeholder="16 Digit NIK KTP Pasien"
-                          value={nik}
-                          onChange={(e) => setNik(e.target.value)}
-                          className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
-                        />
-                      </div>
-                    )
                   )}
-                </div>
 
-                {submitError && (
-                  <div className="mt-4 flex items-center gap-2.5 rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-xs sm:text-sm font-medium text-red-800 dark:text-red-300">
-                    <AlertCircle className="size-4 shrink-0 text-red-600 dark:text-red-400" />
-                    <span>{submitError}</span>
-                  </div>
-                )}
-
-                <Button
-                  type="submit"
-                  size="lg"
-                  disabled={isSubmitting}
-                  className="mt-6 w-full rounded-full bg-primary py-6 text-base font-bold shadow-lg hover:bg-primary/90"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="mr-2 size-5 animate-spin" />
-                      Memproses Pendaftaran...
-                    </>
-                  ) : (
-                    <>
-                      <CalendarCheck className="mr-2 size-5" />
-                      Kirim Pendaftaran Online
-                    </>
-                  )}
-                </Button>
-              </form>
-            </div>
+                  <Button
+                    type="submit"
+                    size="lg"
+                    disabled={isSubmitting}
+                    className="mt-6 w-full rounded-full bg-primary py-6 text-base font-bold shadow-lg hover:bg-primary/90"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 size-5 animate-spin" />
+                        Memproses Pendaftaran...
+                      </>
+                    ) : (
+                      <>
+                        <CalendarCheck className="mr-2 size-5" />
+                        Kirim Pendaftaran Online
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </div>
             )}
           </div>
         </ScrollReveal>
